@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>The Style Studio - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{{ asset('user/assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('user/assets/css/style.css') }}">
+    
+        <style>.custom-alert {
+            position: relative;
+            padding: 14px 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #ff4d4d, #cc0000);
+            color: #fff;
+            font-weight: 500;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.5s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .custom-alert .close-btn {
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+    </style>
+</head>
+
+<body>
+   
+    <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
+        style="background-image: url('{{ asset('user/assets/images/backgrounds/login-bg.jpg') }}')">
+ @if(isset($error))
+    <div id="errorAlert" class="custom-alert">
+        <span style="text-align: center;" class="alert-text">
+            {{$error}}
+        </span>
+        <span class="close-btn" onclick="closeAlert()">×</span>
+    </div>
+@endif
+
+        <div class="container">
+            <div class="form-box">
+                <div class="form-tab">
+                    <h3 class="text-center mb-4">Sign In</h3>
+
+                    <form method="POST" action="{{url('login_process')}}">
+                        @csrf
+
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Password *</label>
+                            <input type="password" class="form-control" name="password" required>
+                        </div>
+
+
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-outline-primary-2 btn-block">
+                                <span>LOG IN</span>
+                                <i class="icon-long-arrow-right"></i>
+                            </button>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <a href="{{ url('register') }}">Don't have an account? Register</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('user/assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('user/assets/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('user/assets/js/main.js') }}">
+       
+    </script>
+     <script script >
+            function closeAlert() {
+                document.getElementById('errorAlert').style.display = 'none';
+            }
+
+        // Auto hide after 3 seconds
+        setTimeout(function() {
+            var alert = document.getElementById('errorAlert');
+            if (alert) {
+                alert.style.opacity = "0";
+                setTimeout(() => alert.style.display = "none", 500);
+            }
+        }, 3000);
+    </script>
+
+</body>
+
+</html>

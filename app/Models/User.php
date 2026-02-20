@@ -20,6 +20,14 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
+        'role',
+        
+        'address_line1',
+        'address_line2',
+        'city',
+        'state',
+        'postal_code',
         'password',
     ];
 
