@@ -14,6 +14,7 @@ Route::get('register', function () {
 });
 
 Route::post('login_process',[LoginController::class,'loginProcess']);
+Route::get('logout',[LoginController::class,'logout']);
 
 
 
@@ -22,6 +23,9 @@ Route::post('login_process',[LoginController::class,'loginProcess']);
 // Admin
 
 Route::get('admin/home',[AdminController::class,'adminhome']);
+Route::get('admin/user',[AdminController::class,'adminuser']);
+Route::get('delete_user/{id}',[AdminController::class,'user_del']);
+
 
 // user
 

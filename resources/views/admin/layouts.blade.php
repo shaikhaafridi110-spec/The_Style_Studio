@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>The_Style_Studio</title>
     <!-- plugins:css -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{asset('admin/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
     <link rel="stylesheet" href="{{asset('admin/assets/vendors/css/vendor.bundle.base.css')}}">
     <!-- endinject -->
@@ -15,6 +17,7 @@
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <link rel="stylesheet" href="{{asset('admin/assets/css/style.css')}}">
+    @yield('user-css')
     <!-- endinject -->
     <link rel="shortcut icon" href="{{asset('admin/assets/images/favicon.ico')}}" />
 </head>
@@ -42,15 +45,15 @@
 
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-                            <img src="{{asset('admin/assets/images/faces/face5.jpg')}}" alt="profile" />
-                            <span class="nav-profile-name">Louis Barnett</span>
+                            <img src="{{asset('admin/assets/images/faces/f3.png')}}" alt="profile" />
+                            <span class="nav-profile-name">{{Auth::user()->name}}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                             <a class="dropdown-item">
                                 <i class="mdi mdi-cog text-primary"></i>
                                 Settings
                             </a>
-                            <a class="dropdown-item">
+                            <a class="dropdown-item" href="{{url('logout')}}">
                                 <i class="mdi mdi-logout text-primary"></i>
                                 Logout
                             </a>
@@ -72,6 +75,13 @@
                             <span class="menu-title">Dashboard</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url('admin/user')}}">
+                            <i class="mdi mdi-account menu-icon"></i>
+                            <span class="menu-title">User</span>
+                        </a>
+                    </li>
+                    
                 </ul>
             </nav>
             <!-- partial -->
@@ -79,7 +89,8 @@
                 @yield('main-content')
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
-                <footer class="footer">
+                <!-- partial -->
+                <footer class="footer" style="">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
                         <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2024 <a
                                 href="https://www.bootstrapdash.com/" target="_blank">Bootstrapdash</a>. All rights reserved.</span>
@@ -87,7 +98,6 @@
                                 class="mdi mdi-heart text-danger"></i></span>
                     </div>
                 </footer>
-                <!-- partial -->
             </div>
             <!-- main-panel ends -->
         </div>
