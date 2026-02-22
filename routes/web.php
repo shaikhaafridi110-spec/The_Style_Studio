@@ -24,7 +24,20 @@ Route::get('logout',[LoginController::class,'logout']);
 
 Route::get('admin/home',[AdminController::class,'adminhome']);
 Route::get('admin/user',[AdminController::class,'adminuser']);
+Route::get('admin/category',[AdminController::class,'admincategory']);
+
+Route::get('admin/add-category',[AdminController::class,'addcategory']);
+Route::get('admin/edit-category/{id}',[AdminController::class,'editcategory']);
+
+Route::post('admin/update_category/{id}',[AdminController::class,'updatecategory']);
+
+
+Route::post('admin/savecategory',[AdminController::class,'savecategory']);
+
+
+
 Route::get('delete_user/{id}',[AdminController::class,'user_del']);
+Route::get('delete_category/{id}',[AdminController::class,'category_del']);
 
 
 // user

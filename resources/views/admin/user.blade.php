@@ -107,9 +107,15 @@
                             <td>{{ $d->address_line2 }}</td>
                             <td>{{ $d->city }}, {{ $d->state }}</td>
                             <td>{{ $d->postal_code }}</td>
-                             <td><a href="{{url('delete_user',$d->id)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
-                        
-                        </td>
+                            <td>
+                                <a href="{{url('delete_user',$d->id)}}"
+                                    class="btn btn-sm btn-delete"
+                                    onclick="return confirm('Are you sure you want to delete this user?')">
+                                    <i class="mdi mdi-delete-outline"></i> Delete
+                                </a>
+                            </td>
+
+                            </td>
                         </tr>
 
                         @endforeach

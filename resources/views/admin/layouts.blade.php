@@ -46,7 +46,7 @@
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
                             <img src="{{asset('admin/assets/images/faces/f3.png')}}" alt="profile" />
-                            <span class="nav-profile-name">{{Auth::user()->name}}</span>
+                            <span class="nav-profile-name text-uppercase">{{Auth::user()->name}}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                             <a class="dropdown-item">
@@ -67,7 +67,7 @@
         <!-- partial -->
         <div class="container-fluid page-body-wrapper">
             <!-- partial:partials/_sidebar.html -->
-            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <nav class="sidebar sidebar-offcanvas"id="sidebar">
                 <ul class="nav">
                     <li class="nav-item">
                         <a class="nav-link" href="{{url('admin/home')}}">
@@ -79,6 +79,12 @@
                         <a class="nav-link" href="{{url('admin/user')}}">
                             <i class="mdi mdi-account menu-icon"></i>
                             <span class="menu-title">User</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url('admin/category')}}">
+                            <i class="mdi mdi-view-grid-outline menu-icon"></i>
+                            <span class="menu-title">Category</span>
                         </a>
                     </li>
                     

@@ -12,14 +12,14 @@ class adminseeder extends Seeder
      */
     public function run(): void
     {
-        //  User::create([
-        //     'name'=>'aafridi',
-        //     'email'=>'aafridi@gmial.com',
-        //     'password'=>'aafridi',
-        //     'phone'=>8128233456,
-        //     'role'=>'1'
+         User::create([
+            'name'=>'aafridi',
+            'email'=>'aafridi@gmial.com',
+            'password'=>'aafridi',
+            'phone'=>8128233456,
+            'role'=>'1'
 
-        // ]);
+        ]);
         // php artisan db:seed --class=adminseeder -->run this q to insert value in data base.
          User::create([
             'name'=>'takshil',

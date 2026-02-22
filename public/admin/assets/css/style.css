@@ -128,6 +128,7 @@
     background: #f8f9fc;
 }
 
+
 .custom-table thead th {
     font-weight: 600;
    
@@ -152,7 +153,21 @@
     border-collapse: collapse;
     width: 100%;
 }
+.btn-delete {
+    background: linear-gradient(45deg, #ff4d4d, #cc0000);
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 25px;
+    font-size: 13px;
+    transition: 0.3s ease;
+}
 
+.btn-delete:hover {
+    background: linear-gradient(45deg, #cc0000, #990000);
+    transform: scale(1.05);
+    color: #fff;
+}
 .custom-table th,
 .custom-table td,
 .custom-table tr{
