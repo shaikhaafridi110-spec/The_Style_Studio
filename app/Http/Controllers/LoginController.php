@@ -48,7 +48,7 @@ class LoginController extends Controller
             'postal_code' => $req->postal_code,
             'password'=>$req->password
         ]);
-        return view('login');
+        return view('login',['success'=>'Account successfully created 🎉']);
     }
     public function logout()
     {

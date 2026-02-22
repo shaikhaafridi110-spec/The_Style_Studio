@@ -146,7 +146,7 @@
            class="form-control">
 </div>
 
-<!-- Show Password Checkbox -->
+<!-- Show Password Checkbox -->     
 <div class="col-12 mb-3">
     <div class="form-check">
         <input type="checkbox" class="form-check-input" id="showPassword">

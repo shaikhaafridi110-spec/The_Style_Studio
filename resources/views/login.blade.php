@@ -58,6 +58,12 @@
     </div>
 @endif
 
+@if(isset($success))
+<div id="successAlert" class="alert alert-success text-center">
+    {{$success}}
+</div>
+@endif
+
         <div class="container">
             <div class="form-box">
                 <div class="form-tab">
@@ -113,7 +119,14 @@
             }
         }, 3000);
     </script>
-
+<script>
+setTimeout(function() {
+    let alert = document.getElementById("successAlert");
+    if(alert){
+        alert.style.display = "none";
+    }
+}, 3000);
+</script>
 </body>
 
 </html>
