@@ -8,8 +8,9 @@
 
     <link rel="stylesheet" href="{{ asset('user/assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('user/assets/css/style.css') }}">
-    
-        <style>.custom-alert {
+
+    <style>
+        .custom-alert {
             position: relative;
             padding: 14px 20px;
             margin-bottom: 20px;
@@ -41,28 +42,27 @@
                 transform: translateY(0);
             }
         }
-    
     </style>
 </head>
 
 <body>
-   
+
     <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
         style="background-image: url('{{ asset('user/assets/images/backgrounds/login-bg.jpg') }}')">
- @if(isset($error))
-    <div id="errorAlert" class="custom-alert">
-        <span style="text-align: center;" class="alert-text">
-            {{$error}}
-        </span>
-        <span class="close-btn" onclick="closeAlert()">×</span>
-    </div>
-@endif
+        @if(isset($error))
+        <div id="errorAlert" class="custom-alert">
+            <span style="text-align: center;" class="alert-text">
+                {{$error}}
+            </span>
+            <span class="close-btn" onclick="closeAlert()">×</span>
+        </div>
+        @endif
 
-@if(isset($success))
-<div id="successAlert" class="alert alert-success text-center">
-    {{$success}}
-</div>
-@endif
+        @if(isset($success))
+        <div id="successAlert" class="alert alert-success text-center">
+            {{$success}}
+        </div>
+        @endif
 
         <div class="container">
             <div class="form-box">
@@ -91,7 +91,10 @@
                         </div>
 
                         <div class="text-center mt-3">
-                            <a href="{{ url('register') }}">Don't have an account? Register</a>
+                            <a href="{{ url('auth/google') }}" class="btn btn-danger btn-block">
+                                Sign Up with Google
+                            </a>
+                            <a href="{{ url('auth/google') }}">Don't have an account? Register</a>
                         </div>
                     </form>
 
@@ -103,12 +106,12 @@
     <script src="{{ asset('user/assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('user/assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('user/assets/js/main.js') }}">
-       
+
     </script>
-     <script script >
-            function closeAlert() {
-                document.getElementById('errorAlert').style.display = 'none';
-            }
+    <script script>
+        function closeAlert() {
+            document.getElementById('errorAlert').style.display = 'none';
+        }
 
         // Auto hide after 3 seconds
         setTimeout(function() {
@@ -119,14 +122,14 @@
             }
         }, 3000);
     </script>
-<script>
-setTimeout(function() {
-    let alert = document.getElementById("successAlert");
-    if(alert){
-        alert.style.display = "none";
-    }
-}, 3000);
-</script>
+    <script>
+        setTimeout(function() {
+            let alert = document.getElementById("successAlert");
+            if (alert) {
+                alert.style.display = "none";
+            }
+        }, 3000);
+    </script>
 </body>
 
 </html>

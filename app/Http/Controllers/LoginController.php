@@ -27,32 +27,32 @@ class LoginController extends Controller
     }
     public function registerProcess(Request $req)
     {
+        
         $req->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
             'phone' => 'required|digits:10',
             'address_line1' => 'required',
-            'password' => 'required|min:6|confirmed',
             'city' => 'required',
             'state' => 'required',
+            'password' => 'required|min:6|confirmed',
             'postal_code' => 'required'
         ]);
-        User::create([
-            'name' => $req->name,
-            'email' => $req->email,
-            'phone' => $req->phone,
-            'address_line1' => $req->address_line1,
-            'address_line2' => $req->address_line2,
-            'city' => $req->city,
-            'state' => $req->state,
-            'postal_code' => $req->postal_code,
-            'password'=>$req->password
-        ]);
+        $user = auth()->user();
+         $user->update([
+        'name'=>$req->name,
+        'phone' => $req->phone,
+        'address_line1' => $req->address_line1,
+        'address_line2' => $req->address_line2,
+        'city' => $req->city,
+        'state' => $req->state,
+        'postal_code' => $req->postal_code,
+        'password'=>$req->password
+    ]);
         return view('login',['success'=>'Account successfully created 🎉']);
     }
     public function logout()
     {
         Auth::logout();
-        return view('login');
+        return redirect('/');
     }
 }

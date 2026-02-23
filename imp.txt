@@ -1,0 +1,21 @@
+🔵 Authorized JavaScript origins
+
+Add:
+
+http://127.0.0.1:8000
+🔵 Authorized redirect URIs (VERY IMPORTANT)
+
+Click Add URI and add:
+
+http://127.0.0.1:8000/auth/google/callback
+
+⚠️ This must match exactly your Laravel route.
+
+
+
+
+
+client id:-355664375903-49oufc8cmbrhtuevdiploact2r2qpi1m.apps.googleusercontent.com
+
+
+Client secret:-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
