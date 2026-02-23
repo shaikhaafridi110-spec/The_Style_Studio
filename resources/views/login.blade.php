@@ -96,7 +96,7 @@
                         <div class="col-12 mb-3">
                             <div class="form-check"> <input type="checkbox" class="form-check-input" id="showPassword"> <label class="form-check-label" for="showPassword"> Show Password </label> </div>
                         </div>
-                        <div class="text-right mt-2">
+                        <div class="text-right mt-2" style="color: blue;">
                             <a href="{{ url('forgot-password') }}">Forgot Password?</a>
                         </div>
 
