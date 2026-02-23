@@ -23,27 +23,14 @@ public function handleGoogleCallback()
 {
     $googleUser = Socialite::driver('google')->stateless()->user();
 
-    $user = User::where('email', $googleUser->getEmail())->first();
+    $existingUser = User::where('email', $googleUser->getEmail())->first();
 
-    if ($user) {
-
-        // 🔥 If existing user but google_id is null, update it
-        if ($user->google_id == null) {
-            $user->update([
-                'google_id' => $googleUser->getId()
-            ]);
-        }
-
-        Auth::login($user);
-
-        if ($user->role == 1) {
-            return redirect('admin/home');
-        }
-
-        return redirect('/');
+    // 🔴 If email already exists → show error on login page
+    if ($existingUser) {
+        return redirect('/')->with('error', 'Email already exists. Please login manually.');
     }
 
-    // 🔵 If user not exists → create new
+    // 🟢 If new user → create account
     $user = User::create([
         'google_id' => $googleUser->getId(),
         'name' => $googleUser->getName(),
@@ -51,7 +38,9 @@ public function handleGoogleCallback()
         'password' => bcrypt(Str::random(16)),
         'role' => 2,
     ]);
-     Auth::login($user);
-    return redirect('register');
+
+    Auth::login($user);
+
+    return redirect('register'); // or complete-profile
 }
 }

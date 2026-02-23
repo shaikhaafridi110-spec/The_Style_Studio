@@ -49,71 +49,27 @@
 
     <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
         style="background-image: url('{{ asset('user/assets/images/backgrounds/login-bg.jpg') }}')">
-        @if(isset($error))
-        <div id="errorAlert" class="custom-alert">
-            <span style="text-align: center;" class="alert-text">
-                {{$error}}
-            </span>
-            <span class="close-btn" onclick="closeAlert()">×</span>
-        </div>
-        @endif
-        @if(session('success'))
-        <div id="successAlert" class="alert alert-success text-center">
-            {{ session('success') }}
-        </div>
-        @endif
-        @if(session('error'))
-        <div id="errorAlert" class="custom-alert">
-            <span style="text-align: center;" class="alert-text">
-                {{ session('error') }}
-            </span>
-            <span class="close-btn" onclick="closeAlert()">×</span>
-        </div>
-        @endif
-        @if(isset($success))
-        <div id="successAlert" class="alert alert-success text-center">
-            {{$success}}
-        </div>
-        @endif
 
         <div class="container">
             <div class="form-box">
                 <div class="form-tab">
-                    <h3 class="text-center mb-4">Sign In</h3>
+                    <h3>Verify OTP</h3>
 
-                    <form method="POST" action="{{url('login_process')}}">
+                    @if(session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                    @endif
+                    <form method="POST" action="{{ url('verify-otp') }}">
                         @csrf
 
                         <div class="form-group">
-                            <label>Email *</label>
-                            <input type="email" class="form-control" name="email" required>
+                            <label>Enter OTP</label>
+                            <input type="text" name="otp" class="form-control" required>
                         </div>
 
-                        <div class="form-group">
-                            <label>Password *</label>
-                            <input type="password" id="password" class="form-control" name="password" required>
-                        </div>
-                        <div class="col-12 mb-3">
-                            <div class="form-check"> <input type="checkbox" class="form-check-input" id="showPassword"> <label class="form-check-label" for="showPassword"> Show Password </label> </div>
-                        </div>
-                        <div class="text-right mt-2">
-                            <a href="{{ url('forgot-password') }}">Forgot Password?</a>
-                        </div>
-
-                        <div class="form-footer">
-                            <button type="submit" class="btn btn-outline-primary-2 btn-block">
-                                <span>LOG IN</span>
-                                <i class="icon-long-arrow-right"></i>
-                            </button>
-                        </div>
-
-                        <div class="text-center mt-3">
-                            <a href="{{ url('auth/google') }}" class="btn btn-danger btn-block">
-                                Sign Up with Google
-                            </a>
-                        </div>
+                        <button type="submit" class="btn btn-success mt-2">
+                            Verify OTP
+                        </button>
                     </form>
-
                 </div>
             </div>
         </div>
@@ -153,14 +109,6 @@
             // document.getElementById("confirm_password").type = type;
         });
     </script>
-    <script>
-    setTimeout(function() {
-        let alert = document.getElementById("successAlert");
-        if (alert) {
-            alert.style.display = "none";
-        }
-    }, 3000);
-</script>
 </body>
 
 </html>

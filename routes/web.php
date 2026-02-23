@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Forgetpassword;
 
 use App\Http\Controllers\GoogleController;
 
@@ -11,6 +12,19 @@ use App\Http\Controllers\GoogleController;
 
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle']);
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+
+// Forgot Password
+Route::get('forgot-password', [Forgetpassword::class, 'forgotPassword']);
+Route::post('send-otp', [Forgetpassword::class, 'sendOtp']);
+
+// Verify OTP
+Route::get('verify-otp', [Forgetpassword::class, 'verifyOtpPage']);
+Route::post('verify-otp', [Forgetpassword::class, 'verifyOtp']);
+
+// Reset Password
+Route::get('reset-password', [Forgetpassword::class, 'resetPasswordPage']);
+Route::post('reset-password', [Forgetpassword::class, 'resetPassword']);
 // login -register
 Route::get('/', function () {
     return view('login');
