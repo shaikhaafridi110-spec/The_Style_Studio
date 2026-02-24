@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>The Style Studio - Register</title>
+    <title>The Style Studio - Profile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="{{ asset('user/assets/css/bootstrap.min.css') }}">
@@ -18,10 +18,10 @@
             <div class="form-box">
                 <div class="form-tab">
 
-                    <h3 class="text-center mb-4">Register Account</h3>
+                    <h3 class="text-center mb-4">Complete Your Profile</h3>
 
 
-                    <form method="POST" action="{{ url('register_process') }}">
+                    <form method="POST" action="{{ url('comlete_process') }}">
                         @csrf
 
                         <div class="row">

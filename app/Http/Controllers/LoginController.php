@@ -19,13 +19,13 @@ class LoginController extends Controller
             if (Auth::user()->role == 1) {
                 return redirect('admin/home');
             }
-            return redirect('/');
+            return redirect('user/home');
         } else {
 
             return view('login', ['error' => 'Invalid Email or Password']);
         }
     }
-    public function registerProcess(Request $req)
+    public function cProcess(Request $req)
     {
         
         $req->validate([

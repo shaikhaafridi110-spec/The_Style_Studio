@@ -41,6 +41,6 @@ public function handleGoogleCallback()
 
     Auth::login($user);
 
-    return redirect('register'); // or complete-profile
+    return redirect('cprofile'); // or complete-profile
 }
 }

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Forgetpassword;
 
 use App\Http\Controllers\GoogleController;
@@ -29,14 +30,14 @@ Route::post('reset-password', [Forgetpassword::class, 'resetPassword']);
 Route::get('/', function () {
     return view('login');
 });
-Route::get('register', function () {
-    return view('register');
+Route::get('cprofile', function () {
+    return view('cprofile');
 });
 
 Route::post('login_process',[LoginController::class,'loginProcess']);
 Route::get('logout',[LoginController::class,'logout']);
 
-Route::post('register_process',[LoginController::class,'registerProcess']);
+Route::post('comlete_process',[LoginController::class,'cProcess']);
 
 
 
@@ -62,4 +63,5 @@ Route::get('delete_category/{id}',[AdminController::class,'category_del']);
 
 
 // user
+Route::get('user/home',[UserController::class,'userhome']);
 
