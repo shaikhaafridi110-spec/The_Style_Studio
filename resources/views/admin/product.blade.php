@@ -90,14 +90,14 @@
     <div class="page-header d-flex justify-content-between align-items-center mb-4">
 
         <div>
-            <h2 class="page-title">Category Management</h2>
-            <p class="page-subtitle">Manage all category here</p>
+            <h2 class="page-title">Product Management</h2>
+            <p class="page-subtitle">Manage all Product here</p>
         </div>
 
         <div>
-            <a href="{{ url('admin/add-category') }}" class="btn add-btn">
+            <a href="{{ url('admin/add-product') }}" class="btn add-btn">
                 <i class="mdi mdi-plus"></i>
-                <span>Add Category</span>
+                <span>Add Product</span>
             </a>
         </div>
 
@@ -115,7 +115,7 @@
                 <i class="mdi mdi-home-outline me-2"></i>
                 <span>Dashboard</span>
                 <i class="mdi mdi-chevron-right mx-2"></i>
-                <span class="text-dark fw-semibold">Category</span>
+                <span class="text-dark fw-semibold">Product</span>
             </div>
         </div>
     </div>
@@ -125,9 +125,9 @@
         <div class="card-header bg-gradient-primary text-white rounded-top-4 
             d-flex justify-content-between align-items-center">
 
-            <h5 class="mb-0">Category List</h5>
+            <h5 class="mb-0">Product List</h5>
 
-            <form method="GET" action="{{ url('admin/category') }}"
+            <form method="GET" action="{{ url('admin/product') }}"
                 class="d-flex align-items-center gap-3 filter-form">
 
                 <!-- Status Dropdown -->
@@ -135,10 +135,10 @@
                     class="form-select filter-select"
                     onchange="this.form.submit()">
                     <option value="">All Status</option>
-                    <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>
+                    <option value="active" {{ request('status') == '1' ? 'selected' : '' }}>
                         Active
                     </option>
-                    <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>
+                    <option value="inactive" {{ request('status') == '0' ? 'selected' : '' }}>
                         Inactive
                     </option>
                 </select>
@@ -159,16 +159,20 @@
                 <table class="table custom-table align-middle">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Slug</th>
-                            <th>Image</th>
+                            
+                            <th>Proname</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Discount_price</th>
                             <th>Status</th>
+                            <th>Category_name</th>
+                            <th>Proimage</th>
                             <th>Action</th>
 
                         </tr>
                     </thead>
                     <tbody>
-                        @if($cdata->count() == 0)
+                        @if($products->count() == 0)
                         <tr>
                             <td colspan="7" class="text-center text-danger">
                                 No matching users found
@@ -177,28 +181,25 @@
                         @endif
 
 
-                        @foreach($cdata as $cd)
+                        @foreach($products as $p)
 
                         <tr>
-                            <td>{{$cd->name}}</td>
-                            <td>{{ $cd->slug }}</td>
+                            <td>{{$p->proname}}</td>
+                            <td>{!! $p->description !!}</td>
+                            <td>{{ $p->price }}</td>
+                            <td>{{ $p->discount_price }}</td>
+                            <td>{{ $p->status }}</td>
+                            <td>{{ $p->category->name }}</td>
                             <td>
-                                <img src="{{ asset('admin/assets/images/'.$cd->image) }}"
-                                    id="category-img"
-                                    alt="">
-                            </td>
-                            <td>@if($cd->status==1)
-                                Active
-                                @else
-                                Inactive
-                                @endif
+                              
+                                    {{$p->proimage}}
                             </td>
                             <td>
-                                <a href="{{ url('admin/edit-category',$cd->id) }}"
+                                <a href="{{ url('admin/edit-product',$p->proid) }}"
                                     class="btn btn-sm btn-edit">
                                     <i class="mdi mdi-pencil-outline"></i> Edit
                                 </a><br>
-                                <a href="{{url('delete_category',$cd->id)}}"
+                                <a href="{{url('delete_producr',$p->proid)}}"
                                     class="btn btn-sm btn-delete"
                                     onclick="return confirm('Are you sure you want to delete this category?')">
                                     <i class="mdi mdi-delete-outline"></i> Delete
@@ -213,7 +214,7 @@
                     </tbody>
 
                 </table>
-                {{$cdata->links()}}
+                {{$products->links()}}
             </div>
         </div>
     </div>

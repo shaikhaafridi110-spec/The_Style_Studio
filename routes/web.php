@@ -9,6 +9,7 @@ use App\Http\Controllers\Forgetpassword;
 use App\Http\Controllers\GoogleController;
 
 
+
 // google authentication
 
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle']);
@@ -45,7 +46,13 @@ Route::post('comlete_process',[LoginController::class,'cProcess']);
 // Admin
 
 Route::get('admin/home',[AdminController::class,'adminhome']);
+
+
+//user
 Route::get('admin/user',[AdminController::class,'adminuser']);
+Route::get('delete_user/{id}',[AdminController::class,'user_del']);
+
+//category
 Route::get('admin/category',[AdminController::class,'admincategory']);
 
 Route::get('admin/add-category',[AdminController::class,'addcategory']);
@@ -56,11 +63,12 @@ Route::post('admin/update_category/{id}',[AdminController::class,'updatecategory
 
 Route::post('admin/savecategory',[AdminController::class,'savecategory']);
 
-
-
-Route::get('delete_user/{id}',[AdminController::class,'user_del']);
 Route::get('delete_category/{id}',[AdminController::class,'category_del']);
 
+
+
+//product
+Route::get('admin/product', [AdminController::class, 'product']);
 
 // user
 Route::get('user/home',[UserController::class,'userhome']);

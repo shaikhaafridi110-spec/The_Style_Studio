@@ -2,24 +2,18 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>The_Style_Studio</title>
-    <!-- plugins:css -->
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{asset('admin/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
-    <link rel="stylesheet" href="{{asset('admin/assets/vendors/css/vendor.bundle.base.css')}}">
-    <!-- endinject -->
-    <!-- plugin css for this page -->
-    <link rel="stylesheet" href="{{asset('admin/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css')}}">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <link rel="stylesheet" href="{{asset('admin/assets/css/style.css')}}">
-    @yield('user-css')
-    <!-- endinject -->
-    <link rel="shortcut icon" href="{{asset('admin/assets/images/favicon.ico')}}" />
+   <title>The_Style_Studio</title>
+
+<link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+
+<!-- Font Awesome (ONLY ONE VERSION) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<link rel="stylesheet" href="{{asset('admin/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
+<link rel="stylesheet" href="{{asset('admin/assets/vendors/css/vendor.bundle.base.css')}}">
+<link rel="stylesheet" href="{{asset('admin/assets/css/style.css')}}">
+
+@yield('user-css')
 </head>
 
 <body>
@@ -87,6 +81,12 @@
                             <span class="menu-title">Category</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url('admin/product')}}">
+                            <i class="mdi mdi-shopping menu-icon"></i>
+                            <span class="menu-title">Product</span>
+                        </a>
+                    </li>
                     
                 </ul>
             </nav>
@@ -132,6 +132,14 @@
 
     <!-- End custom js for this page-->
     <script src="{{asset('admin/assets/js/jquery.cookie.js')}}" type="text/javascript"></script>
+    <script>
+    setTimeout(function () {
+        let alert = document.querySelector('.alert');
+        if(alert){
+            alert.style.display = 'none';
+        }
+    }, 3000);
+</script>
 </body>
 
 </html>

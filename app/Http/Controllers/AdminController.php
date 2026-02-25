@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Product;
 
 use Illuminate\Http\Request;
 
@@ -39,7 +40,7 @@ class AdminController extends Controller
     public function category_del($id)
     {
         Category::where('id', $id)->delete();
-        return redirect('admin/category');
+        return redirect('admin/category')->with('success', 'Category deleted successfully!');
     }
     public function addcategory()
     {
@@ -59,7 +60,7 @@ class AdminController extends Controller
             'status' => $req->status,
             'image' => "categories/" . $filename
         ]);
-        return redirect('admin/category');
+        return redirect('admin/category')->with('success', 'Category added successfully!');;
     }
     public function admincategory(Request $req)
     {
@@ -100,7 +101,32 @@ class AdminController extends Controller
         $category->status = $req->status;
 
         $category->save();
-        return redirect('admin/category');
+        return redirect('admin/category')->with('success', 'Category updated successfully!');;
 
     }
+
+
+
+
+
+    //*********product*********
+
+
+
+    public function product(Request $r){
+
+        $products = Product::select('*');
+        $proname=$r->search;
+        $prostatus=$r->status;
+        if ($proname != '') {
+            $products->where('proname', 'like', '%' . $proname . '%');
+        }
+        if($prostatus!=''){
+            $products->where('status',$prostatus);
+        }
+        $products = $products->paginate(5)->withQueryString();
+        return view('admin/product', compact('products'));
+    }
+
+
 }
