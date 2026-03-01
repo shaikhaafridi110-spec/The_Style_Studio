@@ -71,5 +71,15 @@ Route::get('delete_category/{id}',[AdminController::class,'category_del']);
 Route::get('admin/product', [AdminController::class, 'product']);
 
 // user
-Route::get('user/home',[UserController::class,'userhome']);
+
+Route::get('user/home', [UserController::class, 'home']);
+Route::get('user/shop', [UserController::class, 'shop']);
+Route::get('user/single-shop', [UserController::class, 'single_shop']);
+Route::get('user/cart', [UserController::class, 'cart']);
+Route::get('user/checkout', [UserController::class, 'checkout']);
+Route::get('user/wishlist', [UserController::class, 'wishlist']);
+Route::get('user/about', [UserController::class, 'about']);
+Route::get('user/contact', [UserController::class, 'contact']);
+
+
 
