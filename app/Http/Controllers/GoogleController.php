@@ -27,7 +27,7 @@ public function handleGoogleCallback()
 
     // 🔴 If email already exists → show error on login page
     if ($existingUser) {
-        return redirect('/')->with('error', 'Email already exists. Please login manually.');
+        return redirect('/login')->with('error', 'Email already exists. Please login manually.');
     }
 
     // 🟢 If new user → create account

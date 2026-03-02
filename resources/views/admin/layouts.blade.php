@@ -87,6 +87,12 @@
                             <span class="menu-title">Product</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url('admin/product-image')}}">
+                            <i class="mdi mdi-shopping menu-icon"></i>
+                            <span class="menu-title">Product-Images</span>
+                        </a>
+                    </li>
                     
                 </ul>
             </nav>

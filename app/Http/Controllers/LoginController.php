@@ -19,7 +19,7 @@ class LoginController extends Controller
             if (Auth::user()->role == 1) {
                 return redirect('admin/home');
             }
-            return redirect('user/home');
+            return redirect('/');
         } else {
 
             return view('login', ['error' => 'Invalid Email or Password']);
@@ -53,6 +53,6 @@ class LoginController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect('/');
+        return redirect('/login');
     }
 }

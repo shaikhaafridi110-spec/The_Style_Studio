@@ -91,13 +91,13 @@
 
         <div>
             <h2 class="page-title">Product Management</h2>
-            <p class="page-subtitle">Manage all Product here</p>
+            <p class="page-subtitle">Manage all Product_images here</p>
         </div>
 
         <div>
-            <a href="{{ url('admin/add-product') }}" class="btn add-btn">
+            <a href="{{ url('admin/add-product-image') }}" class="btn add-btn">
                 <i class="mdi mdi-plus"></i>
-                <span>Add Product</span>
+                <span>Add Product-Images</span>
             </a>
         </div>
 
@@ -115,7 +115,7 @@
                 <i class="mdi mdi-home-outline me-2"></i>
                 <span>Dashboard</span>
                 <i class="mdi mdi-chevron-right mx-2"></i>
-                <span class="text-dark fw-semibold">Product</span>
+                <span class="text-dark fw-semibold">Product-Images</span>
             </div>
         </div>
     </div>
@@ -125,23 +125,13 @@
         <div class="card-header bg-gradient-primary text-white rounded-top-4 
             d-flex justify-content-between align-items-center">
 
-            <h5 class="mb-0">Product List</h5>
+            <h5 class="mb-0">Product-Images List</h5>
 
-            <form method="GET" action="{{ url('admin/product') }}"
+            <form method="GET" action="{{ url('admin/product-image') }}"
                 class="d-flex align-items-center gap-3 filter-form">
 
                 <!-- Status Dropdown -->
-                <select style="background-color: white;" name="status"
-                    class="form-select filter-select"
-                    onchange="this.form.submit()">
-                    <option value="">All Status</option>
-                    <option value="active" {{ request('status') == '1' ? 'selected' : '' }}>
-                        Active
-                    </option>
-                    <option value="inactive" {{ request('status') == '0' ? 'selected' : '' }}>
-                        Inactive
-                    </option>
-                </select>
+
 
                 <!-- Search Input -->
                 <input type="text"
@@ -159,53 +149,48 @@
                 <table class="table custom-table align-middle">
                     <thead>
                         <tr>
-                            
+
                             <th>Proname</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Discount</th>
-                            <th>Status</th>
-                            <th>Category</th>
-                            <th>Proimage</th>
+                            <th>Image</th>
+                            <th>Sort_Order</th>
                             <th>Action</th>
 
                         </tr>
                     </thead>
                     <tbody>
-                        @if($products->count() == 0)
+                        @if($productImages->count() == 0)
                         <tr>
                             <td colspan="7" class="text-center text-danger">
-                                No matching users found
+                                No found
                             </td>
                         </tr>
                         @endif
 
 
-                        @foreach($products as $p)
+                        @foreach($productImages as $p)
 
                         <tr>
-                            <td>{{$p->proname}}</td>
-                            <td>{!! $p->description !!}</td>
-                            <td>{{ $p->price }}</td>
-                            <td>{{ $p->discount_price }}</td>
-                            <td>{{ $p->status }}</td>
-                            <td>{{ $p->category->name }}</td>
+                            <td>{{$p->product->proname}}</td>
+
                             <td>
-                                    <img src="{{ asset('admin/assets/images/'.$p->proimage) }}"
+                                <img src="{{ asset('admin/assets/images/'.$p->image) }}"
                                     id="product-img"
                                     alt="">
-                                    {{$p->proimage}}
-                                   
+
+
                             </td>
+                            <td>{{ $p->sort_order }}</td>
+
                             <td>
-                                <a href="{{ url('admin/edit-product',$p->proid) }}"
-                                    class="btn btn-sm btn-edit">
-                                    <i class="mdi mdi-pencil-outline"></i> Edit
-                                </a><br>
-                                <a href="{{url('delete_producr',$p->proid)}}"
-                                    class="btn btn-sm btn-delete"
-                                    onclick="return confirm('Are you sure you want to delete this category?')">
-                                    <i class="mdi mdi-delete-outline"></i> Delete
+                                <a href="{{ url('admin/edit-product-image',$p->proimg_id) }}"
+                                    class="btn btn-sm btn-warning">
+                                    <i class="mdi mdi-primary"></i> Edit
+                                </a>
+
+                                <a href="{{ url('admin/delete-product-image',$p->proimg_id) }}"
+                                    class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Delete this image?')">
+                                    <i class="mdi mdi-delete"></i> Delete
                                 </a>
                             </td>
 
@@ -217,7 +202,7 @@
                     </tbody>
 
                 </table>
-                {{$products->links()}}
+                {{$productImages->links()}}
             </div>
         </div>
     </div>

@@ -28,7 +28,7 @@ Route::post('verify-otp', [Forgetpassword::class, 'verifyOtp']);
 Route::get('reset-password', [Forgetpassword::class, 'resetPasswordPage']);
 Route::post('reset-password', [Forgetpassword::class, 'resetPassword']);
 // login -register
-Route::get('/', function () {
+Route::get('/login', function () {
     return view('login');
 });
 Route::get('cprofile', function () {
@@ -70,9 +70,22 @@ Route::get('delete_category/{id}',[AdminController::class,'category_del']);
 //product
 Route::get('admin/product', [AdminController::class, 'product']);
 
+
+
+
+
+Route::get('admin/product-image', [AdminController::class, 'productimage']);
+Route::get('admin/add-product-image', [AdminController::class, 'addproductimage']);
+Route::post('admin/save-product-image', [AdminController::class, 'saveproductimage']);
+
+
+Route::get('admin/edit-product-image/{id}', [AdminController::class, 'editProductImage']);
+Route::post('admin/update-product-image/{id}', [AdminController::class, 'updateProductImage']);
+Route::get('admin/delete-product-image/{id}', [AdminController::class, 'deleteProductImage']);
+
 // user
 
-Route::get('user/home', [UserController::class, 'home']);
+Route::get('/', [UserController::class, 'home']);
 Route::get('user/shop', [UserController::class, 'shop']);
 Route::get('user/single-shop', [UserController::class, 'single_shop']);
 Route::get('user/cart', [UserController::class, 'cart']);

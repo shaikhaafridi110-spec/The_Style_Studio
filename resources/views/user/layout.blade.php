@@ -92,14 +92,14 @@
                 <div class="container-fluid">
                     <div class="header-left">
 
-                        <a href="{{url('user/home')}}" class="logo">
+                        <a href="{{url('/')}}" class="logo">
                             <img src="{{asset('user/assets/images/demos/demo-5/logo.png')}}" alt="Molla Logo" width="105" height="25">
                         </a>
 
                         <nav class="main-nav">
                             <ul class="menu sf-arrows">
                                 <li class="megamenu-container" style="width: fit-content;">
-                                    <a href="{{url('user/home')}}">Home</a>
+                                    <a href="{{url('/')}}">Home</a>
 
                                 </li>
                                 <li>
@@ -113,7 +113,7 @@
                                     <a href="{{url('user/contact')}}">Contact</a>
                                 </li>
                                 <li>
-                                    <a href="{{url('/')}}">Login</a>
+                                    <a href="{{url('/login')}}">Login</a>
                                 </li>
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
@@ -205,7 +205,7 @@
                                 <li><a href="{{url('user/about')}}">About Us</a></li>
                                 <li><a href="{{url('user/cart')}}">Add To Cart</a></li>
                                 <li><a href="{{url('user/contact')}}">Contact us</a></li>
-                                <li><a href="{{url('/')}}">Log in</a></li>
+                                <li><a href="{{url('/login')}}">Log in</a></li>
                             </ul><!-- End .widget-list -->
                         </div><!-- End .widget -->
                        

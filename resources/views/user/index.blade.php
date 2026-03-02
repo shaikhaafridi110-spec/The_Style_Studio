@@ -14,7 +14,7 @@
                 </div><!-- End .intro-content -->
             </div><!-- End .intro-slide -->
 
-            <div class="intro-slide" style="background-image: url(assets/images/demos/demo-5/slider/slide-2.jpg);">
+            <div class="intro-slide" style="background-image: url({{asset('user/assets/images/demos/demo-5/slider/slide-2.jpg')}});">
                 <div class="container intro-content text-center">
                     <h3 class="intro-subtitle text-white">Limited time only</h3><!-- End .h3 intro-subtitle -->
                     <h1 class="intro-title text-white">Treat your self</h1><!-- End .intro-title -->
@@ -86,7 +86,7 @@
                 <div class="col-md-6">
                     <div class="banner banner-border">
                         <a href="#">
-                            <img src="assets/images/demos/demo-5/banners/banner-1.jpg" alt="Banner">
+                            <img src="{{asset('user/assets/images/demos/demo-5/banners/banner-1.jpg')}}" alt="Banner">
                         </a>
 
                         <div class="banner-content">
@@ -105,7 +105,7 @@
                 <div class="col-md-6">
                     <div class="banner banner-border-hover">
                         <a href="#">
-                            <img src="assets/images/demos/demo-5/banners/banner-2.jpg" alt="Banner">
+                            <img src="{{asset('user/assets/images/demos/demo-5/banners/banner-2.jpg')}}" alt="Banner">
                         </a>
 
                         <div class="banner-content">
@@ -122,7 +122,7 @@
                     <!-- Right Bottom Banner -->
                     <div class="banner banner-border-hover">
                         <a href="#">
-                            <img src="assets/images/demos/demo-5/banners/banner-3.jpg" alt="Banner">
+                            <img src="{{asset('user/assets/images/demos/demo-5/banners/banner-3.jpg')}}" alt="Banner">
                         </a>
 
                         <div class="banner-content">
@@ -193,8 +193,8 @@
                     <div class="product product-2">
                         <figure class="product-media">
                             <a href="product.html">
-                                <img src="assets/images/demos/demo-5/products/product-1-1.jpg" alt="Product image" class="product-image">
-                                <img src="assets/images/demos/demo-5/products/product-1-2.jpg" alt="Product image" class="product-image-hover">
+                                <img src="{{asset('user/assets/images/demos/demo-5/products/product-1-1.jpg')}}" alt="Product image" class="product-image">
+                                <img src="{{asset('user/assets/images/demos/demo-5/products/product-1-2.jpg')}}" alt="Product image" class="product-image-hover">
                             </a>
 
                             <div class="product-action-vertical">
@@ -225,8 +225,8 @@
                     <div class="product product-2">
                         <figure class="product-media">
                             <a href="product.html">
-                                <img src="assets/images/demos/demo-5/products/product-2-1.jpg" alt="Product image" class="product-image">
-                                <img src="assets/images/demos/demo-5/products/product-2-2.jpg" alt="Product image" class="product-image-hover">
+                                <img src="{{asset('user/assets/images/demos/demo-5/products/product-2-1.jpg')}}" alt="Product image" class="product-image">
+                                <img src="{{asset('user/assets/images/demos/demo-5/products/product-2-2.jpg')}}" alt="Product image" class="product-image-hover">
                             </a>
 
                             <div class="product-action-vertical">
@@ -252,8 +252,8 @@
                     <div class="product product-2">
                         <figure class="product-media">
                             <a href="product.html">
-                                <img src="assets/images/demos/demo-5/products/product-3-1.jpg" alt="Product image" class="product-image">
-                                <img src="assets/images/demos/demo-5/products/product-3-2.jpg" alt="Product image" class="product-image-hover">
+                                <img src="{{asset('user/assets/images/demos/demo-5/products/product-3-1.jpg')}}" alt="Product image" class="product-image">
+                                <img src="{{asset('user/assets/images/demos/demo-5/products/product-3-2.jpg')}}" alt="Product image" class="product-image-hover">
                             </a>
 
                             <div class="product-action-vertical">
@@ -280,8 +280,8 @@
                     <div class="product product-2">
                         <figure class="product-media">
                             <a href="product.html">
-                                <img src="assets/images/demos/demo-5/products/product-4-1.jpg" alt="Product image" class="product-image">
-                                <img src="assets/images/demos/demo-5/products/product-4-2.jpg" alt="Product image" class="product-image-hover">
+                                <img src="{{asset('user/assets/images/demos/demo-5/products/product-4-1.jpg')}}" alt="Product image" class="product-image">
+                                <img src="{{asset('user/assets/images/demos/demo-5/products/product-4-2.jpg')}}" alt="Product image" class="product-image-hover">
                             </a>
 
                             <div class="product-action-vertical">
@@ -306,8 +306,8 @@
                     <div class="product product-2">
                         <figure class="product-media">
                             <a href="product.html">
-                                <img src="assets/images/demos/demo-5/products/product-1-1.jpg" alt="Product image" class="product-image">
-                                <img src="assets/images/demos/demo-5/products/product-1-2.jpg" alt="Product image" class="product-image-hover">
+                                <img src="{{asset('user/assets/images/demos/demo-5/products/product-1-1.jpg')}}" alt="Product image" class="product-image">
+                                <img src="{{asset('user/assets/images/demos/demo-5/products/product-1-2.jpg')}}" alt="Product image" class="product-image-hover">
                             </a>
 
                             <div class="product-action-vertical">
@@ -446,7 +446,7 @@
                                                 <div class="product product-2 text-center">
                                                     <figure class="product-media">
                                                         <a href="product.html">
-                                                            <img src="assets/images/demos/demo-5/products/product-13.jpg" alt="Product image" class="product-image">
+                                                            <img src="{{asset('user/assets/images/demos/demo-5/products/product-13.jpg')}}" alt="Product image" class="product-image">
                                                         </a>
                                                     </figure><!-- End .product-media -->
 
@@ -463,7 +463,7 @@
                                                 <div class="product product-2 text-center">
                                                     <figure class="product-media">
                                                         <a href="product.html">
-                                                            <img src="assets/images/demos/demo-5/products/product-14.jpg" alt="Product image" class="product-image">
+                                                            <img src="{{asset('user/assets/images/demos/demo-5/products/product-14.jpg')}}" alt="Product image" class="product-image">
                                                         </a>
                                                     </figure><!-- End .product-media -->
 
@@ -484,7 +484,7 @@
                     <div class="col-lg-6">
                         <div class="banner-set-image banner-border-hover">
                             <a href="#">
-                                <img src="assets/images/demos/demo-5/banners/banner-4.jpg" alt="banner">
+                                <img src="{{asset('user/assets/images/demos/demo-5/banners/banner-4.jpg')}}" alt="banner">
                             </a>
                             <div class="banner-content">
                                 <h3 class="banner-title"><a href="#"><span>Casual basics and<br>trendy key pieces.</span></a></h3><!-- End .banner-title -->
@@ -529,8 +529,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-5-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-5-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-5-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-5-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -562,8 +562,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-6-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-6-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-6-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-6-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -591,8 +591,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-7-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-7-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-7-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-7-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -623,8 +623,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-8-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-8-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-8-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-8-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -651,8 +651,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-9-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-9-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-9-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-9-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -684,8 +684,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-10-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-10-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-10-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-10-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -712,8 +712,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-11-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-11-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-11-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-11-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -740,8 +740,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-12-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-12-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-12-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-12-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -775,8 +775,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-5-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-5-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-5-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-5-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -807,8 +807,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-7-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-7-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-7-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-7-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -839,8 +839,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-10-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-10-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-10-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-10-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -867,8 +867,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-11-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-11-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-11-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-11-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -901,8 +901,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-6-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-6-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-6-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-6-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -930,8 +930,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-12-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-12-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-12-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-12-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -965,8 +965,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-8-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-8-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-8-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-8-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -993,8 +993,8 @@
                             <div class="product product-2">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="assets/images/demos/demo-5/products/product-9-1.jpg" alt="Product image" class="product-image">
-                                        <img src="assets/images/demos/demo-5/products/product-9-2.jpg" alt="Product image" class="product-image-hover">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-9-1.jpg')}}" alt="Product image" class="product-image">
+                                        <img src="{{asset('user/assets/images/demos/demo-5/products/product-9-2.jpg')}}" alt="Product image" class="product-image-hover">
                                     </a>
 
                                     <div class="product-action-vertical">
@@ -1077,7 +1077,7 @@
                 <div class="row">
                     <div class="feed-col">
                         <div class="instagram-feed">
-                            <img src="assets/images/demos/demo-5/instagram/1.jpg" alt="img">
+                            <img src="{{asset('user/assets/images/demos/demo-5/instagram/1.jpg')}}" alt="img">
 
                             <div class="instagram-feed-content">
                                 <a href="#"><i class="icon-heart-o"></i>387</a>
@@ -1088,7 +1088,7 @@
 
                     <div class="feed-col">
                         <div class="instagram-feed">
-                            <img src="assets/images/demos/demo-5/instagram/2.jpg" alt="img">
+                            <img src="{{asset('user/assets/images/demos/demo-5/instagram/2.jpg')}}" alt="img">
 
                             <div class="instagram-feed-content">
                                 <a href="#"><i class="icon-heart-o"></i>691</a>
@@ -1107,7 +1107,7 @@
 
                     <div class="feed-col">
                         <div class="instagram-feed">
-                            <img src="assets/images/demos/demo-5/instagram/3.jpg" alt="img">
+                            <img src="{{asset('user/assets/images/demos/demo-5/instagram/3.jpg')}}" alt="img">
 
                             <div class="instagram-feed-content">
                                 <a href="#"><i class="icon-heart-o"></i>321</a>
@@ -1118,7 +1118,7 @@
 
                     <div class="feed-col">
                         <div class="instagram-feed">
-                            <img src="assets/images/demos/demo-5/instagram/4.jpg" alt="img">
+                            <img src="{{asset('user/assets/images/demos/demo-5/instagram/4.jpg')}}" alt="img">
 
                             <div class="instagram-feed-content">
                                 <a href="#"><i class="icon-heart-o"></i>44</a>
@@ -1129,7 +1129,7 @@
 
                     <div class="feed-col">
                         <div class="instagram-feed">
-                            <img src="assets/images/demos/demo-5/instagram/5.jpg" alt="img">
+                            <img src="{{asset('user/assets/images/demos/demo-5/instagram/5.jpg')}}" alt="img">
 
                             <div class="instagram-feed-content">
                                 <a href="#"><i class="icon-heart-o"></i>128</a>
@@ -1140,7 +1140,7 @@
 
                     <div class="feed-col">
                         <div class="instagram-feed">
-                            <img src="assets/images/demos/demo-5/instagram/6.jpg" alt="img">
+                            <img src="{{asset('user/assets/images/demos/demo-5/instagram/6.jpg')}}" alt="img">
 
                             <div class="instagram-feed-content">
                                 <a href="#"><i class="icon-heart-o"></i>433</a>
@@ -1151,7 +1151,7 @@
 
                     <div class="feed-col">
                         <div class="instagram-feed">
-                            <img src="assets/images/demos/demo-5/instagram/7.jpg" alt="img">
+                            <img src="{{asset('user/assets/images/demos/demo-5/instagram/7.jpg')}}" alt="img">
 
                             <div class="instagram-feed-content">
                                 <a href="#"><i class="icon-heart-o"></i>588</a>
@@ -1162,7 +1162,7 @@
 
                     <div class="feed-col">
                         <div class="instagram-feed">
-                            <img src="assets/images/demos/demo-5/instagram/8.jpg" alt="img">
+                            <img src="{{asset('user/assets/images/demos/demo-5/instagram/8.jpg')}}" alt="img">
 
                             <div class="instagram-feed-content">
                                 <a href="#"><i class="icon-heart-o"></i>87</a>
@@ -1173,7 +1173,7 @@
 
                     <div class="feed-col">
                         <div class="instagram-feed">
-                            <img src="assets/images/demos/demo-5/instagram/9.jpg" alt="img">
+                            <img src="{{asset('user/assets/images/demos/demo-5/instagram/9.jpg')}}" alt="img">
 
                             <div class="instagram-feed-content">
                                 <a href="#"><i class="icon-heart-o"></i>87</a>

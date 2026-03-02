@@ -83,6 +83,6 @@ public function resetPassword(Request $request)
     $user->otp_expire_at = null;
     $user->save();
 
-    return redirect('/')->with('success', 'Password reset successfully');
+    return redirect('/login')->with('success', 'Password reset successfully');
 }
 }

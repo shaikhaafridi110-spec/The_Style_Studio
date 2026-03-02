@@ -51,13 +51,22 @@
         style="background-image: url('{{ asset('user/assets/images/backgrounds/login-bg.jpg') }}')">
 
         <div class="container">
+             @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show auto-close" role="alert">
+        {{ session('success') }}
+    </div>
+@endif
+
             <div class="form-box">
                 <div class="form-tab">
                     <h3>Verify OTP</h3>
 
-                    @if(session('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
-                    @endif
+                   @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show auto-close" role="alert">
+        {{ session('error') }}
+    </div>
+@endif
+                   
                     <form method="POST" action="{{ url('verify-otp') }}">
                         @csrf
 
@@ -108,7 +117,17 @@
             document.getElementById("password").type = type;
             // document.getElementById("confirm_password").type = type;
         });
+        
     </script>
+    <script>
+    setTimeout(function () {
+        let alertList = document.querySelectorAll('.alert');
+        alertList.forEach(function (alert) {
+            let bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        });
+    }, 3000);
+</script>
 </body>
 
 </html>
