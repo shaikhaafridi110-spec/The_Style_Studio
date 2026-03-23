@@ -7,7 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Forgetpassword;
 
 use App\Http\Controllers\GoogleController;
-
+use App\Http\Controllers\AdminProductController;
 
 
 // google authentication
@@ -68,12 +68,15 @@ Route::get('delete_category/{id}',[AdminController::class,'category_del']);
 
 
 //product
-Route::get('admin/product', [AdminController::class, 'product']);
+Route::get('admin/product', [AdminProductController::class, 'product']);
+Route::get('admin/add-product', [AdminProductController::class, 'addproduct']);
+Route::post('admin/saveproduct', [AdminProductController::class, 'saveproduct']);
+
+Route::get('admin/delete_product/{id}', [AdminProductController::class, 'product_delete']);
 
 
 
-
-
+//product-img
 Route::get('admin/product-image', [AdminController::class, 'productimage']);
 Route::get('admin/add-product-image', [AdminController::class, 'addproductimage']);
 Route::post('admin/save-product-image', [AdminController::class, 'saveproductimage']);

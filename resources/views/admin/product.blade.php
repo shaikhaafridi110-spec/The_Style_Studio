@@ -175,7 +175,7 @@
                         @if($products->count() == 0)
                         <tr>
                             <td colspan="7" class="text-center text-danger">
-                                No matching users found
+                                No matching product found
                             </td>
                         </tr>
                         @endif
@@ -202,9 +202,9 @@
                                     class="btn btn-sm btn-edit">
                                     <i class="mdi mdi-pencil-outline"></i> Edit
                                 </a><br>
-                                <a href="{{url('delete_producr',$p->proid)}}"
+                                <a href="{{url('admin/delete_product',$p->proid)}}"
                                     class="btn btn-sm btn-delete"
-                                    onclick="return confirm('Are you sure you want to delete this category?')">
+                                    onclick="return confirm('Are you sure you want to delete this Product?')">
                                     <i class="mdi mdi-delete-outline"></i> Delete
                                 </a>
                             </td>

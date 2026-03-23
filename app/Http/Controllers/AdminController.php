@@ -53,7 +53,7 @@ class AdminController extends Controller
             'status' => 'required|in:0,1',
         ]);
         $file = $req->image;
-        $filename = date('YmdHis') . '.' . $file->getClientOriginalExtension();
+        $filename = time(). '.' . $file->getClientOriginalExtension();
         $file->move(public_path('admin/assets/images/categories'), $filename);
         Category::create([
             'name' => $req->name,
@@ -92,7 +92,7 @@ class AdminController extends Controller
 
 
             $file = $req->image;
-            $filename = date('YmdHis') . '.' . $file->getClientOriginalExtension();
+            $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('admin/assets/images/categories'), $filename);
 
             $category->image = 'categories/' . $filename;
@@ -113,28 +113,13 @@ class AdminController extends Controller
 
 
 
-    public function product(Request $r)
-    {
-
-        $products = Product::select('*');
-        $proname = $r->search;
-        $prostatus = $r->status;
-        if ($proname != '') {
-            $products->where('proname', 'like', '%' . $proname . '%');
-        }
-        if ($prostatus != '') {
-            $products->where('status', $prostatus);
-        }
-        $products = $products->paginate(5)->withQueryString();
-        return view('admin/product', compact('products'));
-    }
-
+   
 
 
 
     public function productimage(Request $r)
     {
-        $query = ProductImage::with('product'); // VERY IMPORTANT
+        $query = ProductImage::with('product'); 
 
         $proname = $r->search;
 
@@ -166,7 +151,7 @@ class AdminController extends Controller
             'sort_order' => 'required|integer|min:0'
         ]);
 
-        $imageName = time() . '_' . uniqid() . '.' . $r->image->extension();
+        $imageName = time().'.' . $r->image->extension();
 
 
         $r->image->move(public_path('admin/assets/images/products'), $imageName);
@@ -201,8 +186,8 @@ class AdminController extends Controller
                 unlink($oldPath);
             }
 
-            // Upload new image
-            $imageName = time() . '_' . $r->image->getClientOriginalName();
+            
+            $imageName = time() . '.' . $r->image->getClientOriginalName();
 
             $r->image->move(
                 public_path('admin/assets/images/products'),
@@ -221,17 +206,7 @@ class AdminController extends Controller
     }
     public function deleteProductImage($id)
     {
-        $image = ProductImage::findOrFail($id);
-
-        // File path
-        $filePath = public_path('admin/assets/images/products/' . $image->image);
-
-        // Delete file if exists
-        if (file_exists($filePath)) {
-            unlink($filePath);
-        }
-
-        // Delete database record
+        $image = ProductImage::findOrFail($id);        
         $image->delete();
 
         return redirect()->back()

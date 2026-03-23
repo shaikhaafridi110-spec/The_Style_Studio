@@ -89,7 +89,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{url('admin/product-image')}}">
-                            <i class="mdi mdi-shopping menu-icon"></i>
+                            <i class="fa-solid fa-file-image menu-icon"></i>
                             <span class="menu-title">Product-Images</span>
                         </a>
                     </li>

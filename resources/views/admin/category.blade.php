@@ -171,7 +171,7 @@
                         @if($cdata->count() == 0)
                         <tr>
                             <td colspan="7" class="text-center text-danger">
-                                No matching users found
+                                No matching category found
                             </td>
                         </tr>
                         @endif
