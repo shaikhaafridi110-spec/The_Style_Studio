@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Forgetpassword;
+use App\Http\Controllers\AdminCategory;
 
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\AdminProductController;
@@ -53,17 +54,18 @@ Route::get('admin/user',[AdminController::class,'adminuser']);
 Route::get('delete_user/{id}',[AdminController::class,'user_del']);
 
 //category
-Route::get('admin/category',[AdminController::class,'admincategory']);
+Route::get('admin/category',[AdminCategory::class,'admincategory']);
 
-Route::get('admin/add-category',[AdminController::class,'addcategory']);
-Route::get('admin/edit-category/{id}',[AdminController::class,'editcategory']);
+Route::get('admin/add-category',[AdminCategory::class,'addcategory']);
+Route::get('admin/edit-category/{id}',[AdminCategory::class,'editcategory']);
 
-Route::post('admin/update_category/{id}',[AdminController::class,'updatecategory']);
+Route::post('admin/update_category/{id}',[AdminCategory::class,'updatecategory']);
 
 
-Route::post('admin/savecategory',[AdminController::class,'savecategory']);
+Route::post('admin/savecategory',[AdminCategory::class,'savecategory']);
 
-Route::get('delete_category/{id}',[AdminController::class,'category_del']);
+Route::get('delete_category/{id}',[AdminCategory::class,'category_del']);
+Route::get('admin/status/{id}',[AdminCategory::class,'status']);
 
 
 
@@ -73,18 +75,21 @@ Route::get('admin/add-product', [AdminProductController::class, 'addproduct']);
 Route::post('admin/saveproduct', [AdminProductController::class, 'saveproduct']);
 
 Route::get('admin/delete_product/{id}', [AdminProductController::class, 'product_delete']);
+Route::get('admin/prostatus/{id}', [AdminProductController::class, 'product_status']);
+Route::get('admin/edit-product/{id}', [AdminProductController::class, 'product_edit']);
+Route::post('admin/updateproduct/{id}', [AdminProductController::class, 'updateProduct']);
 
 
 
 //product-img
-Route::get('admin/product-image', [AdminController::class, 'productimage']);
-Route::get('admin/add-product-image', [AdminController::class, 'addproductimage']);
-Route::post('admin/save-product-image', [AdminController::class, 'saveproductimage']);
+Route::get('admin/product-image', [AdminProductController::class, 'productimage']);
+Route::get('admin/add-product-image', [AdminProductController::class, 'addproductimage']);
+Route::post('admin/save-product-image', [AdminProductController::class, 'saveproductimage']);
 
 
-Route::get('admin/edit-product-image/{id}', [AdminController::class, 'editProductImage']);
-Route::post('admin/update-product-image/{id}', [AdminController::class, 'updateProductImage']);
-Route::get('admin/delete-product-image/{id}', [AdminController::class, 'deleteProductImage']);
+Route::get('admin/edit-product-image/{id}', [AdminProductController::class, 'editProductImage']);
+Route::post('admin/update-product-image/{id}', [AdminProductController::class, 'updateProductImage']);
+Route::get('admin/delete-product-image/{id}', [AdminProductController::class, 'deleteProductImage']);
 
 // user
 

@@ -202,8 +202,8 @@
                     </tbody>
 
                 </table>
-                {{$productImages->links()}}
             </div>
+            {{$productImages->links()}}
         </div>
     </div>
 </div>

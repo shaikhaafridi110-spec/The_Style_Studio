@@ -135,10 +135,10 @@
                     class="form-select filter-select"
                     onchange="this.form.submit()">
                     <option value="">All Status</option>
-                    <option value="active" {{ request('status') == '1' ? 'selected' : '' }}>
+                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>
                         Active
                     </option>
-                    <option value="inactive" {{ request('status') == '0' ? 'selected' : '' }}>
+                    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>
                         Inactive
                     </option>
                 </select>
@@ -148,7 +148,7 @@
                     name="search"
                     value="{{ request('search') }}"
                     class="form-control filter-input"
-                    placeholder="Search category..."
+                    placeholder="Search product..."
                     onkeyup="this.form.submit()">
 
             </form>
@@ -188,7 +188,12 @@
                             <td>{!! $p->description !!}</td>
                             <td>{{ $p->price }}</td>
                             <td>{{ $p->discount_price }}</td>
-                            <td>{{ $p->status }}</td>
+                            <td>
+                                <a href="{{url('admin/prostatus',$p->proid)}}" class="btn {{ $p->status == 'active' ? 'btn-success' : 'btn-danger' }}">
+    
+                                {{ $p->status }}
+                                </a>
+                            </td>
                             <td>{{ $p->category->name }}</td>
                             <td>
                                     <img src="{{ asset('admin/assets/images/'.$p->proimage) }}"
@@ -217,8 +222,8 @@
                     </tbody>
 
                 </table>
-                {{$products->links()}}
             </div>
+            {{$products->links()}}
         </div>
     </div>
 </div>

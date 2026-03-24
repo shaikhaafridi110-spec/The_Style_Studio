@@ -187,11 +187,16 @@
                                     id="category-img"
                                     alt="">
                             </td>
-                            <td>@if($cd->status==1)
+                            <td>
+                                
+                            <a href="{{url('admin/status',$cd->id)}}" class="btn {{ $cd->status == 1 ? 'btn-success' : 'btn-danger' }}">
+                                @if($cd->status==1)
                                 Active
                                 @else
                                 Inactive
                                 @endif
+
+                            </a>
                             </td>
                             <td>
                                 <a href="{{ url('admin/edit-category',$cd->id) }}"
@@ -213,8 +218,8 @@
                     </tbody>
 
                 </table>
-                {{$cdata->links()}}
             </div>
+            {{$cdata->links()}}
         </div>
     </div>
 </div>

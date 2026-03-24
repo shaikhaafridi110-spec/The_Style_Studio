@@ -50,22 +50,9 @@
                             <input type="text" name="slug" class="form-control custom-input" placeholder="Enter slug" required>
                         </div>
 
-                        <!-- Status -->
-
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Status</label>
-                            <div class="form-group ">
-                                <select name="status" required
-                                    class="js-example-basic-single w-100 form-select text-dark">
-                                    <option value="" disabled selected>Select Status</option>
-                                    <option value="1">Active</option>
-                                    <option value="0">Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-
+                       
                         <!-- Image Upload -->
-                        <div class="col-md-6 mb-3">
+                        <div class="">
                             <label class="form-label">Category Image</label>
                             <input type="file" name="image" class="form-control custom-input"require>
                         </div>

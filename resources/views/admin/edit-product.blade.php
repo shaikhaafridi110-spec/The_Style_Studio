@@ -8,7 +8,7 @@
 
         <div>
             <h2 class="page-title">Product Management</h2>
-            <p class="page-subtitle">Add Product here</p>
+            <p class="page-subtitle">Edit Product here</p>
         </div>
 
 
@@ -21,7 +21,7 @@
                 <i class="mdi mdi-home-outline me-2"></i>
                 <span>Dashboard</span>
                 <i class="mdi mdi-chevron-right mx-2"></i>
-                <span class="text-dark fw-semibold">Add-Product</span>
+                <span class="text-dark fw-semibold">Edit-Product</span>
             </div>
         </div>
     </div>
@@ -31,9 +31,9 @@
         <div class="card shadow-sm border-0 rounded-4">
             <div class="card-body">
 
-                <h4 class="card-title mb-3">Add Product</h4>
+                <h4 class="card-title mb-3">Edit Product</h4>
 
-                <form action="{{ url('admin/saveproduct') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ url('admin/updateproduct',$pro->proid) }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="row">
@@ -41,7 +41,7 @@
                         <!-- product Name -->
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Product Name</label>
-                            <input type="text" name="proname" class="form-control custom-input" placeholder="Enter product name" >
+                            <input type="text" name="proname" value="{{$pro->proname}}" class="form-control custom-input" placeholder="Enter product name">
                             @error('proname')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -50,7 +50,7 @@
                         <!-- description -->
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Description</label>
-                            <textarea type="text" name="description" class="form-control custom-input" placeholder="Enter description"></textarea>
+                            <textarea type="text" name="description" class="form-control custom-input" placeholder="Enter description">{{$pro->description}}</textarea>
                             @error('description')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -58,15 +58,15 @@
                         <!--price -->
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Price</label>
-                            <input type="number" name="price" class="form-control custom-input" placeholder="Enter price" >
+                            <input type="number" name="price" value="{{$pro->price}}" class="form-control custom-input" placeholder="Enter price">
                             @error('price')
                             <small class="text-danger">{{ $message }}</small>
-                            @enderror 
+                            @enderror
                         </div>
                         <!-- discount_price -->
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Discount_Price</label>
-                            <input type="number" name="discount_price" class="form-control custom-input" placeholder="Enter discount_price" >
+                            <input type="number" name="discount_price" value="{{$pro->discount_price}}" class="form-control custom-input" placeholder="Enter discount_price">
                             @error('discount_price')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -76,29 +76,44 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Category</label>
                             <div class="form-group ">
-                                <select name="catid" 
+                                <select name="catid"
                                     class="js-example-basic-single w-100 form-select text-dark">
-                                    <option value="" disabled selected>Select category</option>
+
                                     @foreach($data as $d)
-                                        <option value="{{$d->id}}">{{$d->name}}</option>
-                                    @endforeach
+                                    <option value="{{ $d->id }}"
+                                        {{ $d->id == $pro->catid ? 'selected' : '' }}>
+                                        {{ $d->name }}
+
+                                        @endforeach
                                 </select>
                                 @error('catid')
                                 <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                         </div>
+                        <div class="col-md-6 mb-3">
+                        </div>
 
                         <!-- Image Upload -->
+                        <label class="form-label">Product Image</label>
+                        
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Product Image</label>
                             <input type="file" name="proimage" class="form-control custom-input">
                             @error('proimage')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
+                        <div class="col-md-6 mb-3">
+                            
+                                    <img src="{{ asset('admin/assets/images/'.$pro->proimage) }}"
+                                    id="product-img"
+                                    alt=""
+                                    width="200px"
+                                    
+                                    >
+                        </div>
                     </div>
-                     
+
                     <!-- Buttons -->
                     <div class="mt-3">
                         <button type="submit" class="btn btn-primary me-2">

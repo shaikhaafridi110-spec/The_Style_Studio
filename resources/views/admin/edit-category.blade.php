@@ -64,20 +64,9 @@
 
                         <!-- Status -->
 
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Status</label>
-                            <div class="form-group ">
-                                <select name="status" required
-                                    class="js-example-basic-single w-100 form-select text-dark">
-                                    <!-- <option value="" disabled selected>Select Status</option> -->
-                                    <option value="1" {{$cat->status==1?'selected':""}}>Active</option>
-                                    <option value="0" {{$cat->status==0?'selected':""}}>Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-
+                       
                         <!-- Image Upload -->
-                        <div class="col-md-6 mb-3">
+                        <div >
                             <label class="form-label">Category Image</label>
 
                             <!-- Show Old Image -->
