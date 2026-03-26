@@ -80,6 +80,56 @@
         transform: translateY(-2px);
         color: #fff;
     }
+
+    /* Pagination container */
+.pagination {
+    gap: 8px;
+    align-items: center;
+}
+
+/* Page items */
+.page-item .page-link {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    color: #2f4fb3;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.page-item .page-link:hover {
+    background-color: #2f4fb3;
+    color: #fff;
+    border-color: #2f4fb3;
+}
+
+/* Active page */
+.page-item.active .page-link {
+    background: linear-gradient(135deg, #4a6cf7, #2f4fb3);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 10px rgba(47, 79, 179, 0.4);
+}
+
+/* Disabled (dots ...) */
+.page-item.disabled .page-link {
+    background-color: #f1f1f1;
+    color: #999;
+    border: none;
+}
+
+/* Prev/Next arrows */
+.page-item:first-child .page-link,
+.page-item:last-child .page-link {
+    border-radius: 12px;
+    width: auto;
+    padding: 0 12px;
+}
 </style>
 @endsection
 
@@ -219,7 +269,10 @@
 
                 </table>
             </div>
-            {{$cdata->links()}}
+            <!-- {{$cdata->links()}}
+              -->
+
+              {{ $cdata->onEachSide(2)->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>

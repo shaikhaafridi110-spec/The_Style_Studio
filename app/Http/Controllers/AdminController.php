@@ -11,8 +11,11 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+
+  
     public function adminhome()
     {
+        
         return view('admin/index');
     }
 
@@ -34,21 +37,4 @@ class AdminController extends Controller
         User::where('id', $id)->delete();
         return redirect('admin/user');
     }
-
-
-
-   
-
-
-
-
-    //*********product*********
-
-
-
-   
-
-
-
-    
 }

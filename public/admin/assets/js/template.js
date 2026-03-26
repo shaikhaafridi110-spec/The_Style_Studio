@@ -22,7 +22,7 @@
         }
       } else {
         //for other url
-        if (element.attr('href').indexOf(current) !== -1) {
+        if (element.attr('href') === window.location.origin + '/' + location.pathname.split('/').slice(1).join('/')) {
           element.parents('.nav-item').last().addClass('active');
           if (element.parents('.sub-menu').length) {
             element.closest('.collapse').addClass('show');

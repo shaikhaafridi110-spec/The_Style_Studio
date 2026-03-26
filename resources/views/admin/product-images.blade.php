@@ -2,6 +2,54 @@
 
 @section('user-css')
 <style>
+    .filter-select {
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    width: 100%;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Hover Effect */
+.filter-select:hover {
+    border-color: #007bff;
+}
+
+/* Focus Effect */
+
+.filter-select:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(255,255,255,0.4);
+}
+
+/* Dropdown arrow custom */
+.filter-select {
+    background-color:white; /* match your blue */
+    color: #090909;
+    border: 1px solid #ffffff80;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 15px;
+    width: 220px;
+    appearance: none;
+    cursor: pointer;
+max-height: 200px;
+    overflow-y: auto;
+    /* arrow color white */
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5 7l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+}
+.filter-select option {
+    color: #000; /* dropdown list always white bg */
+    background-color: #fff;
+}
+
+
     .btn-edit {
         background: linear-gradient(45deg, #36b9cc, #1c7ed6);
         color: #fff;
@@ -80,6 +128,56 @@
         transform: translateY(-2px);
         color: #fff;
     }
+
+    /* Pagination container */
+.pagination {
+    gap: 8px;
+    align-items: center;
+}
+
+/* Page items */
+.page-item .page-link {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    color: #2f4fb3;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.page-item .page-link:hover {
+    background-color: #2f4fb3;
+    color: #fff;
+    border-color: #2f4fb3;
+}
+
+/* Active page */
+.page-item.active .page-link {
+    background: linear-gradient(135deg, #4a6cf7, #2f4fb3);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 10px rgba(47, 79, 179, 0.4);
+}
+
+/* Disabled (dots ...) */
+.page-item.disabled .page-link {
+    background-color: #f1f1f1;
+    color: #999;
+    border: none;
+}
+
+/* Prev/Next arrows */
+.page-item:first-child .page-link,
+.page-item:last-child .page-link {
+    border-radius: 12px;
+    width: auto;
+    padding: 0 12px;
+}
 </style>
 @endsection
 
@@ -130,16 +228,25 @@
             <form method="GET" action="{{ url('admin/product-image') }}"
                 class="d-flex align-items-center gap-3 filter-form">
 
-                <!-- Status Dropdown -->
 
+                <!-- category Dropdown -->
+                <select  name="product"
+                    class="form-select filter-select"
+                    onchange="this.form.submit()" >
+
+                    <option value="">Product</option>
+
+                    @foreach($pro as $p)
+                    <option value="{{ $p->proid }}"
+                        {{ request('product') == $p->proid ? 'selected' : '' }}>
+                        {{ $p->proname }}
+                    </option>
+                    @endforeach
+
+                </select>
 
                 <!-- Search Input -->
-                <input type="text"
-                    name="search"
-                    value="{{ request('search') }}"
-                    class="form-control filter-input"
-                    placeholder="Search category..."
-                    onkeyup="this.form.submit()">
+
 
             </form>
 
@@ -183,9 +290,9 @@
 
                             <td>
                                 <a href="{{ url('admin/edit-product-image',$p->proimg_id) }}"
-                                    class="btn btn-sm btn-warning">
-                                    <i class="mdi mdi-primary"></i> Edit
-                                </a>
+                                    class="btn btn-sm btn-edit">
+                                    <i class="mdi mdi-pencil-outline"></i> Edit
+                                </a><br>
 
                                 <a href="{{ url('admin/delete-product-image',$p->proimg_id) }}"
                                     class="btn btn-sm btn-danger"
@@ -203,7 +310,9 @@
 
                 </table>
             </div>
-            {{$productImages->links()}}
+            <!-- {{$productImages->links()}}
+              -->
+            {{ $productImages->onEachSide(1)->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>

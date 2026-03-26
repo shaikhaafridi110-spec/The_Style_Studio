@@ -80,6 +80,56 @@
         transform: translateY(-2px);
         color: #fff;
     }
+
+    /* Pagination container */
+.pagination {
+    gap: 8px;
+    align-items: center;
+}
+
+/* Page items */
+.page-item .page-link {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    color: #2f4fb3;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.page-item .page-link:hover {
+    background-color: #2f4fb3;
+    color: #fff;
+    border-color: #2f4fb3;
+}
+
+/* Active page */
+.page-item.active .page-link {
+    background: linear-gradient(135deg, #4a6cf7, #2f4fb3);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 10px rgba(47, 79, 179, 0.4);
+}
+
+/* Disabled (dots ...) */
+.page-item.disabled .page-link {
+    background-color: #f1f1f1;
+    color: #999;
+    border: none;
+}
+
+/* Prev/Next arrows */
+.page-item:first-child .page-link,
+.page-item:last-child .page-link {
+    border-radius: 12px;
+    width: auto;
+    padding: 0 12px;
+}
 </style>
 @endsection
 
@@ -131,7 +181,7 @@
                 class="d-flex align-items-center gap-3 filter-form">
 
                 <!-- Status Dropdown -->
-                <select style="background-color: white;" name="status"
+                <select style="background-color: white;color:black;" name="status"
                     class="form-select filter-select"
                     onchange="this.form.submit()">
                     <option value="">All Status</option>
@@ -143,6 +193,16 @@
                     </option>
                 </select>
 
+            <!-- category Dropdown -->
+                <select style="background-color: white;color:black;" name="category"
+                    class="form-select filter-select"
+                    onchange="this.form.submit()">
+                    <option value="">Category</option>
+                    @foreach($cat as $c)
+                    <option value="{{$c->id}}"{{ request('category') == $c->id ? 'selected' : '' }}>{{$c->name}}</option>
+                    @endforeach
+                </select>
+                
                 <!-- Search Input -->
                 <input type="text"
                     name="search"
@@ -198,8 +258,8 @@
                             <td>
                                     <img src="{{ asset('admin/assets/images/'.$p->proimage) }}"
                                     id="product-img"
-                                    alt="">
-                                    {{$p->proimage}}
+                                    alt="   {{$p->proimage}}">
+                                 
                                    
                             </td>
                             <td>
@@ -223,7 +283,10 @@
 
                 </table>
             </div>
-            {{$products->links()}}
+            <!-- {{$products->links()}}
+              -->
+
+              {{ $products->onEachSide(2)->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>

@@ -2,19 +2,21 @@
 <html lang="en">
 
 <head>
-   <title>The_Style_Studio</title>
+    <title>The_Style_Studio</title>
 
-<link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
-<!-- Font Awesome (ONLY ONE VERSION) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Font Awesome (ONLY ONE VERSION) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<link rel="stylesheet" href="{{asset('admin/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
-<link rel="stylesheet" href="{{asset('admin/assets/vendors/css/vendor.bundle.base.css')}}">
-<link rel="stylesheet" href="{{asset('admin/assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('admin/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
+    <link rel="stylesheet" href="{{asset('admin/assets/vendors/css/vendor.bundle.base.css')}}">
+    <link rel="stylesheet" href="{{asset('admin/assets/css/style.css')}}">
 
-@yield('user-css')
+    @yield('user-css')
 </head>
+
+
 
 <body>
     <div class="container-scroller">
@@ -40,7 +42,16 @@
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
                             <img src="{{asset('admin/assets/images/faces/f3.png')}}" alt="profile" />
-                            <span class="nav-profile-name text-uppercase">{{Auth::user()->name}}</span>
+                            <span class="nav-profile-name text-uppercase">
+                                @if(Auth::check())
+                                {{ Auth::user()->name }}
+                                @else
+                                <script>
+                                    window.location.href = "{{ url('login') }}";
+                                </script>
+                                @endif
+
+                            </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                             <a class="dropdown-item">
@@ -61,39 +72,45 @@
         <!-- partial -->
         <div class="container-fluid page-body-wrapper">
             <!-- partial:partials/_sidebar.html -->
-            <nav class="sidebar sidebar-offcanvas"id="sidebar">
+            <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
-                    <li class="nav-item">
+
+                    <li class="nav-item {{ request()->is('admin/home') ? 'active' : '' }}">
                         <a class="nav-link" href="{{url('admin/home')}}">
                             <i class="mdi mdi-home menu-icon"></i>
                             <span class="menu-title">Dashboard</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+
+                    <li class="nav-item {{ request()->is('admin/user*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{url('admin/user')}}">
                             <i class="mdi mdi-account menu-icon"></i>
                             <span class="menu-title">User</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+
+                    <li class="nav-item {{ request()->is('admin/category*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{url('admin/category')}}">
                             <i class="mdi mdi-view-grid-outline menu-icon"></i>
                             <span class="menu-title">Category</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+
+                    <!-- IMPORTANT FIX HERE -->
+                    <li class="nav-item {{ request()->segment(2) == 'product' ? 'active' : '' }}">
                         <a class="nav-link" href="{{url('admin/product')}}">
                             <i class="mdi mdi-shopping menu-icon"></i>
                             <span class="menu-title">Product</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+
+                    <li class="nav-item {{ request()->segment(2) == 'product-image' ? 'active' : '' }}">
                         <a class="nav-link" href="{{url('admin/product-image')}}">
                             <i class="fa-solid fa-file-image menu-icon"></i>
                             <span class="menu-title">Product-Images</span>
                         </a>
                     </li>
-                    
+
                 </ul>
             </nav>
             <!-- partial -->
@@ -102,7 +119,7 @@
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
                 <!-- partial -->
-                <footer class="footer" >
+                <footer class="footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
                         <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2024 <a
                                 href="https://www.bootstrapdash.com/" target="_blank">Bootstrapdash</a>. All rights reserved.</span>
@@ -139,13 +156,13 @@
     <!-- End custom js for this page-->
     <script src="{{asset('admin/assets/js/jquery.cookie.js')}}" type="text/javascript"></script>
     <script>
-    setTimeout(function () {
-        let alert = document.querySelector('.alert');
-        if(alert){
-            alert.style.display = 'none';
-        }
-    }, 3000);
-</script>
+        setTimeout(function() {
+            let alert = document.querySelector('.alert');
+            if (alert) {
+                alert.style.display = 'none';
+            }
+        }, 3000);
+    </script>
 </body>
 
 </html>

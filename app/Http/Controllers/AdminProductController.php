@@ -12,6 +12,7 @@ class AdminProductController extends Controller
     {
 
         $products = Product::select('*');
+        $cat=Category::select('id','name')->get();
         $proname = $r->search;
         $prostatus = $r->status;
         if ($proname != '') {
@@ -20,8 +21,11 @@ class AdminProductController extends Controller
         if ($prostatus != '') {
             $products->where('status', $prostatus);
         }
+        if($r->category!=''){
+            $products->where('catid',$r->category);
+        }
         $products = $products->paginate(5)->withQueryString();
-        return view('admin/product', compact('products'));
+        return view('admin/product', compact('products','cat'));
     }
     public function addproduct(){
         $data=Category::select('id','name')->where('status','1')->get();
@@ -36,7 +40,7 @@ class AdminProductController extends Controller
             'catid'=>'required',
         'proimage' => 'required|image|mimes:jpg|max:2048'
         ]);
-        $imageName = time().'.' . $res->proimage->getClientOriginalExtension();
+        $imageName = time(). '_' . uniqid() .'.' . $res->proimage->getClientOriginalExtension();
 
         $res->proimage->move(public_path('admin/assets/images/products'), $imageName);
 
@@ -94,7 +98,7 @@ class AdminProductController extends Controller
         $pro->catid=$r->catid;
 
         if($r->proimage!=''){
-             $imageName = time().'.' . $r->proimage->getClientOriginalExtension();
+             $imageName = time(). '_' . uniqid() .'.' .  $r->proimage->getClientOriginalExtension();
 
             $r->proimage->move(public_path('admin/assets/images/products'), $imageName);
 
@@ -112,20 +116,20 @@ class AdminProductController extends Controller
 
     public function productimage(Request $r)
     {
-        $query = ProductImage::with('product'); 
+        $query = ProductImage::with('product')->orderby('proid','asc')->orderby('sort_order','asc'); 
+        $pro= Product::has('images')->where('status','active')->get();
+        $proname = $r->product;
 
-        $proname = $r->search;
-
-
-        if (!empty($proname)) {
-            $query->whereHas('product', function ($q) use ($proname) {
-                $q->where('proname', 'like', '%' . $proname . '%');
-            });
+        if($proname!=''){
+                $query->where('proid',$proname);
         }
+
+
+        
 
         $productImages = $query->paginate(5)->withQueryString();
 
-        return view('admin.product-images', compact('productImages'));
+        return view('admin.product-images', compact('productImages','pro'));
     }
     
 
@@ -140,25 +144,28 @@ class AdminProductController extends Controller
     {
 
         $r->validate([
-            'proid' => 'required|exists:products,proid',
-            'image' => 'required|image|mimes:jpg|max:2048',
-            'sort_order' => 'required|integer|min:0'
-        ]);
+        'proid' => 'required|exists:products,proid',
+        'image.*' => 'required|image|mimes:jpg,jpeg,png|max:2048'
+    ]);
+    $sort=1;
+    foreach ($r->file('image') as $img) {
 
-        $imageName = time().'.' . $r->image->getClientOriginalExtension();
+        $imageName = time(). '_' . uniqid() .'.' . $img->getClientOriginalExtension();
 
 
-        $r->image->move(public_path('admin/assets/images/products'), $imageName);
+        $img->move(public_path('admin/assets/images/products'), $imageName);
 
 
         ProductImage::create([
             'proid' => $r->proid,
             'image' => 'products/' . $imageName,
-            'sort_order' => $r->sort_order
+            'sort_order' => $sort
         ]);
+        $sort++;
+    }
 
         return redirect('admin/product-image')
-            ->with('success', 'Product Image Added Successfully!');
+            ->with('success', 'Multiple Product Images Added Successfully!');
     }
     public function editProductImage($id)
     {
@@ -181,7 +188,7 @@ class AdminProductController extends Controller
             }
 
             
-            $imageName = time() . '.' . $r->image->getClientOriginalName();
+            $imageName = time(). '_' . uniqid() .'.' .  $r->image->getClientOriginalName();
 
             $r->image->move(
                 public_path('admin/assets/images/products'),

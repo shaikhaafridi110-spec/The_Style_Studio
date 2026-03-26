@@ -52,21 +52,13 @@
                         </div>
 
                         <!-- Sort Order -->
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Sort Order</label>
-                            <input type="number" name="sort_order"
-                                class="form-control"
-                                placeholder="Enter sort order" required>
-                                @error('sort_order')
-    <small class="text-danger">{{ $message }}</small>
-@enderror
-                        </div>
+                       
 
                         <!-- Image Upload -->
-                        <div class="col-md-6 mb-3">
+                        <div class="">
                             <label class="form-label">Product Image</label>
-                            <input type="file" name="image"
-                                class="form-control" required>
+                            <input type="file" name="image[]"
+                                class="form-control" multiple required>
                                 @error('image')
     <small class="text-danger">{{ $message }}</small>
 @enderror
