@@ -96,19 +96,36 @@
                         </a>
                     </li>
 
-                    <!-- IMPORTANT FIX HERE -->
-                    <li class="nav-item {{ request()->segment(2) == 'product' ? 'active' : '' }}">
-                        <a class="nav-link" href="{{url('admin/product')}}">
+
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#productMenu" aria-expanded="false" aria-controls="productMenu">
                             <i class="mdi mdi-shopping menu-icon"></i>
                             <span class="menu-title">Product</span>
+                            <i class="menu-arrow"></i>
                         </a>
-                    </li>
 
-                    <li class="nav-item {{ request()->segment(2) == 'product-image' ? 'active' : '' }}">
-                        <a class="nav-link" href="{{url('admin/product-image')}}">
-                            <i class="fa-solid fa-file-image menu-icon"></i>
-                            <span class="menu-title">Product-Images</span>
-                        </a>
+                        <div class="collapse" id="productMenu">
+                            <ul class="nav flex-column sub-menu">
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('admin/product') }}">
+                                        Product List
+                                    </a>
+                                </li>
+
+                                
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('admin/product-image') }}">
+                                        Product Images
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('admin/product-size') }}">
+                                        Product Size
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
 
                 </ul>
@@ -163,6 +180,8 @@
             }
         }, 3000);
     </script>
+
+     @yield('js')
 </body>
 
 </html>

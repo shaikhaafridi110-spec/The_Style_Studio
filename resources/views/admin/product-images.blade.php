@@ -257,7 +257,7 @@ max-height: 200px;
                     <thead>
                         <tr>
 
-                            <th>Proname</th>
+                            <th>Product name</th>
                             <th>Image</th>
                             <th>Sort_Order</th>
                             <th>Action</th>

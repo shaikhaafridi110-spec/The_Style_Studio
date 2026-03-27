@@ -91,6 +91,18 @@ Route::get('admin/edit-product-image/{id}', [AdminProductController::class, 'edi
 Route::post('admin/update-product-image/{id}', [AdminProductController::class, 'updateProductImage']);
 Route::get('admin/delete-product-image/{id}', [AdminProductController::class, 'deleteProductImage']);
 
+
+
+//product-size
+
+
+Route::get('admin/product-size',[AdminProductController::class,'productsize']);
+Route::get('admin/add-product_size',[AdminProductController::class,'addproductsize']);
+Route::post('admin/save-product-size', [AdminProductController::class, 'saveproductsize']);
+Route::post('admin/update-product-stock', [AdminProductController::class, 'updatestock']);
+Route::get('admin/delete_product-size/{id}', [AdminProductController::class, 'deletesize']);
+
+
 // user
 
 Route::get('/', [UserController::class, 'home']);
