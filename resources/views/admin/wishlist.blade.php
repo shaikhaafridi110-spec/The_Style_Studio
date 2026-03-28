@@ -2,7 +2,7 @@
 
 @section('user-css')
 <style>
-     /* Pagination container */
+    /* Pagination container */
     .pagination {
         gap: 8px;
         align-items: center;
@@ -51,6 +51,7 @@
         width: auto;
         padding: 0 12px;
     }
+
     .page-title {
         font-weight: 600;
         font-size: 26px;
@@ -77,6 +78,12 @@
     .shadow-sm {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
+     #product-img {
+        width: 100px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
 </style>
 @endsection
 
@@ -85,9 +92,9 @@
 
     <!-- Page Header -->
     <div class="page-header d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="page-title">User Management</h2>
-            <p class="page-subtitle">Manage all registered users here</p>
+        <div class="wishlist-header">
+            <h2 class="page-title">Wishlist</h2>
+            <p class="page-subtitle">View of favorite products</p>
         </div>
 
     </div>
@@ -99,7 +106,7 @@
                 <i class="mdi mdi-home-outline me-2"></i>
                 <span>Dashboard</span>
                 <i class="mdi mdi-chevron-right mx-2"></i>
-                <span class="text-dark fw-semibold">User</span>
+                <span class="text-dark fw-semibold">Withlist</span>
             </div>
         </div>
     </div>
@@ -109,14 +116,8 @@
         <div class="card-header bg-gradient-primary text-white rounded-top-4 d-flex justify-content-between align-items-center">
             <h5 class="mb-0">User List</h5>
             <div class="d-flex justify-content-end">
-                <form method="GET" action="{{ url('admin/user') }}" class="search-form">
-                    <input
-                        type="text"
-                        name="search"
-                        value="{{ request('search') }}"
-                        onchange="this.form.submit()"
-                        class="form-control search-input"
-                        placeholder="Search user...">
+                <form method="GET" action="" class="search-form">
+                    
                 </form>
             </div>
         </div>
@@ -126,14 +127,11 @@
                 <table class="table custom-table align-middle">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Address Line 1</th>
-                            <th>Address Line 2</th>
-                            <th>City / State</th>
-                            <th>Postal Code</th>
-                            <th>Delete</th>
+                            <th>User Name</th>
+                            <th>Prduct name</th>
+                            <th>Product Image</th>
+                            
+                            <th>Fulldetails of user</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -149,22 +147,28 @@
                         @foreach($data as $d)
 
                         <tr>
-                            <td>{{$d->name}}</td>
-                            <td>{{ $d->email }}</td>
-                            <td>{{ $d->phone }}</td>
-                            <td>{{ $d->address_line1 }}</td>
-                            <td>{{ $d->address_line2 }}</td>
-                            <td>{{ $d->city }}, {{ $d->state }}</td>
-                            <td>{{ $d->postal_code }}</td>
+                            
                             <td>
-                                <a href="{{url('delete_user',$d->id)}}"
-                                    class="btn btn-sm btn-delete"
-                                    onclick="return confirm('Are you sure you want to delete this user?')">
-                                    <i class="mdi mdi-delete-outline"></i> Delete
-                                </a>
+                               {{ $d->user->name}}
+                            </td>
+                            
+                            <td>{{$d->product->proname}}</td>
+                            <td>
+                                <img src="{{ asset('admin/assets/images/'.$d->product->proimage) }}"
+                                    id="product-img"
+                                    alt="   {{$d->product->proimage}}">
+                            </td>
+                            <td>
+                                <form action="{{ url('admin/user')}}" method="get">
+                                    <input type="hidden" name="userid" value="{{$d->user_id}}">
+                             <button style="width:100px"
+                                    class="btn btn-primary">
+                                     Click
+                            </button>
+                            </form>
                             </td>
 
-                            </td>
+                            
                         </tr>
 
                         @endforeach
@@ -172,7 +176,7 @@
                     </tbody>
 
                 </table>
-                
+
 
                 {{ $data->onEachSide(2)->links('pagination::bootstrap-5') }}
             </div>

@@ -28,6 +28,9 @@ class AdminController extends Controller
         if ($name != "") {
             $data->where('name', 'like', '%' . $name . '%');
         }
+        if ($req->userid != "") {
+            $data->where('id',$req->userid);
+        }
         $data = $data->paginate(10)->withQueryString();
         //return view('user',);
         return view('admin/user', compact('data'));

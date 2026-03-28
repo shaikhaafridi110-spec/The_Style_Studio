@@ -6,10 +6,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Forgetpassword;
 use App\Http\Controllers\AdminCategory;
-
+use App\Http\Controllers\AdminWishlistController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\AdminProductController;
-
+use App\Http\Controllers\AdminWishlistController as ControllersAdminWishlistController;
 
 // google authentication
 
@@ -44,7 +44,7 @@ Route::post('comlete_process',[LoginController::class,'cProcess']);
 
 
 
-// Admin
+// *********************Admin****************************
 
 Route::get('admin/home',[AdminController::class,'adminhome']);
 
@@ -101,6 +101,29 @@ Route::get('admin/add-product_size',[AdminProductController::class,'addproductsi
 Route::post('admin/save-product-size', [AdminProductController::class, 'saveproductsize']);
 Route::post('admin/update-product-stock', [AdminProductController::class, 'updatestock']);
 Route::get('admin/delete_product-size/{id}', [AdminProductController::class, 'deletesize']);
+
+
+
+
+//wishlist
+
+
+Route::get('admin/wishlist',[AdminWishlistController::class,'withlist']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // user

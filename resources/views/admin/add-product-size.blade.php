@@ -22,7 +22,11 @@
             </div>
         </div>
     </div>
-
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
     <!-- Main Card -->
     <div class="col-12 grid-margin stretch-card">
         <div class="card shadow-sm border-0 rounded-4">
@@ -52,38 +56,39 @@
                         </div>
 
                         <!-- size-->
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Prduct Size</label>
-                            <select name="size" class="form-select">
-                                <option value="">Select Size</option>
+                        <div class="mb-3">
+                            <label class="form-label">Product Sizes</label>
 
-                                <!-- Upper -->
-                                <option value="S">S</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                                <option value="XXL">XXL</option>
+                            <div class="row">
 
-                                <!-- Lower -->
-                                <option value="28">28</option>
-                                <option value="30">30</option>
-                                <option value="32">32</option>
-                                <option value="34">34</option>
-                                <option value="36">36</option>
-                                <option value="38">38</option>
-                            </select>
-                            @error('size')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
+                                @php
+                                $sizes = ['S','M','L','XL','XXL','28','30','32','34','36','38'];
+                                @endphp
 
-                        <!-- qty--->
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Stock</label>
-                            <input type="number" name="stock" class="form-control custom-input" placeholder="Enter stock">
-                            @error('stock')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
+                                @foreach($sizes as $s)
+                                <div class="col-md-3 mb-2">
+                                    <div class="d-flex align-items-center border rounded p-2">
+
+                                        <!-- Checkbox -->
+                                        <input type="checkbox" name="size[]" value="{{ $s }}" class="me-2 size-check">
+
+                                        <!-- Label -->
+                                        <label class="me-2">{{ $s }}</label>
+
+                                        <!-- Stock Input -->
+                                        <input type="number"
+                                            name="stock[{{ $s }}]"
+                                            class="form-control form-control-sm stock-input"
+                                            placeholder="Qty"
+                                            min="1"
+                                            
+                                            disabled>
+
+                                    </div>
+                                </div>
+                                @endforeach
+
+                            </div>
                         </div>
 
 
@@ -106,4 +111,37 @@
         </div>
     </div>
 </div>
+@endsection
+
+
+
+@section('js')
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    document.querySelectorAll(".size-check").forEach(function (checkbox) {
+
+        checkbox.addEventListener("change", function () {
+
+            let stockInput = this.closest('.d-flex').querySelector(".stock-input");
+
+            if (this.checked) {
+                stockInput.disabled = false;
+                stockInput.focus();
+            } else {
+                stockInput.disabled = true;
+                stockInput.value = "";
+            }
+
+        });
+
+    });
+
+});
+</script>
+<script>
+setTimeout(() => {
+    document.querySelectorAll('.alert').forEach(el => el.style.display = 'none');
+}, 3000);
+</script>
 @endsection

@@ -75,21 +75,21 @@
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
 
-                    <li class="nav-item {{ request()->is('admin/home') ? 'active' : '' }}">
+                    <li class="nav-item">
                         <a class="nav-link" href="{{url('admin/home')}}">
                             <i class="mdi mdi-home menu-icon"></i>
                             <span class="menu-title">Dashboard</span>
                         </a>
                     </li>
 
-                    <li class="nav-item {{ request()->is('admin/user*') ? 'active' : '' }}">
+                    <li class="nav-item">
                         <a class="nav-link" href="{{url('admin/user')}}">
                             <i class="mdi mdi-account menu-icon"></i>
                             <span class="menu-title">User</span>
                         </a>
                     </li>
 
-                    <li class="nav-item {{ request()->is('admin/category*') ? 'active' : '' }}">
+                    <li class="nav-item">
                         <a class="nav-link" href="{{url('admin/category')}}">
                             <i class="mdi mdi-view-grid-outline menu-icon"></i>
                             <span class="menu-title">Category</span>
@@ -126,6 +126,12 @@
                                 </li>
                             </ul>
                         </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url('admin/wishlist')}}">
+                            <i class="mdi mdi-view-grid-outline menu-icon"></i>
+                            <span class="menu-title">Wishlist</span>
+                        </a>
                     </li>
 
                 </ul>

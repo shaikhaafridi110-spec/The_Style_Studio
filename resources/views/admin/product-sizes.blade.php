@@ -270,11 +270,11 @@
 <style>
     .size-row1 {
         display: flex;
-   
+
         align-items: center;
         justify-content: space-evenly;
         margin: 10px;
-        
+
         gap: 8px;
         background: #f5f6fa;
         padding: 8px 10px;
@@ -336,6 +336,171 @@
         border: none;
         border-radius: 8px;
     }
+
+    .size-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f5f6ff;
+        padding: 10px;
+        margin-bottom: 8px;
+        border-radius: 10px;
+    }
+
+    /* LEFT SIDE */
+    .left-part {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* RIGHT SIDE */
+    .right-part {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* SIZE BADGE */
+    .badge-size {
+        background: #5b5be6;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 8px;
+    }
+
+    /* DELETE */
+    .delete-btn {
+        background: #ff4d4f;
+        color: white;
+        padding: 6px 8px;
+        border-radius: 8px;
+    }
+
+    /* INPUT */
+    .input-stock {
+        width: 60px;
+        text-align: center;
+    }
+
+    /* BUTTONS */
+    .btn-minus,
+    .btn-plus {
+        width: 35px;
+        height: 35px;
+        border: none;
+        border-radius: 6px;
+    }
+
+    .btn-minus {
+        background: #ff4d4f;
+        color: white;
+    }
+
+    .btn-plus {
+        background: #5b5be6;
+        color: white;
+    }
+
+    /* Container */
+    .size-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f9f9ff;
+        padding: 12px 16px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        transition: 0.3s;
+    }
+
+    /* Hover effect */
+    .size-row:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Left side */
+    .left-part {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Size badge */
+    .badge-size {
+        background: linear-gradient(135deg, #5b5be6, #7a7aff);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 10px;
+        font-weight: 600;
+    }
+
+    /* Stock text */
+    .old-stock {
+        color: #555;
+        font-weight: 500;
+    }
+
+    /* Delete button */
+    .delete-btn {
+        background: #ffe5e5;
+        color: #ff4d4f;
+        padding: 6px 10px;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+
+    .delete-btn:hover {
+        background: #ff4d4f;
+        color: white;
+    }
+
+    /* Right side */
+    .right-part {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Input */
+    .input-stock {
+        width: 60px;
+        height: 35px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    /* Buttons */
+    .btn-minus {
+        background: #ff4d4f;
+        color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+        border: none;
+    }
+
+    .btn-plus {
+        background: #5b5be6;
+        color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+        border: none;
+    }
+
+    /* Update button */
+    .btn-update {
+        margin-top: 10px;
+        padding: 10px 20px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #5b5be6, #7a7aff);
+        color: white;
+        border: none;
+    }
 </style>
 
 @endsection
@@ -384,12 +549,41 @@
 
             <h5 class="mb-0">Product Size List</h5>
 
-            <form method="GET" action="{{ url('admin/product') }}"
+            <form method="GET" action="{{ url('admin/product-size') }}"
                 class="d-flex align-items-center gap-3 filter-form">
 
                 <!-- Status Dropdown -->
 
+                <select name="size" style="width: fit-content;"
+                    class="form-select filter-select"
+                    onchange="this.form.submit()">
 
+                    <option value="">Size</option>
+
+                    @foreach($ps as $p)
+                    <option value="{{ $p->size }}"
+                        {{ request('size') == $p->size ? 'selected' : '' }}>
+                        {{ $p->size }}
+                    </option>
+                    @endforeach
+
+                </select>
+
+                <select name="product"
+                    class="form-select filter-select"
+                    onchange="this.form.submit()">
+
+                    <option value="">Product</option>
+
+                    @foreach($pro as $p)
+                    <option value="{{ $p->proid }}"
+                        {{ request('product') == $p->proid ? 'selected' : '' }}>
+                        {{ $p->proname }}
+                    </option>
+                    @endforeach
+
+                </select>
+                
                 <!-- category Dropdown -->
 
 
@@ -409,7 +603,6 @@
                             <th>Product Image</th>
                             <th>Size(Stock)</th>
 
-                            <th>Action</th>
 
 
                         </tr>
@@ -429,14 +622,13 @@
                         @php
                         $sizes = \App\Models\ProductSize::where('proid', $p->proid)->get();
                         @endphp
+
                         <tr>
                             <td>{{ $sizes->first()->product->proname }}</td>
+
                             <td>
                                 <img src="{{ asset('admin/assets/images/'.$sizes->first()->product->proimage) }}"
-                                    id="product-img"
-                                    alt="">
-
-
+                                    id="product-img">
                             </td>
 
                             <td>
@@ -444,49 +636,41 @@
                                     @csrf
 
                                     @foreach($sizes as $s)
-                                    <div class="size-row" style="display: flex;">
-                                        <div class="size-row1">
-                                        <span class="badge-size">{{ $s->size }}</span>
+                                    <div class="size-container">
+                                        <div class="size-row">
 
-                                        <span class="old-stock">({{ $s->stock }})</span>
-                                        </div>
-                                        <div class="size-row1">
-                                        <button type="button" class="btn-minus">-</button>
+                                            <!-- LEFT -->
+                                            <div class="left-part">
+                                                <span class="badge-size">{{ $s->size }}</span>
+                                                <span class="old-stock">({{ $s->stock }})</span>
 
-                                        <input type="number" name="stock[]" value="0" class="input-stock">
+                                                <a href="{{ url('admin/delete_product-size', $s->prosize_id) }}"
+                                                    class="delete-btn"
+                                                    onclick="return confirm('Delete this size?')">
+                                                    <i class="mdi mdi-delete-outline"></i>
+                                                </a>
+                                            </div>
 
-                                        <button type="button" class="btn-plus">+</button>
+                                            <!-- RIGHT -->
+                                            <div class="right-part">
+                                                <button type="button" class="btn-minus">-</button>
 
-                                        <input type="hidden" name="proid[]" value="{{ $s->proid }}">
-                                        <input type="hidden" name="size[]" value="{{ $s->size }}">
+                                                <input type="number" name="stock[]" value="0" class="input-stock">
+
+                                                <button type="button" class="btn-plus">+</button>
+
+                                                <input type="hidden" name="proid[]" value="{{ $s->proid }}">
+                                                <input type="hidden" name="size[]" value="{{ $s->size }}">
+                                            </div>
+
                                         </div>
                                     </div>
-                                    
+
                                     @endforeach
 
                                     <button class="btn-update">Update Stock</button>
                                 </form>
-                                
                             </td>
-
-                            <td>
-                                <ul class="size-list">
-                                    @foreach($sizes as $s)
-                                    <li>
-
-
-                                        <a href="{{ url('admin/delete_product-size', $s->prosize_id) }}"
-                                            class="delete-btn"
-                                            onclick="return confirm('Delete this size?')">
-                                            <i class="mdi mdi-delete-outline"></i>
-                                        </a>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            </td>
-
-
-
                         </tr>
 
                         @endforeach
@@ -508,18 +692,18 @@
 
 @section('js')
 <script>
-document.querySelectorAll('.btn-plus').forEach(btn => {
-    btn.onclick = function() {
-        let input = this.previousElementSibling;
-        input.value = parseInt(input.value || 0) + 1;
-    }
-});
+    document.querySelectorAll('.btn-plus').forEach(btn => {
+        btn.onclick = function() {
+            let input = this.previousElementSibling;
+            input.value = parseInt(input.value || 0) + 1;
+        }
+    });
 
-document.querySelectorAll('.btn-minus').forEach(btn => {
-    btn.onclick = function() {
-        let input = this.nextElementSibling;
-        if (input.value > 0) input.value--;
-    }
-});
+    document.querySelectorAll('.btn-minus').forEach(btn => {
+        btn.onclick = function() {
+            let input = this.nextElementSibling;
+            input.value--;
+        }
+    });
 </script>
 @endsection

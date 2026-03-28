@@ -227,14 +227,26 @@ class AdminProductController extends Controller
 
     //product-size
 
-    public function productsize()
+    public function productsize(Request $r)
     {
         $products = Productsize::with('product')->select('proid');
-        $groupproduct = $products->groupBy('proid');
+        $ps=Productsize::select('size')->distinct()->get();
 
+        $pro = Product::has('images')->where('status', 'active')->get();
+        $proname = $r->product;
+        $size= $r->size;
+
+        if ($proname != '') {
+            $products->where('proid', $proname);
+        }
+        if ($size != '') {
+            $products->where('size', $size);
+        }
+
+        $groupproduct = $products->groupBy('proid');
         $groupproduct = $groupproduct->paginate(5)->withQueryString();
 
-        return view('admin/product-sizes', compact('groupproduct'));
+        return view('admin/product-sizes', compact('groupproduct','pro','ps'));
     }
 
     public function addproductsize()
@@ -243,33 +255,65 @@ class AdminProductController extends Controller
         return view('admin/add-product-size', compact('products'));
     }
 
+
+
     public function saveproductsize(Request $res)
     {
+        // ✅ Validation
         $res->validate([
             'proid' => 'required|exists:products,proid',
-            'size' => 'required|in:S,M,L,XL,XXL,28,30,32,34,36,38',
-            'stock'  => 'required|integer|min:1',
+            'size'  => 'required|array',
+            'size.*' => 'in:S,M,L,XL,XXL,28,30,32,34,36,38',
         ]);
 
-        $productSize = ProductSize::where('proid', $res->proid)
-            ->where('size', $res->size)
-            ->first();
 
-        if ($productSize) {
-            // record exists
-            $productSize->stock += $res->stock;
-            $productSize->save();
-            return Redirect('admin/product-size')->with('success', 'Stock updated successfully!');
-        } else {
+        $valid = false;
 
-            ProductSize::create([
-                'proid' => $res->proid,
-                'size'  => $res->size,
-                'stock'   => $res->stock,
-            ]);
+        foreach ($res->size as $size) {
 
-            return Redirect('admin/product-size')->with('success', 'Size added successfully!');
+
+            $stock = isset($res->stock[$size]) ? (int)$res->stock[$size] : 0;
+
+            if ($stock > 0) {
+                $valid = true;
+            }
         }
+
+        if (!$valid) {
+            return back()->with('error', 'Enter stock for at least one size');
+        }
+
+
+        foreach ($res->size as $size) {
+
+            $stock = isset($res->stock[$size]) ? (int)$res->stock[$size] : 0;
+
+
+            if ($stock <= 0) {
+                continue;
+            }
+
+
+            $productSize = ProductSize::where('proid', $res->proid)
+                ->where('size', $size)
+                ->first();
+
+            if ($productSize) {
+
+                $productSize->stock += $stock;
+                $productSize->save();
+            } else {
+
+                ProductSize::create([
+                    'proid' => $res->proid,
+                    'size'  => $size,
+                    'stock' => $stock,
+                ]);
+            }
+        }
+
+        return redirect('admin/product-size')
+            ->with('success', 'Sizes saved successfully!');
     }
     public function updatestock(Request $r)
     {
@@ -277,18 +321,19 @@ class AdminProductController extends Controller
 
             $stock = $r->stock[$key];
 
-            if ($stock > 0) {
+            
                 ProductSize::where('proid', $r->proid[$key])
                     ->where('size', $size)
                     ->increment('stock', $stock);
-            }
+            
+            
         }
         return Redirect('admin/product-size')->with('success', 'Stock updated successfully');
     }
     public function deletesize($id)
-    {   
-        
-        Productsize::find($id)->delete();  
-       return Redirect('admin/product-size')->with('success', 'Stock updated successfully');
+    {
+
+        Productsize::find($id)->delete();
+        return Redirect('admin/product-size')->with('success', 'Stock updated successfully');
     }
 }
