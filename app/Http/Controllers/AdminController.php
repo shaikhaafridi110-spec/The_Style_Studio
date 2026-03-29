@@ -38,6 +38,6 @@ class AdminController extends Controller
     public function user_del($id)
     {
         User::where('id', $id)->delete();
-        return redirect('admin/user');
+        return redirect('admin/user')->with('success', 'User Deleted Successfully');
     }
 }

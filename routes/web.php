@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Forgetpassword;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AdminCategory;
 use App\Http\Controllers\AdminWishlistController;
 use App\Http\Controllers\GoogleController;
@@ -111,6 +112,17 @@ Route::get('admin/delete_product-size/{id}', [AdminProductController::class, 'de
 Route::get('admin/wishlist',[AdminWishlistController::class,'withlist']);
 
 
+
+//order list
+Route::get('admin/Order',[OrderController::class,'orderlist']);
+Route::get('admin/Order-items',[OrderController::class,'orderitems']);
+Route::get('admin/delete_order-item/{id}',[OrderController::class,'orderitem_del']);
+
+
+
+Route::get('admin/delete_order/{id}',[OrderController::class,'order_del']);
+
+Route::get('admin/order-user',[OrderController::class,'order_user']);
 
 
 

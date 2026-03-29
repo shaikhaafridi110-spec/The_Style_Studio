@@ -103,7 +103,13 @@
             </div>
         </div>
     </div>
+    @session('success')
 
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endsession
     <!-- Main Content Card -->
     <div class="card shadow-lg border-0 rounded-4">
         <div class="card-header bg-gradient-primary text-white rounded-top-4 d-flex justify-content-between align-items-center">

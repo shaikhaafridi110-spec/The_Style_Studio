@@ -114,7 +114,7 @@
     <!-- Main Content Card -->
     <div class="card shadow-lg border-0 rounded-4">
         <div class="card-header bg-gradient-primary text-white rounded-top-4 d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">User List</h5>
+            <h5 class="mb-0">Wishlist</h5>
             <div class="d-flex justify-content-end">
                 <form method="GET" action="" class="search-form">
                     
