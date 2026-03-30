@@ -95,38 +95,15 @@
                             <span class="menu-title">Category</span>
                         </a>
                     </li>
-
-
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#productMenu" aria-expanded="false" aria-controls="productMenu">
+                        <a class="nav-link" href="{{url('admin/product')}}">
                             <i class="mdi mdi-shopping menu-icon"></i>
                             <span class="menu-title">Product</span>
-                            <i class="menu-arrow"></i>
                         </a>
-
-                        <div class="collapse" id="productMenu">
-                            <ul class="nav flex-column sub-menu">
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('admin/product') }}">
-                                        Product List
-                                    </a>
-                                </li>
-
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('admin/product-image') }}">
-                                        Product Images
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('admin/product-size') }}">
-                                        Product Size
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
                     </li>
+
+
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="{{url('admin/wishlist')}}">
                             <i class="mdi mdi-cart-heart menu-icon"></i>

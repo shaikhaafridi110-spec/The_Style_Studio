@@ -223,7 +223,7 @@
                             <th>Proname</th>
                             <th>Description</th>
                             <th>Price</th>
-                            <th>Discount</th>
+                         
                             <th>Status</th>
                             <th>Category</th>
                             <th>Proimage</th>
@@ -245,7 +245,7 @@
 
                         <tr>
                             <td>{{$p->proname}}</td>
-                            <td>{!! $p->description !!}</td>
+                            
                             <td>{{ $p->price }}</td>
                             <td>{{ $p->discount_price }}</td>
                             <td>
