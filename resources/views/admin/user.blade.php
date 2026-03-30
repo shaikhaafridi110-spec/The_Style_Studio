@@ -135,10 +135,9 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
-                            <th>Address Line 1</th>
-                            <th>Address Line 2</th>
-                            <th>City / State</th>
-                            <th>Postal Code</th>
+                            
+                            <th>Edit / Check_Details</th>
+                          
                             <th>Delete</th>
                         </tr>
                     </thead>
@@ -158,10 +157,14 @@
                             <td>{{$d->name}}</td>
                             <td>{{ $d->email }}</td>
                             <td>{{ $d->phone }}</td>
-                            <td>{{ $d->address_line1 }}</td>
-                            <td>{{ $d->address_line2 }}</td>
-                            <td>{{ $d->city }}, {{ $d->state }}</td>
-                            <td>{{ $d->postal_code }}</td>
+                            
+                            <td>
+                                <a edit href="{{url('admin/edit_user',$d->id)}}" class="btn btn-sm btn-primary">
+                                    <i class="mdi mdi-pencil-outline"></i> Edit/Check
+                        
+                        
+                        </td>
+                         
                             <td>
                                 <a href="{{url('delete_user',$d->id)}}"
                                     class="btn btn-sm btn-delete"

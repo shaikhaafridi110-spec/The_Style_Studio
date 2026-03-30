@@ -53,13 +53,19 @@
                         <!-- Category Name -->
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Category Name</label>
-                            <input type="text" name="name" value="{{$cat->name}}" class="form-control custom-input" placeholder="Enter category name" required>
+                            <input type="text" name="name" value="{{$cat->name}}" class="form-control custom-input" placeholder="Enter category name" >
+                            @error('name')
+                                <div class="text-danger mt-1">{{ $message }}</div>  
+                            @enderror
                         </div>
 
                         <!-- Slug -->
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Slug</label>
-                            <input type="text" name="slug" value="{{$cat->slug}}" class="form-control custom-input" placeholder="Enter slug" required>
+                            <input type="text" name="slug" value="{{$cat->slug}}" class="form-control custom-input" placeholder="Enter slug" >
+                            @error('slug')
+                                <div class="text-danger mt-1">{{ $message }}</div>  
+                            @enderror
                         </div>
 
                         <!-- Status -->
@@ -75,6 +81,9 @@
                                 <img src="{{ asset('admin/assets/images/'.$cat->image) }}"
                                     alt="{{$cat->image}}"
                                     class="img-preview">
+                                    @error('image')
+                                        <div class="text-danger mt-1">{{ $message }}</div>  
+                                    @enderror
                             </div>
                             @endif
 

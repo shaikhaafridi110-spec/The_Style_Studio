@@ -41,20 +41,30 @@
                         <!-- Category Name -->
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Category Name</label>
-                            <input type="text" name="name" class="form-control custom-input" placeholder="Enter category name"required>
+                            <input type="text" name="name" class="form-control custom-input" placeholder="Enter category name">
+                            @error('name')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Slug -->
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Slug</label>
-                            <input type="text" name="slug" class="form-control custom-input" placeholder="Enter slug" required>
+                            <input type="text" name="slug" class="form-control custom-input" placeholder="Enter slug" >
+                            @error('slug')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
 
                        
                         <!-- Image Upload -->
                         <div class="">
                             <label class="form-label">Category Image</label>
-                            <input type="file" name="image" class="form-control custom-input"require>
+                            <input type="file" name="image" class="form-control custom-input">
+                            @error('image')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+
                         </div>
 
                     </div>

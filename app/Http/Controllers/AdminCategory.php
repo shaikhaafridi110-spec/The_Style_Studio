@@ -19,7 +19,11 @@ class AdminCategory extends Controller
     }
     public function savecategory(Request $req)
     {
-       
+       $req->validate([
+            'name' => 'required|unique:categories,name',
+            'slug' => 'required|unique:categories,slug',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
         $file = $req->image;
         $filename = time(). '.' . $file->getClientOriginalExtension();
         $file->move(public_path('admin/assets/images/categories'), $filename);
@@ -52,6 +56,11 @@ class AdminCategory extends Controller
     }
     public function updatecategory(Request $req, $id)
     {
+        $req->validate([
+            'name' => 'required|unique:categories,name,' . $id,
+            'slug' => 'required|unique:categories,slug,' . $id,
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
         $category = Category::findOrFail($id);
 
         if ($req->image != '') {

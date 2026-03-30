@@ -52,6 +52,8 @@ Route::get('admin/home',[AdminController::class,'adminhome']);
 
 //user
 Route::get('admin/user',[AdminController::class,'adminuser']);
+Route::get('admin/edit_user/{id}',[AdminController::class,'edit_user']);
+Route::post('admin/user-update/{id}',[AdminController::class,'update_user']);
 Route::get('delete_user/{id}',[AdminController::class,'user_del']);
 
 //category
