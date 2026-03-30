@@ -113,10 +113,10 @@
     </div>
     @session('success')
 
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     @endsession
 
     <!-- Main Content Card -->
@@ -177,7 +177,7 @@
                             <th>tracking_number</th>
 
                             <th>notes</th>
-                            <th>User_details</th>
+                            <th>Edit</th>
                             <th>Delete</th>
 
                         </tr>
@@ -247,33 +247,20 @@
                                 <span class="text-muted">N/A</span>
                                 @endif
                             </td>
-                            <td>
-                                <form action="{{ url('admin/order-user') }}" method="GET">
-
-                                    <input type="hidden" name="name" value="{{ $d->name }}">
-                                    <input type="hidden" name="email" value="{{ $d->user->email }}">
-                                    <input type="hidden" name="phone" value="{{ $d->phone }}">
-
-                                    <input type="hidden" name="address_line1" value="{{ $d->address_line1 }}">
-                                    <input type="hidden" name="address_line2" value="{{ $d->address_line2 }}">
-
-                                    <input type="hidden" name="city" value="{{ $d->city }}">
-                                    <input type="hidden" name="state" value="{{ $d->state }}">
-                                    <input type="hidden" name="postal_code" value="{{ $d->postal_code }}">
-
-                                    <button type="submit" class="btn btn-sm btn-primary">
-                                        View Details
-                                    </button>
-
-                                </form>
                             
+                            <td>
+                                <a href="{{ url('admin/order-edit/'.$d->id) }}" class="btn btn-sm btn-warning">
+                                    Edit
+                                </a>
+                            </td>
+
                             </td>
                             <td>
                                 <a href="{{ url('admin/delete_order/'.$d->id) }}" class="btn btn-sm btn-danger"
                                     onclick="return confirm('Are you sure you want to delete this order?');">
                                     Delete
                                 </a>
-                            </td>   
+                            </td>
 
                         </tr>
 

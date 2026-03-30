@@ -96,15 +96,14 @@ Route::get('admin/wishlist',[AdminWishlistController::class,'withlist']);
 
 
 //order list
-Route::get('admin/Order',[OrderController::class,'orderlist']);
-Route::get('admin/Order-items',[OrderController::class,'orderitems']);
-Route::get('admin/delete_order-item/{id}',[OrderController::class,'orderitem_del']);
+Route::get('admin/Order', [OrderController::class, 'orderlist']);
+Route::get('admin/delete_order/{id}', [OrderController::class, 'order_del']);
 
+Route::get('admin/order-edit/{id}', [OrderController::class, 'order_edit']);
+Route::post('admin/order-update/{id}', [OrderController::class, 'order_update']);
 
-
-Route::get('admin/delete_order/{id}',[OrderController::class,'order_del']);
-
-Route::get('admin/order-user',[OrderController::class,'order_user']);
+Route::get('admin/Order-items', [OrderController::class, 'orderitems']);
+Route::get('admin/delete_order-item/{id}', [OrderController::class, 'orderitem_del']);
 
 
 

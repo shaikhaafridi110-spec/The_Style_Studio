@@ -111,30 +111,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#OrderMenu" aria-expanded="false" aria-controls="OrderMenu">
+                        <a class="nav-link" href="{{url('admin/Order')}}">
                             <i class="mdi mdi-package-variant-closed menu-icon"></i>
                             <span class="menu-title">Order</span>
-                            <i class="menu-arrow"></i>
                         </a>
-
-                        <div class="collapse" id="OrderMenu">
-                            <ul class="nav flex-column sub-menu">
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('admin/Order') }}">
-                                        Order List
-                                    </a>
-                                </li>
-
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('admin/Order-items') }}">
-                                        Order Items List
-                                    </a>
-                                </li>
-                               
-                            </ul>
-                        </div>
                     </li>
 
                 </ul>

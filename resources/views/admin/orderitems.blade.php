@@ -88,160 +88,164 @@
 </style>
 @endsection
 
+
+
 @section('main-content')
 <div class="content-wrapper">
 
-    <!-- Page Header -->
-    <div class="page-header d-flex justify-content-between align-items-center mb-4">
-        <div class="wishlist-header">
-            <h2 class="page-title">Order Items</h2>
-            <p class="page-subtitle">View of all order items</p>
+    <h2>Edit Order</h2>
+
+    <form action="{{ url('admin/order-update/'.$order->id) }}" method="POST">
+        @csrf
+
+        <!-- ================= USER ================= -->
+        <div class="card p-3 mb-3">
+            <h4>User Details</h4>
+
+            <label>Name</label>
+            <input type="text" name="name" value="{{ old('name',$order->name) }}" class="form-control">
+            @error('name') <span class="text-danger">{{ $message }}</span> @enderror
+
+            <label>Email</label>
+            <input type="text" name="email" value="{{ old('email',$order->user->email ?? '') }}" class="form-control">
+            @error('email') <span class="text-danger">{{ $message }}</span> @enderror
+
+            <label>Phone</label>
+            <input type="text" name="phone" value="{{ old('phone',$order->phone) }}" class="form-control">
+            @error('phone') <span class="text-danger">{{ $message }}</span> @enderror
+
+            <label>Address</label>
+            <input type="text" name="address_line1" value="{{ $order->address_line1 }}" class="form-control">
         </div>
 
-    </div>
+        <!-- ================= ORDER ================= -->
+        <div class="card shadow-sm p-4 mb-4 border-0">
 
-    <!-- Breadcrumb Card -->
-    <div class="card shadow-sm border-0 mb-4">
-        <div class="card-body py-2 px-3">
-            <div class="d-flex align-items-center text-muted small">
-                <i class="mdi mdi-home-outline me-2"></i>
-                <span>Dashboard</span>
-                <i class="mdi mdi-chevron-right mx-2"></i>
-                <span class="text-dark fw-semibold">Order Items</span>
+            <h4 class="mb-3 fw-bold text-dark">Order Details</h4>
+
+            <!-- STATUS -->
+            <div class="mb-3">
+                <label class="form-label">Status</label>
+                <select name="status" class="form-control">
+                    <option value="pending" {{ $order->status=='pending'?'selected':'' }}>Pending</option>
+                    <option value="confirmed" {{ $order->status=='confirmed'?'selected':'' }}>Confirmed</option>
+                    <option value="shipped" {{ $order->status=='shipped'?'selected':'' }}>Shipped</option>
+                    <option value="delivered" {{ $order->status=='delivered'?'selected':'' }}>Delivered</option>
+                </select>
             </div>
-        </div>
-    </div>
-    @session('success')
 
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endsession
+            <!-- AMOUNT + PAYMENT METHOD (DISPLAY ONLY) -->
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center p-3 rounded"
+                    style="background: linear-gradient(45deg,#6a5acd,#4e73df); color:#fff;">
 
-    <!-- Main Content Card -->
-    <div class="card shadow-lg border-0 rounded-4">
-        <div class="card-header bg-gradient-primary text-white rounded-top-4 d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Order List</h5>
-            <div class="d-flex justify-content-end">
-                <form method="GET" action="" class="d-flex align-items-center gap-3 filter-form">
-                   
-                
-                </form>
+                    <div>
+                        <div style="font-size:14px;">Total Amount</div>
+                        <div style="font-size:22px; font-weight:700;">
+                            ₹ {{ $order->final_amount }}
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <div style="font-size:14px;">Payment Method</div>
+                        <div style="font-size:16px; font-weight:600;">
+                            {{ strtoupper($order->payment_method) }}
+                        </div>
+                    </div>
+
+                </div>
             </div>
+
+            <!-- PAYMENT STATUS -->
+            <div class="mb-3">
+                <label class="form-label">Payment Status</label>
+                <select name="payment_status" class="form-control">
+                    <option value="pending" {{ $order->payment_status=='pending'?'selected':'' }}>Pending</option>
+                    <option value="paid" {{ $order->payment_status=='paid'?'selected':'' }}>Paid</option>
+                </select>
+            </div>
+
+            <!-- TRACKING NUMBER -->
+            <div class="mb-3">
+                <label class="form-label">Tracking Number</label>
+                <input type="text" name="tracking_number"
+                    value="{{ old('tracking_number',$order->tracking_number) }}"
+                    class="form-control" placeholder="Enter tracking number">
+            </div>
+
+            <!-- NOTES -->
+            <div class="mb-3">
+                <label class="form-label">Notes</label>
+                <textarea name="notes" class="form-control" rows="3"
+                    placeholder="Enter notes">{{ old('notes',$order->notes) }}</textarea>
+            </div>
+
         </div>
 
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table custom-table align-middle">
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Product Name</th>
-                            <th>Product Image</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Size</th>
-                            <th>Total</th> 
-                            <th>Status</th>  
-                            <th>Cancel Details</th>    
-                            <th>Delete</th>                 
+        <!-- ================= ORDER ITEMS (EDITABLE) ================= -->
+        <div class="card p-4 mb-4 border-0 shadow-sm">
+            <h4 class="mb-3 fw-bold">Order Items</h4>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if($data->count() == 0)
-                        <tr>
-                            <td colspan="9" class="text-center text-danger">
-                                No orders found.
-                            </td>
-                        </tr>
-                        @endif
+            <div class="row">
+                @forelse($order->items as $item)
 
+                <div class="col-md-6 mb-3">
+                    <div class="d-flex p-3 border rounded align-items-center shadow-sm"
+                        style="background:#fafbff;">
 
-                        @foreach($data as $d)
+                        <!-- PRODUCT IMAGE -->
+                        <div class="me-3">
+                            <img src="{{ asset('admin/assets/images/'.$item->product->proimage) }}"
+                                id="product-img">
+                        </div>
 
-                        <tr>
+                        <!-- PRODUCT DETAILS -->
+                        <div class="flex-grow-1">
 
-                            <td>
-                                
-                                <form action="{{ url('admin/Order')}}" method="get">
-                                        <input type="hidden" name="order_id" value="{{ $d->order_id }}">
-                                   <button type="submit" class="btn btn-primary  btn-sm">{{ $d->order_id }}</button> 
-                        
-                                    
-                                </form>
-                                
-                            </td>
+                            <h6 class="fw-bold mb-1">
+                                {{ $item->product->proname ?? 'No Product' }}
+                            </h6>
 
-                            <td>{{ $d->product->proname }}</td>
+                            <small class="text-muted">
+                                Size: {{ $item->size }} | Qty: {{ $item->qty }}
+                            </small>
 
-                            <td>
-                                <img id="product-img" src="{{ asset('admin/assets/images/'.$d->product->proimage) }}" alt="Product Image">          
-                            </td>
-
-                            <td>
-                                <div class="d-flex flex-column gap-2 capitalize">
-                                    <h8 style="text-transform: capitalize;">Price: {{$d->original_price}}</h8>
-                                    <h8 style="text-transform: capitalize;">Discount: {{$d->discount_amount	}}</h8>
-                                    <h8 style="text-transform: capitalize;">Tax: {{$d->tax_amount}}</h8>
-                                    <h8
-                                        style="text-transform: capitalize;">Final Price: {{$d->final_price}}</h8>
-
-                                </div>
-                            </td>
-
-                            <td>{{ $d->qty }}</td>
-
-                            <td>{{ $d->size }}</td>
-
-                            <td>${{ $d->subtotal}}</td>
-
-                            <td>
-                            {{$d->status}}   
-
-                                
-                            </td>
-
-                            <td>
-                                @if($d->status == 'cancelled')
-                                <div class="d-flex flex-column gap-2 capitalize">
-                              <h8 style="text-transform: capitalize;">Date: {{$d->cancelled_at}}</h8>
-                                    <h8 style="text-transform: capitalize;">Reason: {{$d->cancel_reason}}</h8>
-                            </td>
+                            <div class="mt-2">
+                                <span class="fw-semibold text-dark">
+                                    ₹ {{ $item->final_price }}
+                                </span>
                             </div>
-                                @else
-                                <span class="text-muted fst-italic">N/A</span>
-                                @endif
 
+                            <!-- STATUS -->
+                            <div class="mt-2">
+                                <span class="badge 
+                            {{ $item->status == 'active' ? 'bg-success' : 'bg-danger' }}">
+                                    {{ ucfirst($item->status) }}
+                                </span>
+                            </div>
 
-                            <td>
-                                <a href="{{ url('admin/delete_order-item/'.$d->order_item_id) }}" class="btn btn-sm btn-danger"
-                                    onclick="return confirm('Are you sure you want to delete this order?');">
-                                    Delete
-                                </a>
+                            <!-- CANCEL INFO -->
+                            @if($item->status == 'cancelled')
+                            <div class="mt-2 text-danger small">
+                                Cancelled: {{ $item->cancelled_at }} <br>
+                                Reason: {{ $item->cancel_reason }}
+                            </div>
+                            @endif
 
-                            </td>
+                        </div>
 
+                    </div>
+                </div>
 
-                            
-
-                                 
-
-                        </tr>
-
-                        @endforeach
-
-                    </tbody>
-
-                </table>
-
-{{ $data->onEachSide(2)->links('pagination::bootstrap-5') }}
-             
+                @empty
+                <p class="text-danger">No Items Found</p>
+                @endforelse
             </div>
         </div>
-    </div>
+
+        <button class="btn btn-success">Update Order</button>
+
+    </form>
+
 </div>
-
-
 @endsection
