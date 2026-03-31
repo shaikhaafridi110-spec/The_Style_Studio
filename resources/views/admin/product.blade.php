@@ -82,54 +82,54 @@
     }
 
     /* Pagination container */
-.pagination {
-    gap: 8px;
-    align-items: center;
-}
+    .pagination {
+        gap: 8px;
+        align-items: center;
+    }
 
-/* Page items */
-.page-item .page-link {
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #ddd;
-    color: #2f4fb3;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
+    /* Page items */
+    .page-item .page-link {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ddd;
+        color: #2f4fb3;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
 
-/* Hover effect */
-.page-item .page-link:hover {
-    background-color: #2f4fb3;
-    color: #fff;
-    border-color: #2f4fb3;
-}
+    /* Hover effect */
+    .page-item .page-link:hover {
+        background-color: #2f4fb3;
+        color: #fff;
+        border-color: #2f4fb3;
+    }
 
-/* Active page */
-.page-item.active .page-link {
-    background: linear-gradient(135deg, #4a6cf7, #2f4fb3);
-    color: #fff;
-    border: none;
-    box-shadow: 0 4px 10px rgba(47, 79, 179, 0.4);
-}
+    /* Active page */
+    .page-item.active .page-link {
+        background: linear-gradient(135deg, #4a6cf7, #2f4fb3);
+        color: #fff;
+        border: none;
+        box-shadow: 0 4px 10px rgba(47, 79, 179, 0.4);
+    }
 
-/* Disabled (dots ...) */
-.page-item.disabled .page-link {
-    background-color: #f1f1f1;
-    color: #999;
-    border: none;
-}
+    /* Disabled (dots ...) */
+    .page-item.disabled .page-link {
+        background-color: #f1f1f1;
+        color: #999;
+        border: none;
+    }
 
-/* Prev/Next arrows */
-.page-item:first-child .page-link,
-.page-item:last-child .page-link {
-    border-radius: 12px;
-    width: auto;
-    padding: 0 12px;
-}
+    /* Prev/Next arrows */
+    .page-item:first-child .page-link,
+    .page-item:last-child .page-link {
+        border-radius: 12px;
+        width: auto;
+        padding: 0 12px;
+    }
 </style>
 @endsection
 
@@ -193,16 +193,16 @@
                     </option>
                 </select>
 
-            <!-- category Dropdown -->
+                <!-- category Dropdown -->
                 <select style="background-color: white;color:black;" name="category"
                     class="form-select filter-select"
                     onchange="this.form.submit()">
                     <option value="">Category</option>
                     @foreach($cat as $c)
-                    <option value="{{$c->id}}"{{ request('category') == $c->id ? 'selected' : '' }}>{{$c->name}}</option>
+                    <option value="{{$c->id}}" {{ request('category') == $c->id ? 'selected' : '' }}>{{$c->name}}</option>
                     @endforeach
                 </select>
-                
+
                 <!-- Search Input -->
                 <input type="text"
                     name="search"
@@ -219,11 +219,12 @@
                 <table class="table custom-table align-middle">
                     <thead>
                         <tr>
-                            
+
                             <th>Proname</th>
-                            <th>Description</th>
+                            <th>Avg_Rating</th>
                             <th>Price</th>
-                         
+                            <th>Discount_Price</th>
+
                             <th>Status</th>
                             <th>Category</th>
                             <th>Proimage</th>
@@ -245,22 +246,50 @@
 
                         <tr>
                             <td>{{$p->proname}}</td>
-                            
+                            <td>
+                                @php
+                                $reviews = $p->reviews;
+                                $avgRating = $reviews->avg('rating'); // example: 3.7
+                                $totalReviews = $reviews->count();
+                                $rounded = round($avgRating * 2) / 2;
+                                $full = floor($rounded);
+                                $half = ($rounded - $full) == 0.5;
+                                @endphp
+
+                                @for($i=1; $i<=5; $i++)
+                                    @if($i <=$full)
+                                    <span style="color:gold;">★</span>
+                                    @elseif($i == $full + 1 && $half)
+                                     <i class="mdi mdi-star-half-full" style="color:gold;"></i>
+                                    @else
+                                    <span style="color:#ccc;">☆</span>
+                                    @endif
+                                    @endfor
+
+                                    <span class="ms-2">
+                                        {{ number_format($avgRating,1) }} / 5
+                                    </span>
+
+                                    <span class="text-muted">
+                                        ({{ $totalReviews }} reviews)
+                                    </span>
+                            </td>
+
                             <td>{{ $p->price }}</td>
                             <td>{{ $p->discount_price }}</td>
                             <td>
                                 <a href="{{url('admin/prostatus',$p->proid)}}" class="btn {{ $p->status == 'active' ? 'btn-success' : 'btn-danger' }}">
-    
-                                {{ $p->status }}
+
+                                    {{ $p->status }}
                                 </a>
                             </td>
                             <td>{{ $p->category->name }}</td>
                             <td>
-                                    <img src="{{ asset('admin/assets/images/'.$p->proimage) }}"
+                                <img src="{{ asset('admin/assets/images/'.$p->proimage) }}"
                                     id="product-img"
                                     alt="   {{$p->proimage}}">
-                                 
-                                   
+
+
                             </td>
                             <td>
                                 <a href="{{ url('admin/edit-product',$p->proid) }}"
@@ -286,7 +315,7 @@
             <!-- {{$products->links()}}
               -->
 
-              {{ $products->onEachSide(2)->links('pagination::bootstrap-5') }}
+            {{ $products->onEachSide(2)->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>

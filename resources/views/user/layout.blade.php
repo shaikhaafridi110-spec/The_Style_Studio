@@ -13,7 +13,7 @@
     <!-- Favicon -->
     <!-- <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/icons/favicon-16x16.png">
+    
     <link rel="manifest" href="assets/images/icons/site.html">
     <link rel="mask-icon" href="assets/images/icons/safari-pinned-tab.svg" color="#666666">
     <link rel="shortcut icon" href="assets/images/icons/favicon.ico">
@@ -23,6 +23,7 @@
     <meta name="msapplication-config" content="assets/images/icons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff"> -->
     <!-- Plugins CSS File -->
+     <link rel="icon" type="image/png" sizes="64x64" href="{{asset('user/assets/images/logo11.png')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <link rel="stylesheet" href="{{asset('user/assets/css/bootstrap.min.css')}}">
@@ -88,7 +89,7 @@
 
 <body>
     <div class="page-wrapper">
-        
+
 
         <header class="header header-5">
             <div class="header-middle sticky-header">
@@ -96,8 +97,11 @@
                     <div class="header-left">
 
                         <a href="{{url('/')}}" class="logo">
-                            <img src="{{asset('user/assets/images/demos/demo-5/logo.png')}}" alt="Molla Logo" width="105" height="25">
+                            <img src="{{asset('user/assets/images/logo03.png')}}" alt="Molla Logo" width="105" height="25">
                         </a>
+                       
+                        
+
 
                         <nav class="main-nav">
                             <ul class="menu sf-arrows">
@@ -176,9 +180,11 @@
                     <div class="row">
                         <div class="col-sm-12 col-lg-6">
                             <div class="widget widget-about">
-                                <img src="{{asset('user/assets/images/demos/demo-5/logo-footer.png')}}" class="footer-logo" alt="Footer Logo" width="105" height="25">
-                                <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus. </p>
-
+                                <img src="{{asset('user/assets/images/logo10.png')}}" class="footer-logo" alt="Footer Logo" width="200" height="25">
+                                <p style="font-size:16px; line-height:1.8;">
+                                    At <strong>Style Studio</strong>, we bring you timeless fashion with a modern touch, crafted to express your unique personality and confidence.
+                                </p>
+                                <p style="font-size:16px; line-height:1.8;"><strong>--</strong>Fashion that speaks your style only at Style Studio.</p>
                                 <div class="widget-about-info">
                                     <div class="row">
                                         <div class="col-sm-6 col-md-4">
@@ -231,7 +237,7 @@
 
             <div class="footer-bottom">
                 <div class="container">
-                    <p class="footer-copyright">Copyright © 2025 The_Style_Studio. All Rights Reserved.</p><!-- End .footer-copyright -->
+                    <p class="footer-copyright">Copyright © 2026 The_Style_Studio. All Rights Reserved.</p><!-- End .footer-copyright -->
                     <ul class="footer-menu">
                         <li><a href="#">Terms Of Use</a></li>
                         <li><a href="#">Privacy Policy</a></li>

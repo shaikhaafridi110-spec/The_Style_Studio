@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="{{asset('admin/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
     <link rel="stylesheet" href="{{asset('admin/assets/vendors/css/vendor.bundle.base.css')}}">
     <link rel="stylesheet" href="{{asset('admin/assets/css/style.css')}}">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{asset('admin/assets/images/logo.png')}}">
+
 
     @yield('user-css')
 </head>
@@ -25,12 +27,9 @@
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="navbar-brand-wrapper d-flex justify-content-center">
                 <div class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">
-                    <a class="navbar-brand brand-logo" href="{{url('admin/home')}}"><img src="{{asset('admin/assets/images/logo.svg')}}"
+                    <a class="navbar-brand brand-logo" href="{{url('admin/home')}}"><img src="{{asset('admin/assets/images/logo17.png')}}"
                             alt="logo" /></a>
-                    <a class="navbar-brand brand-logo-white" href="{{url('admin/home')}}"><img src="{{asset('admin/assets/images/logo-white.svg')}}"
-                            alt="logo" /></a>
-                    <a class="navbar-brand brand-logo-mini" href="{{url('admin/home')}}"><img src="{{asset('admin/assets/images/logo-mini.svg')}}"
-                            alt="logo" /></a>
+
                     <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
                         <span class="mdi mdi-sort-variant"></span>
                     </button>
@@ -103,7 +102,7 @@
                     </li>
 
 
-                    
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{url('admin/wishlist')}}">
                             <i class="mdi mdi-cart-heart menu-icon"></i>
@@ -116,6 +115,19 @@
                             <span class="menu-title">Order</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url('admin/review')}}">
+                            <i class="mdi mdi-star menu-icon"></i>
+                            <span class="menu-title">Review</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url('admin/contact')}}">
+                            <i class="mdi mdi-email menu-icon"></i>
+                            <span class="menu-title">Contact</span>         
+                        </a>
+                    </li>
+
 
                 </ul>
             </nav>
@@ -125,12 +137,18 @@
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
                 <!-- partial -->
-                <footer class="footer">
-                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2024 <a
-                                href="https://www.bootstrapdash.com/" target="_blank">Bootstrapdash</a>. All rights reserved.</span>
-                        <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i
-                                class="mdi mdi-heart text-danger"></i></span>
+                <footer class="footer custom-footer">
+                    <div class="container d-sm-flex justify-content-between align-items-center">
+
+                        <span class="footer-left">
+                            © 2026 <strong>The_Style_Studio</strong>. All rights reserved.
+                        </span>
+
+                        <span class="footer-right">
+                            Hand-crafted with ❤️ by
+                            <strong>Afridi</strong> • <strong>Takshil</strong> • <strong>Sanket</strong>
+                        </span>
+
                     </div>
                 </footer>
             </div>

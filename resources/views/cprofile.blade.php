@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <title>The Style Studio - Profile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<link rel="icon" type="image/png" sizes="64x64" href="{{asset('user/assets/images/logo11.png')}}">
     <link rel="stylesheet" href="{{ asset('user/assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('user/assets/css/style.css') }}">
 </head>
 
 <body>
+    
     <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
         style="background-image: url('{{ asset('user/assets/images/backgrounds/login-bg.jpg') }}')">
 

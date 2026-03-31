@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Contact;
 
 class User extends Authenticatable
 {
@@ -58,6 +59,18 @@ class User extends Authenticatable
 
     public function wishlist()
     {
-        return $this->hasMany(Wishlist::class, 'user_id','id');
+        return $this->hasMany(Wishlist::class, 'user_id', 'id');
+    }
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'user_id', 'id');
+    }
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'user_id', 'id');
+    }
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class, 'user_id', 'id');
     }
 }

@@ -9,7 +9,9 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AdminCategory;
 use App\Http\Controllers\AdminWishlistController;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\AdminReviewController;
 use App\Http\Controllers\AdminProductController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AdminWishlistController as ControllersAdminWishlistController;
 
 // google authentication
@@ -106,12 +108,23 @@ Route::get('admin/Order-items', [OrderController::class, 'orderitems']);
 Route::get('admin/delete_order-item/{id}', [OrderController::class, 'orderitem_del']);
 
 
+//review
+
+Route::get('admin/review',[AdminReviewController::class,'review']);
+Route::get('admin/delete-review/{id}',[AdminReviewController::class,'review_del']);
+Route::get('admin/review-status/{id}',[AdminReviewController::class,'review_status']);
 
 
 
 
+//contract
 
+Route::get('admin/contact', [ContactController::class, 'contactilst']);
+Route::get('admin/delete_contact/{id}', [ContactController::class, 'contactdelete']);
+Route::get('admin/contact-status/{id}', [ContactController::class, 'contactstatus']);
 
+Route::get('admin/contact-reply/{id}', [ContactController::class, 'contactreplyForm']);
+Route::post('admin/contact-reply/{id}', [ContactController::class, 'contactreply']);
 
 
 

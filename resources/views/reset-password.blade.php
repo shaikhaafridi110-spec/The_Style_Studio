@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>The Style Studio - Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<link rel="icon" type="image/png" sizes="64x64" href="{{asset('user/assets/images/logo11.png')}}">
     <link rel="stylesheet" href="{{ asset('user/assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('user/assets/css/style.css') }}">
 
