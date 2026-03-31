@@ -10,6 +10,28 @@
     <link rel="stylesheet" href="{{ asset('user/assets/css/style.css') }}">
 
     <style>
+        .otp-input {
+    font-size: 22px;
+    letter-spacing: 6px;
+    font-weight: bold;
+    height: 50px;
+}
+
+#resendBtn {
+    transition: all 0.3s ease;
+}
+
+#resendBtn:disabled {
+    background-color: #ccc;
+    border-color: #ccc;
+    cursor: not-allowed;
+}
+
+#resendBtn.enabled {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
         .custom-alert {
             position: relative;
             padding: 14px 20px;
@@ -51,22 +73,22 @@
         style="background-image: url('{{ asset('user/assets/images/backgrounds/login-bg.jpg') }}')">
 
         <div class="container">
-             @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show auto-close" role="alert">
-        {{ session('success') }}
-    </div>
-@endif
+            @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show auto-close" role="alert">
+                {{ session('success') }}
+            </div>
+            @endif
 
             <div class="form-box">
                 <div class="form-tab">
                     <h3>Verify OTP</h3>
 
-                   @if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show auto-close" role="alert">
-        {{ session('error') }}
-    </div>
-@endif
-                   
+                    @if(session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show auto-close" role="alert">
+                        {{ session('error') }}
+                    </div>
+                    @endif
+
                     <form method="POST" action="{{ url('verify-otp') }}">
                         @csrf
 
@@ -79,6 +101,15 @@
                             Verify OTP
                         </button>
                     </form>
+                    <form method="POST" action="{{ url('send-otp') }}" id="resendForm">
+                        @csrf
+                        <input type="hidden" name="email" value="{{ session('reset_email') }}">
+
+                        <button type="submit" id="resendBtn" class="btn btn-outline-primary mt-3 w-100" disabled>
+                            Resend OTP (<span id="timer">30</span>s)
+                        </button>
+                    </form>
+
                 </div>
             </div>
         </div>
@@ -117,16 +148,32 @@
             document.getElementById("password").type = type;
             // document.getElementById("confirm_password").type = type;
         });
-        
     </script>
     <script>
-    setTimeout(function () {
-        let alertList = document.querySelectorAll('.alert');
-        alertList.forEach(function (alert) {
-            let bsAlert = new bootstrap.Alert(alert);
-            bsAlert.close();
-        });
-    }, 3000);
+        setTimeout(function() {
+            let alertList = document.querySelectorAll('.alert');
+            alertList.forEach(function(alert) {
+                let bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 3000);
+    </script>
+    <script>
+    let timeLeft = 30;
+    let timer = document.getElementById("timer");
+    let resendBtn = document.getElementById("resendBtn");
+
+    let countdown = setInterval(function () {
+        timeLeft--;
+        timer.innerText = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            resendBtn.disabled = false;
+            resendBtn.classList.add("enabled");
+            resendBtn.innerText = "Resend OTP";
+        }
+    }, 1000);
 </script>
 </body>
 
