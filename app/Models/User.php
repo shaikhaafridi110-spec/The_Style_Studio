@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Contact;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -29,6 +30,8 @@ class User extends Authenticatable
         'city',
         'state',
         'postal_code',
+          'birthdate',  
+        'gender',     
         'password',
     ];
 
@@ -40,6 +43,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+
     ];
 
     /**
@@ -52,10 +56,16 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+             'birthdate' => 'date',
         ];
     }
 
-
+     public function getAgeAttribute()
+    {
+        return $this->birthdate
+            ? Carbon::parse($this->birthdate)->age
+            : null;
+    }
 
     public function wishlist()
     {
@@ -72,5 +82,9 @@ class User extends Authenticatable
     public function contacts()
     {
         return $this->hasMany(Contact::class, 'user_id', 'id');
+    }
+    public function couponUsages()
+    {
+        return $this->hasMany(CouponUsage::class, 'user_id');
     }
 }

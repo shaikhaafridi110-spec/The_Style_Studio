@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{asset('admin/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
     <link rel="stylesheet" href="{{asset('admin/assets/vendors/css/vendor.bundle.base.css')}}">
     <link rel="stylesheet" href="{{asset('admin/assets/css/style.css')}}">
-    <link rel="icon" type="image/png" sizes="64x64" href="{{asset('admin/assets/images/logo.png')}}">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{asset('user/assets/images/logo11.png')}}">
 
 
     @yield('user-css')
@@ -125,6 +125,12 @@
                         <a class="nav-link" href="{{url('admin/contact')}}">
                             <i class="mdi mdi-email menu-icon"></i>
                             <span class="menu-title">Contact</span>         
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url('admin/coupon')}}">
+                            <i class="mdi mdi-ticket-percent menu-icon"></i>
+                            <span class="menu-title">Coupon</span>
                         </a>
                     </li>
 

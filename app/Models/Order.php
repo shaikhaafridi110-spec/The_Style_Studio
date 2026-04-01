@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    
+
     protected $table = 'orders';
-    protected $primaryKey = 'order_id';
+   
 
 
     protected $fillable = [
@@ -44,5 +44,9 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderItem::class, 'order_id');
+    }
+    public function couponUsage()
+    {
+        return $this->hasOne(CouponUsage::class, 'order_id');
     }
 }

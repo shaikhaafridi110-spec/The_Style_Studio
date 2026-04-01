@@ -78,7 +78,8 @@
     .shadow-sm {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
-     #product-img {
+
+    #product-img {
         width: 100px;
         height: 120px;
         object-fit: cover;
@@ -117,7 +118,7 @@
             <h5 class="mb-0">Wishlist</h5>
             <div class="d-flex justify-content-end">
                 <form method="GET" action="" class="search-form">
-                    
+
                 </form>
             </div>
         </div>
@@ -127,11 +128,9 @@
                 <table class="table custom-table align-middle">
                     <thead>
                         <tr>
-                            <th>User Name</th>
-                            <th>Prduct name</th>
-                            <th>Product Image</th>
-                            
-                            <th>Fulldetails of user</th>
+                            <th>Product Name</th>
+                            <th>Image</th>
+                            <th>Total Wishlist</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -145,32 +144,22 @@
 
 
                         @foreach($data as $d)
-
                         <tr>
-                            
-                            <td>
-                               {{ $d->user->name}}
-                            </td>
-                            
-                            <td>{{$d->product->proname}}</td>
+
+                            <td>{{ $d->product->proname }}</td>
+
                             <td>
                                 <img src="{{ asset('admin/assets/images/'.$d->product->proimage) }}"
-                                    id="product-img"
-                                    alt="   {{$d->product->proimage}}">
+                                    id="product-img">
                             </td>
+
                             <td>
-                                <form action="{{ url('admin/user')}}" method="get">
-                                    <input type="hidden" name="userid" value="{{$d->user_id}}">
-                             <button style="width:100px"
-                                    class="btn btn-primary">
-                                     Click
-                            </button>
-                            </form>
+                                <span class="badge bg-success">
+                                    {{ $d->total_wishlist }} users
+                                </span>
                             </td>
 
-                            
                         </tr>
-
                         @endforeach
 
                     </tbody>

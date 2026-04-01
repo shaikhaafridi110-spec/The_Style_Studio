@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <title>The Style Studio - Profile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" type="image/png" sizes="64x64" href="{{asset('user/assets/images/logo11.png')}}">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{asset('user/assets/images/logo11.png')}}">
     <link rel="stylesheet" href="{{ asset('user/assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('user/assets/css/style.css') }}">
 </head>
 
 <body>
-    
+
     <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
         style="background-image: url('{{ asset('user/assets/images/backgrounds/login-bg.jpg') }}')">
 
@@ -30,7 +30,7 @@
                             <div class="col-md-6 mb-3">
                                 <label>Full Name *</label>
                                 <input type="text" name="name" class="form-control" required>
-                                 @error('name')
+                                @error('name')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -41,16 +41,38 @@
                             <div class="col-md-6 mb-3">
                                 <label>Phone *</label>
                                 <input type="text" name="phone" class="form-control" required>
-                                 @error('phone')
+                                @error('phone')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Birthdate</label>
+                                <input type="date" name="birthdate" class="form-control"
+                                    value="{{ old('birthdate') }}">
 
+                                @error('birthdate')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Gender</label>
+                                <select name="gender" class="form-control">
+                                    <option value="">Select Gender</option>
+
+                                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
+                                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
+                                    <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
+                                </select>
+
+                                @error('gender')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
                             <!-- Address Line 1 -->
                             <div class="col-md-6 mb-3">
                                 <label>Address Line 1 *</label>
                                 <input type="text" name="address_line1" class="form-control" required>
-                                 @error('address_line1')
+                                @error('address_line1')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -67,7 +89,7 @@
                                 <select id="state" name="state" class="form-control" required>
                                     <option value="">Select State</option>
                                 </select>
-                                 @error('state')
+                                @error('state')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -78,7 +100,7 @@
                                 <select id="city" name="city" class="form-control" required disabled>
                                     <option value="">Select City</option>
                                 </select>
-                                 @error('city')
+                                @error('city')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -87,7 +109,7 @@
                             <div class="col-md-6 mb-3">
                                 <label>Postal Code *</label>
                                 <input type="text" name="postal_code" class="form-control" required>
-                                 @error('postal_code')
+                                @error('postal_code')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -95,7 +117,7 @@
                             <div class="col-md-6 mb-3">
                                 <label>Password *</label>
                                 <input type="password" id="password" name="password" class="form-control" required>
-                                 @error('password')
+                                @error('password')
                                 <div class="text-danger small mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -103,7 +125,7 @@
                             <div class="col-md-6 mb-3">
                                 <label>Confirm Password *</label>
                                 <input type="password" id="confirm_password" name="password_confirmation" class="form-control" required>
-                            </div> 
+                            </div>
                             <!-- Show Password -->
                             <div class="col-12 mb-3">
                                 <div class="form-check"> <input type="checkbox" class="form-check-input" id="showPassword"> <label class="form-check-label" for="showPassword"> Show Password </label> </div>

@@ -12,7 +12,8 @@ use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\AdminReviewController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\AdminWishlistController as ControllersAdminWishlistController;
+use App\Http\Controllers\AdminCouponController;
+
 
 // google authentication
 
@@ -128,6 +129,15 @@ Route::post('admin/contact-reply/{id}', [ContactController::class, 'contactreply
 
 
 
+
+// LIST
+Route::get('admin/coupon', [AdminCouponController::class, 'coupon']);
+Route::get('admin/add-coupon', [AdminCouponController::class, 'addCoupon']);
+Route::post('admin/save-coupon', [AdminCouponController::class, 'saveCoupon']);
+Route::get('admin/edit-coupon/{id}', [AdminCouponController::class, 'editCoupon']);
+Route::post('admin/update-coupon/{id}', [AdminCouponController::class, 'updateCoupon']);
+Route::get('admin/delete-coupon/{id}', [AdminCouponController::class, 'deleteCoupon']);
+Route::get('admin/coupon-status/{id}', [AdminCouponController::class, 'status']);
 
 
 

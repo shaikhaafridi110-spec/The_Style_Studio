@@ -9,36 +9,37 @@
     .text-danger {
         font-size: 13px;
     }
+
     .btn-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    font-size: 14px;
-    border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.3);
-    color: #fff;
-    background: transparent;
-    transition: all 0.3s ease;
-}
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        font-size: 14px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: #fff;
+        background: transparent;
+        transition: all 0.3s ease;
+    }
 
-/* Icon style */
-.btn-back i {
-    font-size: 16px;
-    transition: transform 0.3s ease;
-}
+    /* Icon style */
+    .btn-back i {
+        font-size: 16px;
+        transition: transform 0.3s ease;
+    }
 
-/* Hover effect */
-.btn-back:hover {
-    background: rgba(255,255,255,0.15);
-    color: #fff;
-    transform: translateY(-2px);
-}
+    /* Hover effect */
+    .btn-back:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+        transform: translateY(-2px);
+    }
 
-/* Icon slide effect */
-.btn-back:hover i {
-    transform: translateX(-4px);
-}
+    /* Icon slide effect */
+    .btn-back:hover i {
+        transform: translateX(-4px);
+    }
 </style>
 @endsection
 
@@ -55,15 +56,15 @@
             <h5 class="mb-0">Edit User</h5>
 
             <a href="{{ url()->previous() }}" class="btn-back">
-    <i class="mdi mdi-arrow-left"></i> Back
-</a>
+                <i class="mdi mdi-arrow-left"></i> Back
+            </a>
         </div>
 
         <div class="card-body">
 
             <form action="{{ url('admin/user-update', $data->id) }}" method="POST">
                 @csrf
-               
+
 
                 <div class="row">
 
@@ -89,6 +90,43 @@
                         @enderror
                     </div>
 
+                    <!-- Birthdate -->
+                    <div class="col-md-6 mb-3">
+                        <label>Birthdate</label>
+                        <input type="date" name="birthdate" class="form-control"
+                            value="{{ old('birthdate', $data->birthdate ? \Carbon\Carbon::parse($data->birthdate)->format('Y-m-d') : '') }}">
+
+                        @error('birthdate')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="col-md-6 mb-3">
+                        <label>Gender</label>
+                        <select name="gender" class="form-control">
+                            <option value="">Select Gender</option>
+
+                            <option value="male"
+                                {{ old('gender', $data->gender) == 'male' ? 'selected' : '' }}>
+                                Male
+                            </option>
+
+                            <option value="female"
+                                {{ old('gender', $data->gender) == 'female' ? 'selected' : '' }}>
+                                Female
+                            </option>
+
+                            <option value="other"
+                                {{ old('gender', $data->gender) == 'other' ? 'selected' : '' }}>
+                                Other
+                            </option>
+                        </select>
+
+                        @error('gender')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
                     <!-- Phone -->
                     <div class="col-md-6 mb-3">
                         <label>Phone</label>
@@ -153,10 +191,10 @@
                         @enderror
                     </div>
 
-                    
-                    
 
-                        
+
+
+
                 </div>
 
                 <button type="submit" class="btn btn-primary mt-3">Update User</button>

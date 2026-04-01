@@ -10,14 +10,14 @@ use Illuminate\Http\Request;
 class AdminWishlistController extends Controller
 {
     public function withlist()
-    {
-        
-        $data = Wishlist::select('*')->with('user')->with('product');
-        
-       
-        $data = $data->paginate(10)->withQueryString();
-        return view('admin/wishlist',compact('data'));
-        //return view('user',);
+{
+    $data = Wishlist::select('proid')
+        ->selectRaw('COUNT(*) as total_wishlist') // ✅ correct count   
+        ->with('product')
+        ->groupBy('proid')
+        ->orderByDesc('total_wishlist') // highest first
+        ->paginate(10);
 
-    }
+    return view('admin/wishlist', compact('data'));
+}
 }

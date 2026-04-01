@@ -189,7 +189,7 @@
                                     <div class="row">
                                         <div class="col-sm-6 col-md-4">
                                             <span class="widget-about-title">Got Question? Call us 24/7</span>
-                                            <a href="tel:123456789">+0123 456 789</a>
+                                            <a href="tel:123456789" style="color: #D4AF37;">+0123 456 789</a>
                                         </div><!-- End .col-sm-6 -->
                                         <div class="col-sm-6 col-md-8">
                                             <!-- End .footer-payments -->

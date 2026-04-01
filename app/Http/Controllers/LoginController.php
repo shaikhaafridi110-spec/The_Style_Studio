@@ -26,30 +26,42 @@ class LoginController extends Controller
         }
     }
     public function cProcess(Request $req)
-    {
-        
-        $req->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'required|digits:10',
-            'address_line1' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-            'password' => 'required|min:6|confirmed',
-            'postal_code' => 'required'
-        ]);
-        $user = auth()->user();
-         $user->update([
-        'name'=>$req->name,
+{
+    $req->validate([
+        'name' => 'required|string|max:255',
+        'phone' => 'required|digits:10',
+        'address_line1' => 'required',
+        'city' => 'required',
+        'state' => 'required',
+        'postal_code' => 'required',
+        'password' => 'required|min:6|confirmed',
+
+       
+        'birthdate' => 'nullable|date',
+        'gender' => 'required|in:male,female,other',
+    ]);
+
+    $user = auth()->user();
+
+    $user->update([
+        'name' => $req->name,
         'phone' => $req->phone,
         'address_line1' => $req->address_line1,
         'address_line2' => $req->address_line2,
         'city' => $req->city,
         'state' => $req->state,
         'postal_code' => $req->postal_code,
-        'password'=>$req->password
+        'password' => $req->password,
+
+        // ✅ NEW
+        'birthdate' => $req->birthdate,
+        'gender' => $req->gender,
+
+       
     ]);
-        return view('login',['success'=>'Account successfully created 🎉']);
-    }
+
+    return view('login', ['success' => 'Account successfully created 🎉']);
+}
     public function logout()
     {
         Auth::logout();
