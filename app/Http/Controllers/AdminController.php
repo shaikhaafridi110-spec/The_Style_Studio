@@ -170,11 +170,19 @@ foreach ($monthData as $m) {
     // ======================
     // 🔥 TOP PRODUCTS
     // ======================
-    $topProducts = OrderItem::select('product_name', DB::raw('SUM(qty) as total'))
-        ->groupBy('product_name')
-        ->orderByDesc('total')
-        ->limit(5)
-        ->get();
+
+
+$topProducts = OrderItem::select(
+        'products.proid',
+        'products.proname',
+        DB::raw('SUM(order_items.qty) as total')
+    )
+    ->join('products', 'products.proid', '=', 'order_items.product_id')
+    ->groupBy('products.proid', 'products.proname')
+    ->orderByDesc('total')
+    ->limit(5)
+    ->get();
+   
 
     // ======================
     // 🧾 RECENT ORDERS

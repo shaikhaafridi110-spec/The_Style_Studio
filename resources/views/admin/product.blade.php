@@ -312,8 +312,7 @@
 
                 </table>
             </div>
-            <!-- {{$products->links()}}
-              -->
+            
 
             {{ $products->onEachSide(2)->links('pagination::bootstrap-5') }}
         </div>

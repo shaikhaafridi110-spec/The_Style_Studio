@@ -12,6 +12,7 @@ use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\AdminReviewController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\UsershopController;
 use App\Http\Controllers\AdminCouponController;
 
 
@@ -145,7 +146,17 @@ Route::get('admin/coupon-status/{id}', [AdminCouponController::class, 'status'])
 // user
 
 Route::get('/', [UserController::class, 'home']);
-Route::get('user/shop', [UserController::class, 'shop']);
+
+
+
+// shop
+
+Route::get('user/shop', [UsershopController::class, 'shop']);
+Route::get('user/shop/{name}', [UsershopController::class, 'shop']);
+
+
+
+
 Route::get('user/single-shop', [UserController::class, 'single_shop']);
 Route::get('user/cart', [UserController::class, 'cart']);
 Route::get('user/checkout', [UserController::class, 'checkout']);

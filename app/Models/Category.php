@@ -12,4 +12,12 @@ class Category extends Model
         'image',
         'status'
     ];
+
+
+
+    public function product()
+    {
+        return $this->hasMany(Product::class, 'catid', 'id');
+
+    }
 }

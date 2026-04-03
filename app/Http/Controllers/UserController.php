@@ -9,9 +9,7 @@ class UserController extends Controller
     public function home(){
          return view('user.index');
     }
-    public function shop(){
-         return view('user.shop');
-    }
+    
     public function single_shop(){
         return view('user.single_shop');
     }

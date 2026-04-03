@@ -23,7 +23,7 @@
     <meta name="msapplication-config" content="assets/images/icons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff"> -->
     <!-- Plugins CSS File -->
-     <link rel="icon" type="image/png" sizes="64x64" href="{{asset('user/assets/images/logo11.png')}}">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{asset('user/assets/images/logo11.png')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <link rel="stylesheet" href="{{asset('user/assets/css/bootstrap.min.css')}}">
@@ -99,8 +99,8 @@
                         <a href="{{url('/')}}" class="logo">
                             <img src="{{asset('user/assets/images/logo03.png')}}" alt="Molla Logo" width="105" height="25">
                         </a>
-                       
-                        
+
+
 
 
                         <nav class="main-nav">
@@ -120,31 +120,36 @@
                                     <a href="{{url('user/contact')}}">Contact</a>
                                 </li>
                                 <li>
-                                    <a href="{{url('/login')}}">Login</a>
+                                    @if(!Auth::check())
+                                    <a href="{{url('/login')}}"> Login </a>
+
+                                    @endif
+
                                 </li>
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
                     </div><!-- End .header-left -->
-
+                    @if(!Request::is('login'))
                     <div class="header-right">
                         <div class="header-search header-search-extended header-search-visible">
                             <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
-                            <form action="#" method="get">
+                            <form action="{{url('user/shop')}}" method="get">
                                 <div class="header-search-wrapper">
                                     <label for="q" class="sr-only">Search</label>
-                                    <input type="search" class="form-control" name="q" id="q" placeholder="Search product ..." required>
+                                    <input type="search" class="form-control" name="search" id="q" placeholder="Search product ..." required>
                                     <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
                                 </div><!-- End .header-search-wrapper -->
                             </form>
                         </div><!-- End .header-search -->
-
+                        @if(Auth::check())
                         <a href="{{url('user/wishlist')}}" class="wishlist-link">
                             <i class="icon-heart-o"></i>
                         </a>
+                        @endif
                         <a href="{{url('user/cart')}}" class="wishlist-link">
                             <i class="icon-shopping-cart"></i>
                         </a>
-
+                        @if(Auth::check())
                         <!-- End .cart-dropdown -->
                         <div class="dropdown settings-dropdown">
                             <a href="#" class="dropdown-toggle"
@@ -155,10 +160,13 @@
 
                             <div class="dropdown-menu dropdown-menu-right">
                                 <a class="dropdown-item" href="#">My Profile</a>
-                                <a class="dropdown-item" href="#">Logout</a>
+                                <a class="dropdown-item" href="{{url('logout')}}">Logout</a>
                             </div>
                         </div>
-                    </div><!-- End .header-right -->
+                        @endif
+                    </div>
+                    @endif
+                    <!-- End .header-right -->
                 </div><!-- End .container-fluid -->
             </div><!-- End .header-middle -->
         </header>
@@ -212,7 +220,11 @@
                                     <li><a href="{{url('user/about')}}">About Us</a></li>
                                     <li><a href="{{url('user/cart')}}">Add To Cart</a></li>
                                     <li><a href="{{url('user/contact')}}">Contact us</a></li>
+                                    @if(!Auth::check())
+                                   
+                                   
                                     <li><a href="{{url('/login')}}">Log in</a></li>
+                                    @endif
                                 </ul><!-- End .widget-list -->
                             </div><!-- End .widget -->
 
@@ -223,11 +235,18 @@
                                 <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
 
                                 <ul class="widget-list">
-                                    <li><a href="#">Sign In</a></li>
-                                    <li><a href="cart.html">View Cart</a></li>
-                                    <li><a href="#">My Wishlist</a></li>
-                                    <li><a href="#">Track My Order</a></li>
+                                   
+                              
+                                    @if(Auth::check())
+                                    <li><a href="{{url('user/wishlist')}}">My Wishlist</a></li>
+                                    <li><a href="#">My Order</a></li>
+                                   
+                                    @endif
                                     <li><a href="#">Help</a></li>
+                                    @if(Auth::check())
+                                   
+                                     <li><a href="{{url('logout')}}">Log Out</a></li>
+                                    @endif
                                 </ul><!-- End .widget-list -->
                             </div><!-- End .widget -->
                         </div><!-- End .col-sm-64 col-lg-3 -->
