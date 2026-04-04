@@ -21,6 +21,9 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'catid', 'id');
     }
+    public function productsize(){
+        return $this->hasMany(Productsize::class, 'proid');
+    }
     public function images()
     {
         return $this->hasMany(ProductImage::class, 'proid');

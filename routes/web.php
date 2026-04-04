@@ -14,7 +14,7 @@ use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\UsershopController;
 use App\Http\Controllers\AdminCouponController;
-
+use App\Http\Controllers\WishlistController;
 
 // google authentication
 
@@ -163,6 +163,10 @@ Route::get('user/checkout', [UserController::class, 'checkout']);
 Route::get('user/wishlist', [UserController::class, 'wishlist']);
 Route::get('user/about', [UserController::class, 'about']);
 Route::get('user/contact', [UserController::class, 'contact']);
+
+
+
+Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
 
 
 

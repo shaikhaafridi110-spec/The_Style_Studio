@@ -289,6 +289,8 @@
     <!-- Main JS File -->
     <script src="{{asset('user/assets/js/main.js')}}"></script>
     <script src="{{asset('user/assets/js/demos/demo-5.js')}}"></script>
+
+    @stack('scripts')
 </body>
 
 
