@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use App\Models\OrderItem;
@@ -86,8 +87,17 @@ class UsershopController extends Controller
             $product->whereBetween('price', [$r->min_price, $r->max_price]);
         }
 
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+ 
+        $cartItems = Cart::with('product')
+                         ->where('user_id', Auth::id())
+                         ->get();
+ 
+        $subtotal = $cartItems->sum(fn($item) => ($item->product->price ?? 0) * $item->qty);
         $product = $product->paginate(12)->withQueryString();
 
-        return view('user.shop', compact('product', 'cat', 'minPrice', 'maxPrice','wishlistIds'));
+        return view('user.shop', compact('product', 'cat', 'minPrice', 'maxPrice','wishlistIds','cartItems','subtotal'));
     }
 }

@@ -14,6 +14,7 @@ use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\UsershopController;
 use App\Http\Controllers\AdminCouponController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\WishlistController;
 
 // google authentication
@@ -169,4 +170,13 @@ Route::get('user/contact', [UserController::class, 'contact']);
 Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
 
 
+
+//cart
+
+
+
+Route::post('/cart/add',    [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/update', [CartController::class, 'updateQty'])->name('cart.update');
+Route::post('/cart/remove', [CartController::class, 'remove']   )->name('cart.remove');
+Route::post('/cart/clear',  [CartController::class, 'clear']    )->name('cart.clear');
 
