@@ -266,6 +266,43 @@
     #cart-toast.toast-updated { background: #2176ae; }
     #cart-toast.toast-login   { background: #e63946; }
 
+    /* ── Discount Badge ────────────────────────────── */
+    .badge-discount {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #e63946;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.4px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        z-index: 100;
+        pointer-events: none;
+    }
+
+    /* ── Price display ─────────────────────────────── */
+    .product-price .new-price {
+        color: #e63946;
+        font-weight: 700;
+        font-size: 15px;
+    }
+    .product-price .old-price {
+        color: #aaa;
+        font-size: 13px;
+        text-decoration: line-through;
+        margin-left: 5px;
+    }
+    .product-price .discount-pct {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        color: #2a9d5c;
+        letter-spacing: 0.3px;
+        margin-top: 2px;
+    }
+
     /* ── Sidebar Checkbox Fix ──────────────────────── */
     .custom-control-input {
         position: relative !important;
@@ -404,6 +441,12 @@
                                                      alt="{{ $pro->proname }}"
                                                      class="product-image fixed-img">
 
+                                                {{-- Discount Badge --}}
+                                                @if($pro->discount_price && $pro->discount_price > 0)
+                                                    @php $pct = number_format(($pro->discount_price / $pro->price) * 100, 2); @endphp
+                                                    <span class="badge-discount">-{{ $pct }}%</span>
+                                                @endif
+
                                                 {{-- Wishlist Button --}}
                                                 <div class="product-action-vertical">
                                                     <button type="button"
@@ -438,7 +481,17 @@
                                                 </h3>
 
                                                 <div class="product-price">
-                                                    ₹{{ $pro->price }}
+                                                    @if($pro->discount_price && $pro->discount_price > 0)
+                                                        @php
+                                                            $finalPrice = $pro->price - $pro->discount_price;
+                                                
+                                                        @endphp
+                                                        <span class="new-price">₹{{ number_format($finalPrice, 2) }}</span>
+                                                        <span class="old-price">₹{{ number_format($pro->price, 2) }}</span>
+                                                        
+                                                    @else
+                                                        <span>₹{{ number_format($pro->price, 2) }}</span>
+                                                    @endif
                                                 </div>
 
                                                 <div class="ratings-container">

@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+ 
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Cart;
 
 class UserController extends Controller
 {
@@ -20,8 +23,20 @@ class UserController extends Controller
         return view('user.checkout');
     }
     public function wishlist(){
-        return view('user.wishlist');
-    
+             if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+ 
+        $wishlist = Wishlist::with(['product.category', 'product.productsize'])
+                            ->where('user_id', Auth::id())
+                            ->latest()
+                            ->get();
+ 
+        $cartItems = Cart::with('product')
+                         ->where('user_id', Auth::id())
+                         ->get();
+ 
+        return view('user.wishlist', compact('wishlist', 'cartItems'));
     }
     public function about(){
         return view('user.about');
