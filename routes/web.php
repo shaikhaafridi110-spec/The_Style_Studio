@@ -17,6 +17,7 @@ use App\Http\Controllers\AdminCouponController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\WishlistController;
 
+
 // google authentication
 
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle']);
@@ -51,6 +52,10 @@ Route::post('comlete_process',[LoginController::class,'cProcess']);
 
 
 // *********************Admin****************************
+
+Route::middleware(['isAdmin'])->group(function(){
+
+
 
 Route::get('admin/home',[AdminController::class,'adminhome']);
 
@@ -141,7 +146,7 @@ Route::post('admin/update-coupon/{id}', [AdminCouponController::class, 'updateCo
 Route::get('admin/delete-coupon/{id}', [AdminCouponController::class, 'deleteCoupon']);
 Route::get('admin/coupon-status/{id}', [AdminCouponController::class, 'status']);
 
-
+});
 
 
 // user

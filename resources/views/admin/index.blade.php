@@ -613,7 +613,7 @@
                 <div class="product-row">
                     <div class="product-name">
                         <div class="product-rank">{{ $index+1 }}</div>
-                        <span>{{ $p->product_name }}</span>
+                        <span>{{ $p->proname }}</span>
                     </div>
 
                     <div style="display:flex;align-items:center;gap:12px;">

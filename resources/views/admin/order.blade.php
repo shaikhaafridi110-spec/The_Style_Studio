@@ -168,7 +168,7 @@
                 <table class="table custom-table align-middle">
                     <thead>
                         <tr>
-                            <th>User_id</th>
+                            <th>User_Name</th>
                             <th>Order Status</th>
                             <th>Amount Status</th>
 
@@ -196,7 +196,7 @@
 
                         <tr>
 
-                            <td>{{ $d->name}}</td>
+                            <td>{{ $d->user->name}}</td>
                             <td>
                                 <div class="d-flex flex-column gap-2 capitalize">
                                     <h8 style="text-transform: capitalize;"> order_number: {{ $d->order_number }}</h8>
