@@ -4,100 +4,115 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Category;
-use Illuminate\Support\Facades\DB;
 use App\Models\OrderItem;
 use App\Models\Product;
-use App\Models\Productsize;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Wishlist;
 
 class UsershopController extends Controller
 {
     public function shop(Request $r, $name = null)
     {
-        $product = Product::with('category', 'reviews', 'productsize')
+        // ── Base query ────────────────────────────────────────────
+        // We do NOT filter by status here — inactive products are
+        // shown on the page but rendered as disabled/unavailable.
+        // If you want to HIDE inactive products entirely, uncomment:
+        // ->where('status', 'active')
+        $query = Product::with(['category', 'reviews', 'productsize'])
             ->withCount('reviews')
             ->withAvg('reviews', 'rating');
 
-        
-        $wishlistIds = [];
-
-        if (Auth::check()) {
-            $wishlistIds = Wishlist::where('user_id', Auth::id())
-                ->pluck('proid')
-                ->toArray();
-        }
-
+        // ── Category via route segment ────────────────────────────
         if ($name) {
-            $product->whereHas('category', function ($q) use ($name) {
-                $q->where('slug', $name);
-            });
+            $query->whereHas('category', fn($q) => $q->where('slug', $name));
         }
 
-
-        if ($r->category) {
-            $product->whereHas('category', function ($q) use ($r) {
-                $q->whereIn('slug', $r->category);
-            });
+        // ── Category filter (sidebar checkboxes) ──────────────────
+        if ($r->filled('category')) {
+            $query->whereHas('category', fn($q) => $q->whereIn('slug', $r->category));
         }
 
-      
-        if ($r->search) {
-            $product->where('proname', 'like', "%{$r->search}%");
+        // ── Search ────────────────────────────────────────────────
+        if ($r->filled('search')) {
+            $query->where('proname', 'like', "%{$r->search}%");
         }
 
+        // ── Size filter ───────────────────────────────────────────
+        if ($r->filled('size')) {
+            $query->whereHas('productsize', fn($q) => $q->whereIn('size', $r->size));
+        }
 
+        // ── Price range: capture GLOBAL min/max BEFORE price filter
+        //    Clone so category/search/size are respected but price
+        //    filter itself doesn't shrink the slider bounds.
+        $boundsQuery = clone $query;
+        $minPrice    = (int) ($boundsQuery->min('price') ?? 0);
+        $maxPrice    = (int) ($boundsQuery->max('price') ?? 9999);
 
+        // ── Price filter (applied AFTER bounds are captured) ──────
+        if ($r->filled('min_price') && $r->filled('max_price')) {
+            $query->whereBetween('price', [(int) $r->min_price, (int) $r->max_price]);
+        }
 
-       
-        $topIds = OrderItem::select('product_id')
-            ->groupBy('product_id')
-            ->orderByRaw('SUM(qty) DESC')
-            ->pluck('product_id')
-            ->toArray();
+        // ── Sorting ───────────────────────────────────────────────
+        if ($r->sortby === 'popularity') {
+            $topIds = OrderItem::select('product_id')
+                ->groupBy('product_id')
+                ->orderByRaw('SUM(qty) DESC')
+                ->pluck('product_id')
+                ->toArray();
 
-    
-        if ($r->sortby == 'popularity' && !empty($topIds)) {
-            $ids = implode(',', $topIds);
+            if (!empty($topIds)) {
+                $ids = implode(',', $topIds);
+                $query->whereIn('proid', $topIds)
+                      ->orderByRaw("FIELD(proid, $ids)");
+            }
 
-            $product->whereIn('proid', $topIds)
-                ->orderByRaw("FIELD(proid, $ids)");
-        } elseif ($r->sortby == 'rating') {
-            $product->orderByDesc('reviews_avg_rating');
-        } elseif ($r->sortby == 'date') {
-            $product->orderByDesc('proid');
+        } elseif ($r->sortby === 'rating') {
+            // withAvg('reviews','rating') creates alias "reviews_avg_rating"
+            $query->orderByDesc('reviews_avg_rating');
+
+        } elseif ($r->sortby === 'date') {
+            $query->orderByDesc('proid');
+
         } else {
-            $product->orderBy('proid', 'asc');
+            $query->orderBy('proid', 'asc');
         }
 
-     
+        // ── Sidebar categories (only non-empty ones) ──────────────
         $cat = Category::withCount('product')
             ->having('product_count', '>', 0)
             ->get();
 
-        if ($r->size) {
-            $product->whereHas('productsize', function ($q) use ($r) {
-                $q->whereIn('size', $r->size);
-            });
-        }
-        $minPrice =  $product->min('price');
-        $maxPrice =  $product->max('price');
-        if ($r->min_price && $r->max_price) {
-            $product->whereBetween('price', [$r->min_price, $r->max_price]);
-        }
+        // ── Wishlist IDs for current user ─────────────────────────
+        $wishlistIds = Auth::check()
+            ? Wishlist::where('user_id', Auth::id())->pluck('proid')->toArray()
+            : [];
 
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
- 
-        $cartItems = Cart::with('product')
-                         ->where('user_id', Auth::id())
-                         ->get();
- 
-        $subtotal = $cartItems->sum(fn($item) => ($item->product->price ?? 0) * $item->qty);
-        $product = $product->paginate(12)->withQueryString();
+        // ── Cart items (guests get empty collection) ──────────────
+        $cartItems = Auth::check()
+            ? Cart::with('product')->where('user_id', Auth::id())->get()
+            : collect();
 
-        return view('user.shop', compact('product', 'cat', 'minPrice', 'maxPrice','wishlistIds','cartItems','subtotal'));
+        // ── Subtotal (respects discount_price) ────────────────────
+        $subtotal = $cartItems->sum(function ($item) {
+            $price    = $item->product->price ?? 0;
+            $discount = $item->product->discount_price ?? 0;
+            return ($price - $discount) * $item->qty;
+        });
+
+        // ── Paginate ──────────────────────────────────────────────
+        $product = $query->paginate(12)->withQueryString();
+
+        return view('user.shop', compact(
+            'product',
+            'cat',
+            'minPrice',
+            'maxPrice',
+            'wishlistIds',
+            'cartItems',
+            'subtotal'
+        ));
     }
 }

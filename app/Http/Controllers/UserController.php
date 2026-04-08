@@ -16,9 +16,7 @@ class UserController extends Controller
     public function single_shop(){
         return view('user.single_shop');
     }
-    public function cart(){
-        return view('user.cart');
-    }
+    
     public function checkout(){
         return view('user.checkout');
     }

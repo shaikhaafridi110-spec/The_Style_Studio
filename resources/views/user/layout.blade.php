@@ -145,11 +145,11 @@
                         <a href="{{url('user/wishlist')}}" class="wishlist-link">
                             <i class="icon-heart-o"></i>
                         </a>
-                        @endif
+                       
                         <a href="{{url('user/cart')}}" class="wishlist-link">
                             <i class="icon-shopping-cart"></i>
                         </a>
-                        @if(Auth::check())
+                      
                         <!-- End .cart-dropdown -->
                         <div class="dropdown settings-dropdown">
                             <a href="#" class="dropdown-toggle"
@@ -218,7 +218,9 @@
                                 <ul class="widget-list">
                                     <li><a href="{{url('user/shop')}}">Shop</a></li>
                                     <li><a href="{{url('user/about')}}">About Us</a></li>
-                                    <li><a href="{{url('user/cart')}}">Add To Cart</a></li>
+                                   
+                                    
+
                                     <li><a href="{{url('user/contact')}}">Contact us</a></li>
                                     @if(!Auth::check())
                                    
@@ -239,6 +241,7 @@
                               
                                     @if(Auth::check())
                                     <li><a href="{{url('user/wishlist')}}">My Wishlist</a></li>
+                                    <li><a href="{{url('user/cart')}}">Add To Cart</a></li>
                                     <li><a href="#">My Order</a></li>
                                    
                                     @endif

@@ -44,10 +44,7 @@
                             <span class="nav-profile-name text-uppercase">
                                 @if(Auth::check())
                                 {{ Auth::user()->name }}
-                                @else
-                                <script>
-                                    window.location.href = "{{ url('login') }}";
-                                </script>
+                              
                                 @endif
 
                             </span>

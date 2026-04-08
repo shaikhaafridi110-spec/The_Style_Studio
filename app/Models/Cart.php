@@ -21,6 +21,9 @@ class Cart extends Model
         return $this->belongsTo(Product::class, 'proid', 'proid');
     }
 
+
+
+
     // ── Relationship: belongs to User ────────────────────────────
     public function user()
     {

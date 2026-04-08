@@ -223,7 +223,7 @@
                             <th>Proname</th>
                             <th>Avg_Rating</th>
                             <th>Price</th>
-                            <th>Discount_Price</th>
+                            <th>D_Price</th>
 
                             <th>Status</th>
                             <th>Category</th>
@@ -265,11 +265,11 @@
                                     <span style="color:#ccc;">☆</span>
                                     @endif
                                     @endfor
-
+                                    
                                     <span class="ms-2">
                                         {{ number_format($avgRating,1) }} / 5
                                     </span>
-
+<br>
                                     <span class="text-muted">
                                         ({{ $totalReviews }} reviews)
                                     </span>

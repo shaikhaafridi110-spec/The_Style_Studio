@@ -26,6 +26,67 @@
         transform: scale(1.08);
     }
 
+    /* ── Out of Stock Card ─────────────────────────── */
+    .product-unavailable {
+        opacity: 0.72;
+    }
+
+    .product-unavailable .product-media img {
+        filter: grayscale(30%);
+    }
+
+    .product-unavailable .product-media:hover img {
+        transform: none;
+    }
+
+    /* ── Inactive Card (fully disabled) ───────────── */
+    .product-inactive {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+
+    .product-inactive .product-media img {
+        filter: grayscale(60%);
+    }
+
+    .product-inactive .product-media:hover img {
+        transform: none;
+    }
+
+    .product-inactive .add-to-cart,
+    .product-inactive .btn-wishlist {
+        pointer-events: none !important;
+    }
+
+    .product-inactive a {
+        pointer-events: none !important;
+        color: #aaa !important;
+    }
+
+    /* ── Overlay on unavailable cards ─────────────── */
+    .unavailable-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.30);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    .unavailable-overlay span {
+        background: rgba(0,0,0,0.68);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 7px 16px;
+        border-radius: 30px;
+        border: 1.5px solid rgba(255,255,255,0.25);
+    }
+
     /* ── No Products Box ───────────────────────────── */
     .no-product-box {
         min-height: 400px;
@@ -167,16 +228,26 @@
         line-height: normal !important;
     }
 
-    /* hide any theme pseudo-element icon replacement */
     .btn-cart::before,
     .btn-cart::after {
         display: none !important;
     }
 
-    .btn-cart:hover {
+    .btn-cart:hover:not(:disabled) {
         background: #e63946 !important;
         color: #fff !important;
         transform: translateY(-1px);
+    }
+
+    /* ── Disabled cart button (OOS / Inactive) ─────── */
+    .btn-cart:disabled,
+    .btn-cart.btn-disabled {
+        background: #bbb !important;
+        color: #fff !important;
+        cursor: not-allowed !important;
+        opacity: 0.85;
+        transform: none !important;
+        pointer-events: none !important;
     }
 
     .btn-cart.loading {
@@ -212,7 +283,6 @@
         color: #fff;
     }
 
-    /* Out of stock pill */
     #sizeModal .size-option.out-of-stock {
         border-color: #eee;
         color: #ccc;
@@ -230,6 +300,24 @@
         text-decoration: none;
         margin-top: 2px;
         text-transform: uppercase;
+    }
+
+    /* ── Low Stock label inside size pill ──────────── */
+    #sizeModal .size-option .low-stock-label {
+        display: block;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        color: #e67e22;
+        margin-top: 2px;
+        text-transform: uppercase;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    /* Keep orange label visible when pill is selected */
+    #sizeModal .size-option.selected .low-stock-label {
+        color: #ffc87a;
     }
 
     #confirmAddToCart:hover  { background: #e63946 !important; }
@@ -271,7 +359,6 @@
         position: absolute;
         top: 10px;
         left: 10px;
-        background: #e63946;
         color: #fff;
         font-size: 11px;
         font-weight: 800;
@@ -281,6 +368,10 @@
         z-index: 100;
         pointer-events: none;
     }
+
+    .badge-discount.badge-sale     { background: #e63946; }
+    .badge-discount.badge-oos      { background: #888; }
+    .badge-discount.badge-inactive { background: #444; }
 
     /* ── Price display ─────────────────────────────── */
     .product-price .new-price {
@@ -294,13 +385,8 @@
         text-decoration: line-through;
         margin-left: 5px;
     }
-    .product-price .discount-pct {
-        display: block;
-        font-size: 11px;
-        font-weight: 700;
-        color: #2a9d5c;
-        letter-spacing: 0.3px;
-        margin-top: 2px;
+    .product-price .price-muted {
+        color: #aaa;
     }
 
     /* ── Sidebar Checkbox Fix ──────────────────────── */
@@ -312,6 +398,15 @@
 
     .custom-control-label {
         cursor: pointer;
+    }
+
+    /* ── OOS Wishlist hint ─────────────────────────── */
+    .oos-wishlist-hint {
+        font-size: 11px;
+        color: #999;
+        text-align: center;
+        margin-top: 4px;
+        font-style: italic;
     }
 </style>
 
@@ -433,38 +528,78 @@
 
                                 @if($product->count())
                                     @foreach($product as $pro)
+                                    @php
+                                        $totalStock   = $pro->productsize->sum('stock');
+                                        $isOutOfStock = $totalStock === 0;
+                                        $isInactive   = isset($pro->status) && $pro->status !== 'active';
+                                        $unavailable  = $isOutOfStock || $isInactive;
+                                        $blockNav     = $isInactive;
+                                    @endphp
+
                                     <div class="col-6 col-md-4 col-lg-4 col-xl-3">
-                                        <div class="product product-7 text-center">
+                                        <div class="product product-7 text-center
+                                            {{ $isOutOfStock && !$isInactive ? 'product-unavailable' : '' }}
+                                            {{ $isInactive ? 'product-inactive' : '' }}">
 
                                             <figure class="product-media">
-                                                <img src="{{ asset('admin/assets/images/' . $pro->proimage) }}"
-                                                     alt="{{ $pro->proname }}"
-                                                     class="product-image fixed-img">
 
-                                                {{-- Discount Badge --}}
-                                                @if($pro->discount_price && $pro->discount_price > 0)
-                                                    @php $pct = number_format(($pro->discount_price / $pro->price) * 100, 2); @endphp
-                                                    <span class="badge-discount">-{{ $pct }}%</span>
+                                                {{-- Unavailable overlay --}}
+                                                @if($unavailable)
+                                                    <div class="unavailable-overlay">
+                                                        <span>
+                                                            {{ $isInactive ? '🚫 Unavailable' : '😔 Out of Stock' }}
+                                                        </span>
+                                                    </div>
                                                 @endif
 
-                                                {{-- Wishlist Button --}}
+                                                {{-- Image --}}
+                                                <a href="{{ $blockNav ? '#' : url('user/single-shop/' . $pro->id) }}">
+                                                    <img src="{{ asset('admin/assets/images/' . $pro->proimage) }}"
+                                                         alt="{{ $pro->proname }}"
+                                                         class="product-image fixed-img">
+                                                </a>
+
+                                                {{-- Badges --}}
+                                                @if($isInactive)
+                                                    <span class="badge-discount badge-inactive">Unavailable</span>
+                                                @elseif($isOutOfStock)
+                                                    <span class="badge-discount badge-oos">Out of Stock</span>
+                                                @elseif($pro->discount_price && $pro->discount_price > 0)
+                                                    @php $pct = number_format(($pro->discount_price / $pro->price) * 100, 2); @endphp
+                                                    <span class="badge-discount badge-sale">-{{ $pct }}%</span>
+                                                @endif
+
+                                                {{-- Wishlist Button (hidden only for inactive) --}}
+                                                @if(!$isInactive)
                                                 <div class="product-action-vertical">
                                                     <button type="button"
                                                         class="btn-wishlist add-to-wishlist {{ in_array($pro->proid, $wishlistIds ?? []) ? 'active' : '' }}"
                                                         data-id="{{ $pro->proid }}"
-                                                        title="Add to Wishlist">
+                                                        title="{{ $isOutOfStock ? 'Save for later — notify when back in stock' : 'Add to Wishlist' }}">
                                                     </button>
+                                                </div>
+                                                @endif
+
+                                                {{-- Cart Button --}}
+                                                <div class="product-action">
+                                                    @if($unavailable)
+                                                        <button type="button"
+                                                            class="btn-product btn-cart btn-disabled"
+                                                            disabled
+                                                            title="{{ $isInactive ? 'This product is currently unavailable' : 'This product is out of stock' }}">
+                                                            {{ $isInactive ? '🚫 Unavailable' : '😔 Out of Stock' }}
+                                                        </button>
+                                                    @else
+                                                        <button type="button"
+                                                            class="btn-product btn-cart add-to-cart"
+                                                            data-id="{{ $pro->proid }}"
+                                                            data-name="{{ $pro->proname }}"
+                                                            data-sizes="{{ json_encode($pro->productsize->map(fn($s) => ['size' => $s->size, 'stock' => $s->stock])) }}">
+                                                            🛒 Add to Cart
+                                                        </button>
+                                                    @endif
                                                 </div>
 
-                                                <div class="product-action">
-                                                    <button type="button"
-                                                        class="btn-product btn-cart add-to-cart"
-                                                        data-id="{{ $pro->proid }}"
-                                                        data-name="{{ $pro->proname }}"
-                                                        data-sizes="{{ json_encode($pro->productsize->map(fn($s) => ['size' => $s->size, 'stock' => $s->stock])) }}">
-                                                        🛒 Add to Cart
-                                                    </button>
-                                                </div>
                                             </figure>
 
                                             <div class="product-body">
@@ -475,22 +610,23 @@
                                                 </div>
 
                                                 <h3 class="product-title">
-                                                    <a href="{{ url('user/single-shop/' . $pro->id) }}">
+                                                    <a href="{{ $blockNav ? '#' : url('user/single-shop/' . $pro->id) }}"
+                                                       style="{{ $blockNav ? 'color:#aaa; pointer-events:none;' : '' }}">
                                                         {{ $pro->proname }}
                                                     </a>
                                                 </h3>
 
                                                 <div class="product-price">
                                                     @if($pro->discount_price && $pro->discount_price > 0)
-                                                        @php
-                                                            $finalPrice = $pro->price - $pro->discount_price;
-                                                
-                                                        @endphp
-                                                        <span class="new-price">₹{{ number_format($finalPrice, 2) }}</span>
+                                                        @php $finalPrice = $pro->price - $pro->discount_price; @endphp
+                                                        <span class="new-price {{ $unavailable ? 'price-muted' : '' }}">
+                                                            ₹{{ number_format($finalPrice, 2) }}
+                                                        </span>
                                                         <span class="old-price">₹{{ number_format($pro->price, 2) }}</span>
-                                                        
                                                     @else
-                                                        <span>₹{{ number_format($pro->price, 2) }}</span>
+                                                        <span class="{{ $unavailable ? 'price-muted' : '' }}">
+                                                            ₹{{ number_format($pro->price, 2) }}
+                                                        </span>
                                                     @endif
                                                 </div>
 
@@ -500,6 +636,11 @@
                                                     </div>
                                                     <span class="ratings-text">({{ $pro->reviews_count }})</span>
                                                 </div>
+
+                                                @if($isOutOfStock && !$isInactive)
+                                                    <p class="oos-wishlist-hint">♡ Save to wishlist</p>
+                                                @endif
+
                                             </div>
 
                                         </div>
@@ -674,6 +815,7 @@
     // ── Wishlist Toggle ───────────────────────────────────────────
     $(document).on('click', '.add-to-wishlist', function (e) {
         e.preventDefault();
+        e.stopPropagation();
 
         const btn        = $(this);
         const product_id = btn.data('id');
@@ -689,11 +831,9 @@
                 if (res.status === 'added') {
                     btn.addClass('active');
                     showToast('❤️ ' + res.message, 'success');
-
                 } else if (res.status === 'removed') {
                     btn.removeClass('active');
                     showToast('🗑️ ' + res.message, 'removed');
-
                 } else if (res.status === 'login') {
                     showToast('🔒 ' + res.message, 'login');
                 }
@@ -703,6 +843,7 @@
             }
         });
     });
+
     // ── Cart Toast Helper ─────────────────────────────────────────
     function showCartToast(message, type) {
         const toast = $('#cart-toast');
@@ -779,6 +920,7 @@
             $alreadySection.hide();
         }
 
+        // ── Build size pills ──────────────────────────────────────
         const $grid = $('#sizeOptions');
         $grid.empty();
 
@@ -786,23 +928,32 @@
             $grid.html('<p style="color:#aaa;font-size:13px;padding:4px 0 8px;">No sizes defined for this product.</p>');
         } else {
             sizes.forEach(function (item) {
-                // Skip sizes already in cart so user can't double-add same size
                 const alreadyAdded = cartItems.some(c => c.size === item.size);
-                const inStock = item.stock > 0;
-                const disabled = !inStock || alreadyAdded;
+                const inStock      = item.stock > 0;
+                const isLowStock   = inStock && !alreadyAdded && item.stock <= 3;
+                const disabled     = !inStock || alreadyAdded;
+
+                // Build the inner HTML for the pill
+                let pillHTML = item.size;
+
+                if (alreadyAdded) {
+                    pillHTML += '<span class="oos-label">In Cart</span>';
+                } else if (!inStock) {
+                    pillHTML += '<span class="oos-label">Out of Stock</span>';
+                } else if (isLowStock) {
+                    pillHTML += '<span class="low-stock-label">Only ' + item.stock + ' left</span>';
+                }
 
                 const $pill = $('<div>')
                     .addClass('size-option' + (disabled ? ' out-of-stock' : ''))
                     .attr('data-size', item.size)
                     .attr('data-stock', item.stock)
-                    .html(
-                        item.size +
-                        (alreadyAdded
-                            ? '<span class="oos-label">In Cart</span>'
-                            : (!inStock ? '<span class="oos-label">Out of Stock</span>' : ''))
-                    );
+                    .html(pillHTML);
 
-                if (disabled) $pill.attr('title', alreadyAdded ? 'Already in cart' : 'Out of stock');
+                if (disabled) {
+                    $pill.attr('title', alreadyAdded ? 'Already in cart' : 'Out of stock');
+                }
+
                 $grid.append($pill);
             });
         }
@@ -818,10 +969,8 @@
             data: { cart_id: cartId, _token: "{{ csrf_token() }}" },
             success: function (res) {
                 if (res.status === 'removed') {
-                    // Remove the tag from already-in-cart list
                     $tag.remove();
 
-                    // Remove from local cartData
                     if (cartData[productId]) {
                         cartData[productId] = cartData[productId].filter(i => i.cart_id !== cartId);
                         if (cartData[productId].length === 0) {
@@ -830,25 +979,25 @@
                         }
                     }
 
-                    // Re-enable that size pill in the grid
-                    $('#sizeOptions .size-option').each(function () {
-                        // We don't easily know which size was removed here,
-                        // so re-open the modal fresh is not needed — just find matching pill
-                    });
-
-                    // Re-render size pills: mark the removed size as available again
+                    // Re-enable pill for that size if it was marked "In Cart"
                     $('#sizeOptions .size-option.out-of-stock').each(function () {
-                        const $pill = $(this);
-                        const sizeLabel = $pill.attr('data-size');
+                        const $pill       = $(this);
+                        const sizeLabel   = $pill.attr('data-size');
+                        const sizeStock   = parseInt($pill.attr('data-stock') || 0);
                         const stillInCart = (cartData[productId] || []).some(c => c.size === sizeLabel);
-                        if (!stillInCart && $pill.find('.oos-label').text() === 'In Cart') {
-                            $pill.removeClass('out-of-stock')
-                                 .removeAttr('title')
-                                 .find('.oos-label').remove();
+                        const $oosLabel   = $pill.find('.oos-label');
+
+                        if (!stillInCart && $oosLabel.text() === 'In Cart') {
+                            $pill.removeClass('out-of-stock').removeAttr('title');
+                            $oosLabel.remove();
+
+                            // Re-add low stock label if applicable
+                            if (sizeStock > 0 && sizeStock <= 3) {
+                                $pill.append('<span class="low-stock-label">Only ' + sizeStock + ' left</span>');
+                            }
                         }
                     });
 
-                    // Update cart badge in header if exists
                     if (res.cart_count !== undefined) {
                         $('.cart-count, #cart-count').text(res.cart_count);
                     }
@@ -869,7 +1018,6 @@
 
     // ── Qty plus ──────────────────────────────────────────────────
     $('#modalQtyPlus').on('click', function () {
-        // Cap qty at selected size's stock
         const stock = parseInt($('#sizeOptions .size-option.selected').data('stock') || 99);
         if (cartQty < stock) { cartQty++; $('#modalQtyValue').text(cartQty); }
     });
@@ -880,19 +1028,16 @@
         $('#sizeOptions .size-option').removeClass('selected');
         $(this).addClass('selected');
         $('#sizeError').hide();
-
-        // Reset qty to 1 when size changes
         cartQty = 1;
         $('#modalQtyValue').text(1);
     });
 
     // ── Confirm add to cart ───────────────────────────────────────
     $('#confirmAddToCart').on('click', function () {
-        const $selected   = $('#sizeOptions .size-option.selected');
+        const $selected    = $('#sizeOptions .size-option.selected');
         const selectedSize = $selected.data('size');
         const btn          = $(this);
 
-        // Validate: size required if any sizes exist
         if ($('#sizeOptions .size-option:not(.out-of-stock)').length > 0 && !selectedSize) {
             $('#sizeError').show();
             return;
@@ -914,7 +1059,6 @@
                 btn.prop('disabled', false).html('🛒 Add to Cart');
 
                 if (res.status === 'added') {
-                    // Update local cartData so re-opening modal reflects new item
                     if (!cartData[cartProductId]) cartData[cartProductId] = [];
                     cartData[cartProductId].push({
                         cart_id : res.cart_id || null,
@@ -928,7 +1072,7 @@
             },
             error: function () {
                 $('#sizeModal').modal('hide');
-                btn.prop('disabled', false).text('🛒 Add to Cart');
+                btn.prop('disabled', false).html('🛒 Add to Cart');
                 showCartToast('Something went wrong. Please try again.', 'login');
             }
         });

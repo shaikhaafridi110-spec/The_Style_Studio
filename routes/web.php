@@ -164,9 +164,9 @@ Route::get('user/shop/{name}', [UsershopController::class, 'shop']);
 
 
 Route::get('user/single-shop', [UserController::class, 'single_shop']);
-Route::get('user/cart', [UserController::class, 'cart']);
-Route::get('user/checkout', [UserController::class, 'checkout']);
-Route::get('user/wishlist', [UserController::class, 'wishlist']);
+
+Route::get('user/checkout', [UserController::class, 'checkout'])->middleware('isUser');
+Route::get('user/wishlist', [UserController::class, 'wishlist'])->middleware('isUser');
 Route::get('user/about', [UserController::class, 'about']);
 Route::get('user/contact', [UserController::class, 'contact']);
 
@@ -178,10 +178,11 @@ Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wi
 
 //cart
 
-
-
-Route::post('/cart/add',    [CartController::class, 'addToCart'])->name('cart.add');
-Route::post('/cart/update', [CartController::class, 'updateQty'])->name('cart.update');
-Route::post('/cart/remove', [CartController::class, 'remove']   )->name('cart.remove');
-Route::post('/cart/clear',  [CartController::class, 'clear']    )->name('cart.clear');
+Route::get('user/cart', [CartController::class, 'cart'])->middleware('isUser');
+Route::get('cart/remove/{id}', [CartController::class, 'cartremove'])->middleware('isUser');
+Route::post('cart/update-qty', [CartController::class, 'updateCartQty'])->name('cart.updateQty')->middleware('isUser');
+Route::post('/cart/add',    [CartController::class, 'addToCart'])->name('cart.add')->middleware('isUser');
+Route::post('/cart/update', [CartController::class, 'updateQty'])->name('cart.update')->middleware('isUser');
+Route::post('/cart/remove', [CartController::class, 'remove']   )->name('cart.remove')->middleware('isUser');
+Route::post('/cart/clear',  [CartController::class, 'clear']    )->name('cart.clear')->middleware('isUser');
 

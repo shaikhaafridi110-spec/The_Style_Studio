@@ -113,11 +113,40 @@
         user-select: none;
         background: #fff;
         color: #333;
+        position: relative;
     }
     #wlSizeModal .size-option:hover:not(.oos) { border-color: #1a1a1a; background: #f5f5f5; }
     #wlSizeModal .size-option.selected        { border-color: #1a1a1a; background: #1a1a1a; color: #fff; }
     #wlSizeModal .size-option.oos             { border-color: #eee; color: #ccc; cursor: not-allowed; text-decoration: line-through; }
-    #wlSizeModal .size-option.oos .oos-lbl    { display: block; font-size: 9px; color: #e63946; text-decoration: none; margin-top: 2px; text-transform: uppercase; }
+    #wlSizeModal .size-option .oos-lbl        { display: block; font-size: 9px; color: #e63946; text-decoration: none; margin-top: 2px; text-transform: uppercase; font-weight: 700; }
+    #wlSizeModal .size-option.selected .oos-lbl { color: #ff9999; }
+
+    /* ── Low Stock Badge ───────────────────────────────── */
+    #wlSizeModal .size-option .low-stock-lbl {
+        display: block;
+        font-size: 9px;
+        color: #e67e00;
+        margin-top: 2px;
+        text-transform: uppercase;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+    #wlSizeModal .size-option.selected .low-stock-lbl {
+        color: #ffc97a;
+    }
+    /* Low stock warning bar below size grid */
+    #wlLowStockWarning {
+        display: none;
+        margin-top: 10px;
+        padding: 7px 12px;
+        background: #fff8ee;
+        border: 1.5px solid #f0a500;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #b97200;
+    }
+
     #wlConfirmCart:hover { background: #e63946 !important; }
 </style>
 
@@ -149,6 +178,12 @@
             <div style="padding:18px 20px 4px;">
                 <p style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin:0 0 10px;">Select Size</p>
                 <div id="wlSizeOptions" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+
+                {{-- Low stock warning bar (shown when selected size has < 3 stock) --}}
+                <div id="wlLowStockWarning">
+                    ⚠ <span id="wlLowStockText"></span>
+                </div>
+
                 <p id="wlSizeError" style="display:none;color:#e63946;font-size:12px;margin-top:8px;">⚠ Please select a size first.</p>
             </div>
 
@@ -219,8 +254,8 @@
 
                         @foreach($wishlist as $item)
                         @php
-                            $pro   = $item->product;
-                            $sizes = $pro->productsize ?? collect();
+                            $pro      = $item->product;
+                            $sizes    = $pro->productsize ?? collect();
                             $hasStock = $sizes->sum('stock') > 0;
                         @endphp
                         <tr id="wl-row-{{ $item->id }}">
@@ -262,25 +297,33 @@
 
                             {{-- Stock --}}
                             <td class="stock-col">
-                                @if($hasStock)
-                                    <span class="in-stock">✔ In Stock</span>
+                                @if($pro->status == 'active')
+                                    @if($hasStock)
+                                        <span class="in-stock">✔ In Stock</span>
+                                    @else
+                                        <span class="out-of-stock">✘ Out of Stock</span>
+                                    @endif
                                 @else
-                                    <span class="out-of-stock">✘ Out of Stock</span>
+                                    <span class="out-of-stock">✘ Not Available</span>
                                 @endif
                             </td>
 
                             {{-- Add to Cart --}}
                             <td class="action-col">
-                                @if($hasStock)
-                                    <button type="button"
-                                        class="btn-wl-cart wl-open-modal"
-                                        data-id="{{ $pro->proid }}"
-                                        data-name="{{ $pro->proname }}"
-                                        data-sizes="{{ json_encode($sizes->map(fn($s) => ['size' => $s->size, 'stock' => $s->stock])) }}">
-                                        <i class="icon-cart-plus"></i> Add to Cart
-                                    </button>
+                                @if($pro->status == 'active')
+                                    @if($hasStock)
+                                        <button type="button"
+                                            class="btn-wl-cart wl-open-modal"
+                                            data-id="{{ $pro->proid }}"
+                                            data-name="{{ $pro->proname }}"
+                                            data-sizes="{{ json_encode($sizes->map(fn($s) => ['size' => $s->size, 'stock' => $s->stock])) }}">
+                                            <i class="icon-cart-plus"></i> Add to Cart
+                                        </button>
+                                    @else
+                                        <button class="btn-wl-cart" disabled>Out of Stock</button>
+                                    @endif
                                 @else
-                                    <button class="btn-wl-cart" disabled>Out of Stock</button>
+                                    <button class="btn-wl-cart" disabled>Not Available</button>
                                 @endif
                             </td>
 
@@ -322,7 +365,7 @@
 
 @push('scripts')
 <script>
-    // ── Cart items keyed by proid (same pattern as shop page) ─────
+    // ── Cart items keyed by proid ─────────────────────────────────
     const cartData = @json(
         $cartItems->groupBy('proid')->map(fn($items) =>
             $items->map(fn($i) => ['cart_id' => $i->cart_id, 'size' => $i->size, 'qty' => $i->qty])
@@ -338,9 +381,9 @@
 
     // ── Remove from Wishlist ──────────────────────────────────────
     $(document).on('click', '.wl-remove', function () {
-        const btn    = $(this);
-        const rowId  = btn.data('id');
-        const proId  = btn.data('proid');
+        const btn   = $(this);
+        const rowId = btn.data('id');
+        const proId = btn.data('proid');
 
         $.ajax({
             url : "{{ route('wishlist.toggle') }}",
@@ -350,7 +393,6 @@
                 if (res.status === 'removed') {
                     $('#wl-row-' + rowId).fadeOut(300, function () {
                         $(this).remove();
-                        // Show empty state if no rows left
                         if ($('#wishlist-body tr').length === 0) {
                             location.reload();
                         }
@@ -376,6 +418,7 @@
         $('#wlQtyValue').text(1);
         $('#wlModalName').text(productName);
         $('#wlSizeError').hide();
+        $('#wlLowStockWarning').hide();
 
         // ── Already in Cart section ───────────────────────────────
         const $section = $('#wlAlreadySection');
@@ -432,17 +475,33 @@
             sizes.forEach(function (item) {
                 const alreadyAdded = inCart.some(c => c.size === item.size);
                 const inStock      = item.stock > 0;
+                const isLowStock   = inStock && item.stock < 3;   // ← KEY: less than 3 = low stock
                 const disabled     = !inStock || alreadyAdded;
 
+                // Build inner HTML
+                let innerHtml = '<span class="size-name">' + item.size + '</span>';
+
+                if (alreadyAdded) {
+                    innerHtml += '<span class="oos-lbl">In Cart</span>';
+                } else if (!inStock) {
+                    innerHtml += '<span class="oos-lbl">Out of Stock</span>';
+                } else if (isLowStock) {
+                    // Show "Only X left" below size name on the pill
+                    innerHtml += '<span class="low-stock-lbl">Only ' + item.stock + ' left!</span>';
+                }
+
                 const $pill = $('<div>')
-                    .addClass('size-option' + (disabled ? ' oos' : ''))
+                    .addClass('size-option' + (disabled ? ' oos' : '') + (isLowStock && !disabled ? ' low-stock' : ''))
                     .attr('data-size', item.size)
                     .attr('data-stock', item.stock)
-                    .html(item.size + (alreadyAdded
-                        ? '<span class="oos-lbl">In Cart</span>'
-                        : (!inStock ? '<span class="oos-lbl">Out of Stock</span>' : '')));
+                    .html(innerHtml);
 
-                if (disabled) $pill.attr('title', alreadyAdded ? 'Already in cart' : 'Out of stock');
+                if (disabled) {
+                    $pill.attr('title', alreadyAdded ? 'Already in cart' : 'Out of stock');
+                } else if (isLowStock) {
+                    $pill.attr('title', 'Only ' + item.stock + ' left in stock!');
+                }
+
                 $grid.append($pill);
             });
         }
@@ -460,7 +519,6 @@
                 if (res.status === 'removed') {
                     $tag.remove();
 
-                    // Update local cartData
                     if (cartData[productId]) {
                         cartData[productId] = cartData[productId].filter(i => i.cart_id !== cartId);
                         if (cartData[productId].length === 0) {
@@ -498,15 +556,26 @@
     // ── Size selection ────────────────────────────────────────────
     $(document).on('click', '#wlSizeOptions .size-option', function () {
         if ($(this).hasClass('oos')) return;
+
         $('#wlSizeOptions .size-option').removeClass('selected');
         $(this).addClass('selected');
         $('#wlSizeError').hide();
-        wlQty = 1; $('#wlQtyValue').text(1);
+        wlQty = 1;
+        $('#wlQtyValue').text(1);
+
+        // ── Show/hide low stock warning bar ──────────────────────
+        const stock = parseInt($(this).data('stock'));
+        if (stock > 0 && stock < 3) {
+            $('#wlLowStockText').text('Only ' + stock + ' left in this size! Order soon.');
+            $('#wlLowStockWarning').show();
+        } else {
+            $('#wlLowStockWarning').hide();
+        }
     });
 
     // ── Confirm Add to Cart ───────────────────────────────────────
     $('#wlConfirmCart').on('click', function () {
-        const $sel        = $('#wlSizeOptions .size-option.selected');
+        const $sel         = $('#wlSizeOptions .size-option.selected');
         const selectedSize = $sel.data('size');
         const btn          = $(this);
 
@@ -548,6 +617,14 @@
                 wlToast('Something went wrong. Please try again.', 'red');
             }
         });
+    });
+
+    // ── Hide low stock warning when modal closes ──────────────────
+    $('#wlSizeModal').on('hidden.bs.modal', function () {
+        $('#wlLowStockWarning').hide();
+        $('#wlSizeOptions .size-option').removeClass('selected');
+        wlQty = 1;
+        $('#wlQtyValue').text(1);
     });
 </script>
 @endpush
