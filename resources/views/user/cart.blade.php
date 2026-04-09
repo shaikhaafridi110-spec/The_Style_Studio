@@ -36,7 +36,16 @@
     <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
         <div class="container"></div>
     </nav>
-
+        @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show shadow"
+         style="border-left:4px solid #28a745; border-radius:6px;">
+        <i class="icon-check mr-2" style="color:#28a745;"></i>
+        <strong>Success!</strong> {{ session('success') }}
+        <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+        </button>
+    </div>
+    @endif
     <div class="page-content">
         <div class="cart">
             <div class="container">
@@ -75,13 +84,13 @@
                                     <td class="product-col">
                                         <div class="product">
                                             <figure class="product-media">
-                                                <a href="#">
+                                                <a href="{{url('user/single-shop/' . $c->proid) }}">
                                                     <img src="{{ asset('admin/assets/images/'.$c->product->proimage) }}"
                                                          width="100px" height="100px" alt="">
                                                 </a>
                                             </figure>
                                             <h3 class="product-title">
-                                                <a href="#">{{ $c->product->proname }}<br>
+                                                <a href="{{url('user/single-shop/' . $c->proid) }}">{{ $c->product->proname }}<br>
                                                     Size:- <span>{{ $c->size }}</span>
                                                 </a>
                                             </h3>
@@ -120,7 +129,7 @@
                                 @empty
                                 <tr>
                                     <td colspan="5" class="text-center py-4">
-                                        Your cart is empty. <a href="{{ url('/') }}">Continue Shopping</a>
+                                        Your cart is empty. <a href="{{ url('user/shop') }}">Continue Shopping</a>
                                     </td>
                                 </tr>
                                 @endforelse
@@ -264,5 +273,13 @@
         }, 3000);
     }
 </script>
-
+<script>
+    setTimeout(function () {
+        document.querySelectorAll('.alert').forEach(function (el) {
+            el.classList.remove('show');
+            el.classList.add('fade');
+            setTimeout(function () { el.remove(); }, 300);
+        });
+    }, 4000);
+</script>
 @endsection

@@ -6,16 +6,54 @@ use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
+use App\Models\Product;
 
 class UserController extends Controller
 {
-    public function home(){
-         return view('user.index');
+   public function index()
+    {
+        // ALL products for trendy section
+        $trendyAll = Product::with('category')
+                        ->where('status', 'active')
+                        
+                        ->take(13)
+                        ->get();
+
+        // Products by category slug for tabs
+        $trendyWomen = Product::with('category')
+                        ->whereHas('category', fn($q) => $q->wherein('slug', ['women-jeans','women-top','women-dress']))
+                        ->where('status', 'active')
+                        ->latest()->take(8)->get();
+
+        $trendyMen = Product::with('category')
+                        ->whereHas('category', fn($q) => $q->wherein('slug', ['men-shirt', 'men-jeans','men-tshirt']))
+                        ->where('status', 'active')
+                        ->latest()->take(8)->get();
+
+        
+
+        // New arrivals
+        $newAll = Product::with('category')
+                        ->where('status', 'active')
+                        ->latest()
+                        ->take(8)
+                        ->get();
+
+        $newClothing = Product::with('category')
+                        ->where('status', 'active')
+                        ->latest()->take(8)->get();
+
+        
+
+       
+
+        return view('user.index', compact(
+            'trendyAll', 'trendyWomen', 'trendyMen', 
+            'newAll', 'newClothing'
+        ));
     }
     
-    public function single_shop(){
-        return view('user.single_shop');
-    }
+   
     
     public function checkout(){
         return view('user.checkout');

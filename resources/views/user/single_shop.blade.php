@@ -2,481 +2,591 @@
 
 @section('content')
 
+<style>
+    /* ── GALLERY ── */
+    .product-gallery-wrapper {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    /* THUMBNAIL COLUMN */
+    .thumb-col {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 90px;
+        flex-shrink: 0;
+    }
+
+    .thumb-item {
+        width: 90px;
+        height: 100px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: border-color .2s;
+    }
+
+    .thumb-item.active,
+    .thumb-item:hover {
+        border-color: #c96;
+    }
+
+    .thumb-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    /* MAIN IMAGE */
+    .main-img-col {
+        flex: 1;
+    }
+
+    .main-img-col figure {
+        margin: 0;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #f5f5f5;
+    }
+
+    #main-product-img {
+        width: 100%;
+        height: 500px;
+        object-fit: contain;
+        display: block;
+        transition: opacity .2s;
+    }
+
+    /* ── STAR RATING (clickable) ── */
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        gap: 2px;
+        margin-bottom: 10px;
+    }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        font-size: 34px;
+        color: #ccc;
+        cursor: pointer;
+        line-height: 1;
+        transition: color .15s;
+    }
+
+    .star-rating label:hover,
+    .star-rating label:hover~label,
+    .star-rating input:checked~label {
+        color: #f7a800;
+    }
+
+    /* ── REVIEW DISPLAY STARS ── */
+    .review-stars {
+        font-size: 16px;
+    }
+
+    .review-stars .filled {
+        color: #f7a800;
+    }
+
+    .review-stars .empty {
+        color: #ddd;
+    }
+
+    /* ── REVIEW CARD ── */
+    .review {
+        border-bottom: 1px solid #f0f0f0;
+        padding: 16px 0;
+    }
+
+    .review:last-child {
+        border-bottom: none;
+    }
+
+    /* ── PRICE ── */
+    .new-price {
+        color: #c96;
+        font-size: 24px;
+        font-weight: 700;
+        margin-right: 8px;
+    }
+
+    .old-price {
+        color: #aaa;
+        font-size: 18px;
+        text-decoration: line-through;
+    }
+
+    .discount-badge {
+        display: inline-block;
+        background: #e8f5e9;
+        color: #2e7d32;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 4px;
+        margin-left: 8px;
+        vertical-align: middle;
+    }
+</style>
+
 <main class="main">
-            <div class="page-header text-center" >
-        		<div class="container" style="padding-top: 80px;">
-        			<h1 class="page-title">Produc Name<span></span></h1>
-        		</div><!-- End .container -->
-        	</div><!-- End .page-header -->
-            <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
-                <div class="container">
-                    
-                </div><!-- End .container -->
-            </nav><!-- End .breadcrumb-nav -->
 
-            <div class="page-content">
-                <div class="container">
-                    <div class="product-details-top">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="product-gallery product-gallery-vertical">
-                                    <div class="row">
-                                        <figure class="product-main-image">
-                                            <img id="product-zoom" src="assets/images/products/single/1.jpg" data-zoom-image="assets/images/products/single/1-big.jpg" alt="product image">
+    {{-- PAGE HEADER --}}
+    <div class="page-header text-center">
+        <div class="container" style="padding-top:80px;">
+            <h1 class="page-title">{{ $product->proname }}</h1>
+        </div>
+    </div>
 
-                                            <a href="#" id="btn-product-gallery" class="btn-product-gallery">
-                                                <i class="icon-arrows"></i>
-                                            </a>
-                                        </figure><!-- End .product-main-image -->
+    {{-- BREADCRUMB --}}
+    <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ url('user/product') }}">Products</a></li>
+                <li class="breadcrumb-item active">{{ $product->proname }}</li>
+            </ol>
+        </div>
+    </nav>
 
-                                        <div id="product-zoom-gallery" class="product-image-gallery">
-                                            <a class="product-gallery-item active" href="#" data-image="assets/images/products/single/1.jpg" data-zoom-image="assets/images/products/single/1-big.jpg">
-                                                <img src="assets/images/products/single/1-small.jpg" alt="product side">
-                                            </a>
+    <div class="page-content">
+        <div class="container">
 
-                                            <a class="product-gallery-item" href="#" data-image="assets/images/products/single/2.jpg" data-zoom-image="assets/images/products/single/2-big.jpg">
-                                                <img src="assets/images/products/single/2-small.jpg" alt="product cross">
-                                            </a>
+            @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show shadow"
+                style="border-left:4px solid #dc3545; border-radius:6px;">
+                <i class="icon-close mr-2" style="color:#dc3545;"></i>
+                <strong>Error!</strong> {{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert">
+                    <span>&times;</span>
+                </button>
+            </div>
+            @endif
+            @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show shadow"
+                style="border-left:4px solid #28a745; border-radius:6px;">
+                <i class="icon-check mr-2" style="color:#28a745;"></i>
+                <strong>Success!</strong> {{ session('success') }}
+                <button type="button" class="close" data-dismiss="alert">
+                    <span>&times;</span>
+                </button>
+            </div>
+            @endif
 
-                                            <a class="product-gallery-item" href="#" data-image="assets/images/products/single/3.jpg" data-zoom-image="assets/images/products/single/3-big.jpg">
-                                                <img src="assets/images/products/single/3-small.jpg" alt="product with model">
-                                            </a>
+            <div class="product-details-top mb-5">
+                <div class="row">
 
-                                            <a class="product-gallery-item" href="#" data-image="assets/images/products/single/4.jpg" data-zoom-image="assets/images/products/single/4-big.jpg">
-                                                <img src="assets/images/products/single/4-small.jpg" alt="product back">
-                                            </a>
-                                        </div><!-- End .product-image-gallery -->
-                                    </div><!-- End .row -->
-                                </div><!-- End .product-gallery -->
-                            </div><!-- End .col-md-6 -->
+                    {{-- ── LEFT: GALLERY ── --}}
+                    <div class="col-md-6 mb-4">
+                        <div class="product-gallery-wrapper">
 
-                            <div class="col-md-6">
-                                <div class="product-details">
-                                    <h1 class="product-title">Dark yellow lace cut out swing dress</h1><!-- End .product-title -->
+                            {{-- THUMBNAILS --}}
+                            <div class="thumb-col">
 
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                        <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a>
-                                    </div><!-- End .rating-container -->
+                                <div class="thumb-item active"
+                                    data-image="{{ asset('admin/assets/images/' . $product->proimage) }}">
+                                    <img src="{{ asset('admin/assets/images/' . $product->proimage) }}"
+                                        alt="main">
+                                </div>
 
-                                    <div class="product-price">
-                                        $84.00
-                                    </div><!-- End .product-price -->
+                                @foreach($product->images->sortBy('sort_order') as $img)
+                                <div class="thumb-item"
+                                    data-image="{{ asset('admin/assets/images/' . $img->image) }}">
+                                    <img src="{{ asset('admin/assets/images/' . $img->image) }}"
+                                        alt="thumb {{ $loop->iteration }}">
+                                </div>
+                                @endforeach
 
-                                    <div class="product-content">
-                                        <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue. Morbi purus libero, faucibus adipiscing. Sed lectus. </p>
-                                    </div><!-- End .product-content -->
+                            </div>
 
-                                    <div class="details-filter-row details-row-size">
-                                        <label>Color:</label>
+                            {{-- MAIN IMAGE --}}
+                            <div class="main-img-col">
+                                <figure>
+                                    <img id="main-product-img"
+                                        src="{{ asset('admin/assets/images/' . $product->proimage) }}"
+                                        alt="{{ $product->proname }}">
+                                </figure>
+                            </div>
 
-                                        <div class="product-nav product-nav-thumbs">
-                                            <a href="#" class="active">
-                                                <img src="assets/images/products/single/1-thumb.jpg" alt="product desc">
-                                            </a>
-                                            <a href="#">
-                                                <img src="assets/images/products/single/2-thumb.jpg" alt="product desc">
-                                            </a>
-                                        </div><!-- End .product-nav -->
-                                    </div><!-- End .details-filter-row -->
+                        </div>
+                    </div>
 
-                                    <div class="details-filter-row details-row-size">
-                                        <label for="size">Size:</label>
-                                        <div class="select-custom">
-                                            <select name="size" id="size" class="form-control">
-                                                <option value="#" selected="selected">Select a size</option>
-                                                <option value="s">Small</option>
-                                                <option value="m">Medium</option>
-                                                <option value="l">Large</option>
-                                                <option value="xl">Extra Large</option>
-                                            </select>
-                                        </div><!-- End .select-custom -->
+                    {{-- ── RIGHT: PRODUCT INFO ── --}}
+                    <div class="col-md-6">
+                        <div class="product-details">
 
-                                       
-                                    </div><!-- End .details-filter-row -->
+                            <h1 class="product-title">{{ $product->proname }}</h1>
 
-                                    <div class="details-filter-row details-row-size">
-                                        <label for="qty">Qty:</label>
-                                        <div class="product-details-quantity">
-                                            <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
-                                        </div><!-- End .product-details-quantity -->
-                                    </div><!-- End .details-filter-row -->
+                            {{-- AVERAGE RATING STARS --}}
+                            <div class="ratings-container mb-2">
+                                <div class="ratings">
+                                    <div class="ratings-val"
+                                        style="width:{{ ($avgRating/5)*100 }}%;"></div>
+                                </div>
+                                <a class="ratings-text" href="#"
+                                    onclick="
+                                       document.getElementById('product-review-link').click();
+                                       return false;">
+                                    ( {{ $reviews->count() }} Reviews )
+                                </a>
+                            </div>
 
-                                    <div class="product-details-action">
-                                        <a href="{{url('user/cart')}}" class="btn-product btn-cart"><span>add to cart</span></a>
+                            {{-- PRICE --}}
+                            {{-- PRICE --}}
+                            <div class="product-price mb-3">
+                                @if($product->discount_price && $product->discount_price > 0)
+                                @php
+                                $finalPrice = $product->price - $product->discount_price;
+                                $discountPct = number_format(($product->discount_price / $product->price) * 100,2);
+                                @endphp
+                                <span class="new-price">₹{{ number_format($finalPrice, 2) }}</span>
+                                <span class="old-price">₹{{ number_format($product->price, 2) }}</span>
+                                <span class="discount-badge">-{{ $discountPct }}% OFF</span>
+                                @else
+                                <span style="color:#c96;font-size:24px;font-weight:700;">
+                                    ₹{{ number_format($product->price, 2) }}
+                                </span>
+                                @endif
+                            </div>
 
-                                        <div class="details-action-wrapper">
-                                            <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
-                                            
-                                        </div><!-- End .details-action-wrapper -->
-                                    </div><!-- End .product-details-action -->
+                            {{-- DESCRIPTION (renders HTML tags) --}}
+                            <div class="product-content mb-3">
+                                {!! $product->description !!}
+                            </div>
 
-                                    <div class="product-details-footer">
-                                        <div class="product-cat">
-                                            <span>Category:</span>
-                                            <a href="#">Women</a>,
-                                            <a href="#">Dresses</a>,
-                                            <a href="#">Yellow</a>
-                                        </div><!-- End .product-cat -->
+                            {{-- ADD TO CART FORM --}}
+                            @if($product->size->count())
+                            <form action="{{ url('user/cart/add') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="proid" value="{{ $product->proid }}">
 
-                                        <div class="social-icons social-icons-sm">
-                                            <span class="social-label">Share:</span>
-                                            <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
-                                            <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
-                                            <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
-                                            <a href="#" class="social-icon" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
+                                <div class="details-filter-row details-row-size mb-3">
+                                    <label for="size">Size:</label>
+                                    <div class="select-custom">
+                                        <select name="size" id="size"
+                                            class="form-control" required>
+                                            <option value="" disabled selected>Select a size</option>
+                                            @foreach($product->size as $s)
+                                            <option value="{{ $s->size }}"
+                                                {{ $s->stock == 0 ? 'disabled' : '' }}>
+                                                {{ strtoupper($s->size) }}
+                                                {{ $s->stock == 0 ? '(Out of Stock)' : '' }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="details-filter-row details-row-size mb-3">
+                                    <label for="qty">Qty:</label>
+                                    <div class="product-details-quantity">
+                                        <input type="number" name="qty" id="qty"
+                                            class="form-control"
+                                            value="1"required>
+                                        
+                                    </div>
+                                    @error('qty')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                </div>
+
+                                <div class="product-details-action">
+                                    @auth
+                                    <button type="submit" class="btn-product btn-cart">
+                                        <span>add to cart</span>
+                                    </button>
+                                    @else
+                                    <a href="{{ url('login') }}"
+                                        class="btn-product btn-cart">
+                                        <span>Login</span>
+                                    </a>
+                                    @endauth
+                                </div>
+                            </form>
+                            @else
+                            <div class="alert alert-warning mt-3">
+                                Currently <strong>Out of Stock</strong>.
+                            </div>
+                            @endif
+
+                            {{-- CATEGORY --}}
+                            <div class="product-details-footer mt-3">
+                                <div class="product-cat">
+                                    <span>Category:</span>
+                                    <a href="#">{{ $product->category->name ?? 'N/A' }}</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            {{-- END PRODUCT TOP --}}
+
+
+            {{-- ── TABS ── --}}
+            <div class="product-details-tab">
+                <ul class="nav nav-pills justify-content-center" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="product-desc-link"
+                            data-toggle="tab" href="#product-desc-tab" role="tab">
+                            Description
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="product-review-link"
+                            data-toggle="tab" href="#product-review-tab" role="tab">
+                            Reviews ({{ $reviews->count() }})
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+
+                    {{-- DESCRIPTION TAB --}}
+                    <div class="tab-pane fade show active"
+                        id="product-desc-tab" role="tabpanel">
+                        <div class="product-desc-content">
+                            <h3>Product Information</h3>
+                            {!! $product->description !!}
+                        </div>
+                    </div>
+
+                    {{-- REVIEWS TAB --}}
+                    <div class="tab-pane fade"
+                        id="product-review-tab" role="tabpanel">
+                        <div class="reviews p-3">
+                            <h3 class="mb-4">Reviews ({{ $reviews->count() }})</h3>
+
+                            {{-- LIST REVIEWS --}}
+                            @forelse($reviews as $review)
+                            <div class="review">
+                                <div class="row no-gutters">
+                                    <div class="col-auto pr-4">
+                                        <h5 class="mb-1">
+                                            {{ $review->user->name ?? 'Anonymous' }}
+                                        </h5>
+                                        {{-- STAR DISPLAY --}}
+                                        <div class="review-stars">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <span class="{{ $i <= $review->rating ? 'filled' : 'empty' }}">
+                                                &#9733;
+                                                </span>
+                                                @endfor
                                         </div>
-                                    </div><!-- End .product-details-footer -->
-                                </div><!-- End .product-details -->
-                            </div><!-- End .col-md-6 -->
-                        </div><!-- End .row -->
-                    </div><!-- End .product-details-top -->
+                                        <small class="text-muted">
+                                            {{ $review->created_at->diffForHumans() }}
+                                        </small>
+                                    </div>
+                                    <div class="col">
+                                        <p class="mb-0 mt-1">
+                                            {{ $review->review ?? '' }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            @empty
+                            <p class="text-muted">No reviews yet. Be the first!</p>
+                            @endforelse
 
-                    <div class="product-details-tab">
-                        <ul class="nav nav-pills justify-content-center" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">Description</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab" aria-controls="product-info-tab" aria-selected="false">Additional information</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="product-shipping-link" data-toggle="tab" href="#product-shipping-tab" role="tab" aria-controls="product-shipping-tab" aria-selected="false">Shipping & Returns</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews (2)</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel" aria-labelledby="product-desc-link">
-                                <div class="product-desc-content">
-                                    <h3>Product Information</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. </p>
-                                    <ul>
-                                        <li>Nunc nec porttitor turpis. In eu risus enim. In vitae mollis elit. </li>
-                                        <li>Vivamus finibus vel mauris ut vehicula.</li>
-                                        <li>Nullam a magna porttitor, dictum risus nec, faucibus sapien.</li>
-                                    </ul>
+                            <hr class="mt-4">
 
-                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. </p>
-                                </div><!-- End .product-desc-content -->
-                            </div><!-- .End .tab-pane -->
-                            <div class="tab-pane fade" id="product-info-tab" role="tabpanel" aria-labelledby="product-info-link">
-                                <div class="product-desc-content">
-                                    <h3>Information</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. </p>
+                            {{-- WRITE REVIEW --}}
+                            <div class="add-review mt-4">
+                                <h4 class="mb-3">Write a Review</h4>
 
-                                    <h3>Fabric & care</h3>
-                                    <ul>
-                                        <li>Faux suede fabric</li>
-                                        <li>Gold tone metal hoop handles.</li>
-                                        <li>RI branding</li>
-                                        <li>Snake print trim interior </li>
-                                        <li>Adjustable cross body strap</li>
-                                        <li> Height: 31cm; Width: 32cm; Depth: 12cm; Handle Drop: 61cm</li>
-                                    </ul>
+                                @auth
+                                @if($userReviewed)
+                                <div class="alert alert-info">
+                                    You have already reviewed this product.
+                                </div>
+                                @else
+                                <form action="{{ route('user.review', $product->proid) }}"
+                                    method="POST">
+                                    @csrf
 
-                                    <h3>Size</h3>
-                                    <p>one size</p>
-                                </div><!-- End .product-desc-content -->
-                            </div><!-- .End .tab-pane -->
-                            <div class="tab-pane fade" id="product-shipping-tab" role="tabpanel" aria-labelledby="product-shipping-link">
-                                <div class="product-desc-content">
-                                    <h3>Delivery & returns</h3>
-                                    <p>We deliver to over 100 countries around the world. For full details of the delivery options we offer, please view our <a href="#">Delivery information</a><br>
-                                    We hope you’ll love every purchase, but if you ever need to return an item you can do so within a month of receipt. For full details of how to make a return, please view our <a href="#">Returns information</a></p>
-                                </div><!-- End .product-desc-content -->
-                            </div><!-- .End .tab-pane -->
-                            <div class="tab-pane fade" id="product-review-tab" role="tabpanel" aria-labelledby="product-review-link">
-                                <div class="reviews">
-                                    <h3>Reviews (2)</h3>
-                                    <div class="review">
-                                        <div class="row no-gutters">
-                                            <div class="col-auto">
-                                                <h4><a href="#">Samanta J.</a></h4>
-                                                <div class="ratings-container">
-                                                    <div class="ratings">
-                                                        <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                                    </div><!-- End .ratings -->
-                                                </div><!-- End .rating-container -->
-                                                <span class="review-date">6 days ago</span>
-                                            </div><!-- End .col -->
-                                            <div class="col">
-                                                <h4>Good, perfect size</h4>
+                                    {{-- CLICKABLE STARS --}}
+                                    <div class="form-group">
+                                        <label class="d-block mb-1">
+                                            Your Rating
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="star-rating">
+                                            <input type="radio" id="star5" name="rating" value="5"
+                                                {{ old('rating')==5 ? 'checked':'' }} required>
+                                            <label for="star5" title="5 stars">&#9733;</label>
 
-                                                <div class="review-content">
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus cum dolores assumenda asperiores facilis porro reprehenderit animi culpa atque blanditiis commodi perspiciatis doloremque, possimus, explicabo, autem fugit beatae quae voluptas!</p>
-                                                </div><!-- End .review-content -->
+                                            <input type="radio" id="star4" name="rating" value="4"
+                                                {{ old('rating')==4 ? 'checked':'' }}>
+                                            <label for="star4" title="4 stars">&#9733;</label>
 
-                                                <div class="review-action">
-                                                    <a href="#"><i class="icon-thumbs-up"></i>Helpful (2)</a>
-                                                    <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                                </div><!-- End .review-action -->
-                                            </div><!-- End .col-auto -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .review -->
+                                            <input type="radio" id="star3" name="rating" value="3"
+                                                {{ old('rating')==3 ? 'checked':'' }}>
+                                            <label for="star3" title="3 stars">&#9733;</label>
 
-                                    <div class="review">
-                                        <div class="row no-gutters">
-                                            <div class="col-auto">
-                                                <h4><a href="#">John Doe</a></h4>
-                                                <div class="ratings-container">
-                                                    <div class="ratings">
-                                                        <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                                    </div><!-- End .ratings -->
-                                                </div><!-- End .rating-container -->
-                                                <span class="review-date">5 days ago</span>
-                                            </div><!-- End .col -->
-                                            <div class="col">
-                                                <h4>Very good</h4>
+                                            <input type="radio" id="star2" name="rating" value="2"
+                                                {{ old('rating')==2 ? 'checked':'' }}>
+                                            <label for="star2" title="2 stars">&#9733;</label>
 
-                                                <div class="review-content">
-                                                    <p>Sed, molestias, tempore? Ex dolor esse iure hic veniam laborum blanditiis laudantium iste amet. Cum non voluptate eos enim, ab cumque nam, modi, quas iure illum repellendus, blanditiis perspiciatis beatae!</p>
-                                                </div><!-- End .review-content -->
+                                            <input type="radio" id="star1" name="rating" value="1"
+                                                {{ old('rating')==1 ? 'checked':'' }}>
+                                            <label for="star1" title="1 star">&#9733;</label>
+                                        </div>
+                                        @error('rating')
+                                        <small class="text-danger d-block">{{ $message }}</small>
+                                        @enderror
+                                    </div>
 
-                                                <div class="review-action">
-                                                    <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
-                                                    <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                                </div><!-- End .review-action -->
-                                            </div><!-- End .col-auto -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .review -->
-                                </div><!-- End .reviews -->
-                            </div><!-- .End .tab-pane -->
-                        </div><!-- End .tab-content -->
-                    </div><!-- End .product-details-tab -->
+                                    {{-- REVIEW TEXT --}}
+                                    <div class="form-group mt-3">
+                                        <label>Your Review
+                                            <span class="text-muted">(optional)</span>
+                                        </label>
+                                        <textarea name="review"
+                                            class="form-control"
+                                            rows="4"
+                                            placeholder="Share your experience...">{{ old('review') }}</textarea>
+                                        @error('review')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
 
-                    <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
+                                    <button type="submit"
+                                        class="btn btn-primary mt-2 px-4">
+                                        Submit Review
+                                    </button>
+                                </form>
+                                @endif
+                                @else
+                                <p>
+                                    <a href="{{ url('login') }}">Login</a>
+                                    to write a review.
+                                </p>
+                                @endauth
+                            </div>
 
-                    <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
-                        data-owl-options='{
-                            "nav": false, 
-                            "dots": true,
-                            "margin": 20,
-                            "loop": false,
-                            "responsive": {
-                                "0": {
-                                    "items":1
-                                },
-                                "480": {
-                                    "items":2
-                                },
-                                "768": {
-                                    "items":3
-                                },
-                                "992": {
-                                    "items":4
-                                },
-                                "1200": {
-                                    "items":4,
-                                    "nav": true,
-                                    "dots": false
-                                }
-                            }
-                        }'>
-                        <div class="product product-7 text-center">
-                            <figure class="product-media">
-                                <span class="product-label label-new">New</span>
-                                <a href="product.html">
-                                    <img src="assets/images/products/product-4.jpg" alt="Product image" class="product-image">
-                                </a>
+                        </div>
+                    </div>
 
-                                <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                                </div><!-- End .product-action-vertical -->
+                </div>
+            </div>
+            {{-- END TABS --}}
 
-                                <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                </div><!-- End .product-action -->
-                            </figure><!-- End .product-media -->
 
-                            <div class="product-body">
-                                <div class="product-cat">
-                                    <a href="#">Women</a>
-                                </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html">Brown paperbag waist <br>pencil skirt</a></h3><!-- End .product-title -->
-                                <div class="product-price">
-                                    $60.00
-                                </div><!-- End .product-price -->
-                                <div class="ratings-container">
-                                    <div class="ratings">
-                                        <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
-                                    </div><!-- End .ratings -->
-                                    <span class="ratings-text">( 2 Reviews )</span>
-                                </div><!-- End .rating-container -->
+            {{-- ── RELATED PRODUCTS ── --}}
+            @if($related->count())
+            <h2 class="title text-center mb-4 mt-5">You May Also Like</h2>
 
-                                <div class="product-nav product-nav-thumbs">
-                                    <a href="#" class="active">
-                                        <img src="assets/images/products/product-4-thumb.jpg" alt="product desc">
-                                    </a>
-                                    <a href="#">
-                                        <img src="assets/images/products/product-4-2-thumb.jpg" alt="product desc">
-                                    </a>
+            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
+                data-toggle="owl"
+                data-owl-options='{
+                         "nav":false,"dots":true,"margin":20,"loop":false,
+                         "responsive":{
+                             "0":{"items":1},
+                             "480":{"items":2},
+                             "768":{"items":3},
+                             "992":{"items":4},
+                             "1200":{"items":4,"nav":true,"dots":false}
+                         }
+                     }'>
 
-                                    <a href="#">
-                                        <img src="assets/images/products/product-4-3-thumb.jpg" alt="product desc">
-                                    </a>
-                                </div><!-- End .product-nav -->
-                            </div><!-- End .product-body -->
-                        </div><!-- End .product -->
+                @foreach($related as $rel)
+                <div class="product product-7 text-center">
+                    <figure class="product-media">
 
-                        <div class="product product-7 text-center">
-                            <figure class="product-media">
-                                <span class="product-label label-out">Out of Stock</span>
-                                <a href="product.html">
-                                    <img src="assets/images/products/product-6.jpg" alt="Product image" class="product-image">
-                                </a>
+                        {{-- DISCOUNT BADGE --}}
+                        @if($rel->discount_price > 0)
+                        @php
+                        $pct = number_format(($rel->discount_price/ $rel->price) * 100,2);
+                        @endphp
+                        <span class="product-label label-sale">-{{ $pct }}%</span>
+                        @endif
 
-                                <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                                </div><!-- End .product-action-vertical -->
+                        <a href="{{ route('user.single', $rel->proid) }}">
+                            <img src="{{ asset('admin/assets/images/' . $rel->proimage) }}"
+                                alt="{{ $rel->proname }}"
+                                class="product-image"
+                                style="height:280px;object-fit:cover;">
+                        </a>
+                        <div class="product-action">
+                            <a href="{{ route('user.single', $rel->proid) }}"
+                                class="btn-product btn-cart">
+                                <span>view product</span>
+                            </a>
+                        </div>
+                    </figure>
 
-                                <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                </div><!-- End .product-action -->
-                            </figure><!-- End .product-media -->
+                    <div class="product-body">
+                        <div class="product-cat">
+                            <a href="#">{{ $rel->category->name ?? '' }}</a>
+                        </div>
+                        <h3 class="product-title">
+                            <a href="{{ route('user.single', $rel->proid) }}">
+                                {{ $rel->proname }}
+                            </a>
+                        </h3>
+                        <div class="product-price">
+                            @if($rel->discount_price > 0)
+                            @php
+                            $finalPrice = $rel->price - $rel->discount_price;
+                            $pct = round(($rel->discount_price / $rel->price) * 100);
+                            @endphp
+                            {{-- in product-body --}}
+                            <span class="new-price">₹{{ number_format($finalPrice, 2) }}</span>
+                            <span class="old-price">₹{{ number_format($rel->price, 2) }}</span>
+                            @else
+                            <span class="new-price" style="color:gray ;font-size: large; font-weight: normal;">₹{{ number_format($rel->price, 2) }}</span>
 
-                            <div class="product-body">
-                                <div class="product-cat">
-                                    <a href="#">Jackets</a>
-                                </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html">Khaki utility boiler jumpsuit</a></h3><!-- End .product-title -->
-                                <div class="product-price">
-                                    <span class="out-price">$120.00</span>
-                                </div><!-- End .product-price -->
-                                <div class="ratings-container">
-                                    <div class="ratings">
-                                        <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                    </div><!-- End .ratings -->
-                                    <span class="ratings-text">( 6 Reviews )</span>
-                                </div><!-- End .rating-container -->
-                            </div><!-- End .product-body -->
-                        </div><!-- End .product -->
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                @endforeach
 
-                        <div class="product product-7 text-center">
-                            <figure class="product-media">
-                                <span class="product-label label-top">Top</span>
-                                <a href="product.html">
-                                    <img src="assets/images/products/product-11.jpg" alt="Product image" class="product-image">
-                                </a>
+            </div>
+            @endif
 
-                                <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                                </div><!-- End .product-action-vertical -->
+        </div>
+    </div>
+</main>
 
-                                <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                </div><!-- End .product-action -->
-                            </figure><!-- End .product-media -->
+{{-- THUMBNAIL SWITCHER - plain JS, no AJAX --}}
+<script>
+    document.querySelectorAll('.thumb-item').forEach(function(thumb) {
+        thumb.addEventListener('click', function() {
+            // update main image
+            document.getElementById('main-product-img').src =
+                this.getAttribute('data-image');
 
-                            <div class="product-body">
-                                <div class="product-cat">
-                                    <a href="#">Shoes</a>
-                                </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html">Light brown studded Wide fit wedges</a></h3><!-- End .product-title -->
-                                <div class="product-price">
-                                    $110.00
-                                </div><!-- End .product-price -->
-                                <div class="ratings-container">
-                                    <div class="ratings">
-                                        <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                    </div><!-- End .ratings -->
-                                    <span class="ratings-text">( 1 Reviews )</span>
-                                </div><!-- End .rating-container -->
+            // update active border
+            document.querySelectorAll('.thumb-item').forEach(function(el) {
+                el.classList.remove('active');
+            });
+            this.classList.add('active');
+        });
+    });
+</script>
 
-                                <div class="product-nav product-nav-thumbs">
-                                    <a href="#" class="active">
-                                        <img src="assets/images/products/product-11-thumb.jpg" alt="product desc">
-                                    </a>
-                                    <a href="#">
-                                        <img src="assets/images/products/product-11-2-thumb.jpg" alt="product desc">
-                                    </a>
-
-                                    <a href="#">
-                                        <img src="assets/images/products/product-11-3-thumb.jpg" alt="product desc">
-                                    </a>
-                                </div><!-- End .product-nav -->
-                            </div><!-- End .product-body -->
-                        </div><!-- End .product -->
-
-                        <div class="product product-7 text-center">
-                            <figure class="product-media">
-                                <a href="product.html">
-                                    <img src="assets/images/products/product-10.jpg" alt="Product image" class="product-image">
-                                </a>
-
-                                <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                                </div><!-- End .product-action-vertical -->
-
-                                <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                </div><!-- End .product-action -->
-                            </figure><!-- End .product-media -->
-
-                            <div class="product-body">
-                                <div class="product-cat">
-                                    <a href="#">Jumpers</a>
-                                </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html">Yellow button front tea top</a></h3><!-- End .product-title -->
-                                <div class="product-price">
-                                    $56.00
-                                </div><!-- End .product-price -->
-                                <div class="ratings-container">
-                                    <div class="ratings">
-                                        <div class="ratings-val" style="width: 0%;"></div><!-- End .ratings-val -->
-                                    </div><!-- End .ratings -->
-                                    <span class="ratings-text">( 0 Reviews )</span>
-                                </div><!-- End .rating-container -->
-                            </div><!-- End .product-body -->
-                        </div><!-- End .product -->
-
-                        <div class="product product-7 text-center">
-                            <figure class="product-media">
-                                <a href="product.html">
-                                    <img src="assets/images/products/product-7.jpg" alt="Product image" class="product-image">
-                                </a>
-
-                                <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                    <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                                </div><!-- End .product-action-vertical -->
-
-                                <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                </div><!-- End .product-action -->
-                            </figure><!-- End .product-media -->
-
-                            <div class="product-body">
-                                <div class="product-cat">
-                                    <a href="#">Jeans</a>
-                                </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html">Blue utility pinafore denim dress</a></h3><!-- End .product-title -->
-                                <div class="product-price">
-                                    $76.00
-                                </div><!-- End .product-price -->
-                                <div class="ratings-container">
-                                    <div class="ratings">
-                                        <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
-                                    </div><!-- End .ratings -->
-                                    <span class="ratings-text">( 2 Reviews )</span>
-                                </div><!-- End .rating-container -->
-                            </div><!-- End .product-body -->
-                        </div><!-- End .product -->
-                    </div><!-- End .owl-carousel -->
-                </div><!-- End .container -->
-            </div><!-- End .page-content -->
-        </main><!-- End .main -->
+<script>
+    setTimeout(function() {
+        document.querySelectorAll('.alert').forEach(function(el) {
+            el.classList.remove('show');
+            el.classList.add('fade');
+            setTimeout(function() {
+                el.remove();
+            }, 300);
+        });
+    }, 4000);
+</script>
 
 @endsection

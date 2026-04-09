@@ -553,7 +553,7 @@
                                                 @endif
 
                                                 {{-- Image --}}
-                                                <a href="{{ $blockNav ? '#' : url('user/single-shop/' . $pro->id) }}">
+                                                <a href="{{url('user/single-shop/' . $pro->proid) }}">
                                                     <img src="{{ asset('admin/assets/images/' . $pro->proimage) }}"
                                                          alt="{{ $pro->proname }}"
                                                          class="product-image fixed-img">
@@ -610,7 +610,7 @@
                                                 </div>
 
                                                 <h3 class="product-title">
-                                                    <a href="{{ $blockNav ? '#' : url('user/single-shop/' . $pro->id) }}"
+                                                    <a href="{{url('user/single-shop/' . $pro->proid) }}"
                                                        style="{{ $blockNav ? 'color:#aaa; pointer-events:none;' : '' }}">
                                                         {{ $pro->proname }}
                                                     </a>

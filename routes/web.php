@@ -15,6 +15,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\UsershopController;
 use App\Http\Controllers\AdminCouponController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\UsersingleController;
 use App\Http\Controllers\WishlistController;
 
 
@@ -151,7 +152,8 @@ Route::get('admin/coupon-status/{id}', [AdminCouponController::class, 'status'])
 
 // user
 
-Route::get('/', [UserController::class, 'home']);
+Route::get('/', [UserController::class, 'index'])->name('home');
+Route::get('/home', [UserController::class, 'index']);
 
 
 
@@ -163,7 +165,7 @@ Route::get('user/shop/{name}', [UsershopController::class, 'shop']);
 
 
 
-Route::get('user/single-shop', [UserController::class, 'single_shop']);
+
 
 Route::get('user/checkout', [UserController::class, 'checkout'])->middleware('isUser');
 Route::get('user/wishlist', [UserController::class, 'wishlist'])->middleware('isUser');
@@ -181,8 +183,16 @@ Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wi
 Route::get('user/cart', [CartController::class, 'cart'])->middleware('isUser');
 Route::get('cart/remove/{id}', [CartController::class, 'cartremove'])->middleware('isUser');
 Route::post('cart/update-qty', [CartController::class, 'updateCartQty'])->name('cart.updateQty')->middleware('isUser');
-Route::post('/cart/add',    [CartController::class, 'addToCart'])->name('cart.add')->middleware('isUser');
-Route::post('/cart/update', [CartController::class, 'updateQty'])->name('cart.update')->middleware('isUser');
-Route::post('/cart/remove', [CartController::class, 'remove']   )->name('cart.remove')->middleware('isUser');
-Route::post('/cart/clear',  [CartController::class, 'clear']    )->name('cart.clear')->middleware('isUser');
+Route::post('/cart/add',    [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/update', [CartController::class, 'updateQty'])->name('cart.update');
+Route::post('/cart/remove', [CartController::class, 'remove']   )->name('cart.remove');
+Route::post('/cart/clear',  [CartController::class, 'clear']    )->name('cart.clear');
+
+
+//single
+
+Route::post('user/cart/add',[UsersingleController::class,'add'])->middleware('isUser');
+
+Route::get('user/single-shop/{id}',            [UsersingleController::class, 'single'])->name('user.single');
+Route::post('user/single/{id}/review',    [UsersingleController::class, 'addReview'])->name('user.review')->middleware('isUser');
 
