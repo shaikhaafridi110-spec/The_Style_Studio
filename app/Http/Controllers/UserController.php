@@ -55,9 +55,7 @@ class UserController extends Controller
     
    
     
-    public function checkout(){
-        return view('user.checkout');
-    }
+    
     public function wishlist(){
              if (!Auth::check()) {
             return redirect()->route('login');

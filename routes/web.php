@@ -15,6 +15,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\UsershopController;
 use App\Http\Controllers\AdminCouponController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\Checkoutcontroller;
 use App\Http\Controllers\UsersingleController;
 use App\Http\Controllers\WishlistController;
 
@@ -167,14 +168,10 @@ Route::get('user/shop/{name}', [UsershopController::class, 'shop']);
 
 
 
-Route::get('user/checkout', [UserController::class, 'checkout'])->middleware('isUser');
-Route::get('user/wishlist', [UserController::class, 'wishlist'])->middleware('isUser');
-Route::get('user/about', [UserController::class, 'about']);
-Route::get('user/contact', [UserController::class, 'contact']);
 
 
 
-Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+
 
 
 
@@ -195,4 +192,52 @@ Route::post('user/cart/add',[UsersingleController::class,'add'])->middleware('is
 
 Route::get('user/single-shop/{id}',            [UsersingleController::class, 'single'])->name('user.single');
 Route::post('user/single/{id}/review',    [UsersingleController::class, 'addReview'])->name('user.review')->middleware('isUser');
+
+
+//checkoutcontroller
+
+Route::middleware('isUser')->group(function () {
+ 
+    // Checkout page
+    Route::get('user/checkout', [CheckoutController::class, 'index'])->name('checkout');
+ 
+    // Apply coupon (AJAX)
+    Route::post('/checkout/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('checkout.applyCoupon');
+ 
+    // Place order (branches internally to card/upi/cod)
+    Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
+ 
+    // ── Card / Razorpay ─────────────────────────────────────────────────
+    Route::post('/checkout/razorpay/success', [CheckoutController::class, 'razorpaySuccess'])->name('checkout.razorpaySuccess');
+ 
+    // ── UPI ─────────────────────────────────────────────────────────────
+    Route::post('/checkout/upi/confirm', [CheckoutController::class, 'upiConfirm'])->name('checkout.upiConfirm');
+ 
+    // ── COD OTP ─────────────────────────────────────────────────────────
+    Route::post('/checkout/otp/verify',  [CheckoutController::class, 'verifyOtp'])->name('checkout.verifyOtp');
+    Route::post('/checkout/otp/resend',  [CheckoutController::class, 'resendOtp'])->name('checkout.resendOtp');
+ 
+    // ── Result pages ────────────────────────────────────────────────────
+    Route::get('/checkout/success/{orderId}', [CheckoutController::class, 'success'])->name('checkout.success');
+    Route::get('/checkout/failed',            [CheckoutController::class, 'failed'])->name('checkout.failed');
+});
+ 
+// Razorpay Webhook — NO auth middleware, verify signature inside controller
+Route::post('/webhook/razorpay', [CheckoutController::class, 'razorpayWebhook'])
+    ->name('webhook.razorpay')
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
+
+//wish list
+Route::get('user/wishlist', [UserController::class, 'wishlist'])->middleware('isUser');
+Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+
+//order
+Route::middleware('isUser')->group(function () {
+    Route::get('/orders',      [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+});
+
+
+Route::get('user/about', [UserController::class, 'about']);
+Route::get('user/contact', [UserController::class, 'contact']);
 

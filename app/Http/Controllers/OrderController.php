@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Auth;
+
 
 class OrderController extends Controller
 {
@@ -106,6 +110,40 @@ class OrderController extends Controller
     }
 
 
+
+
+
+    // ─────────────────────────────────────────────────────────
+    // 1. MY ORDERS LIST
+    // ─────────────────────────────────────────────────────────
+    public function index(Request $request)
+    {
+        $query = Order::with('items')
+            ->where('user_id', Auth::id())
+            ->latest('order_date');
+ 
+        // Filter by status (optional)
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+ 
+        $orders = $query->paginate(8)->withQueryString();
+ 
+        return view('user.order', compact('orders'));
+    }
+ 
+    // ─────────────────────────────────────────────────────────
+    // 2. ORDER DETAIL / STATUS
+    // ─────────────────────────────────────────────────────────
+    public function show($orderId)
+    {
+        $order = Order::with('items')
+            ->where('id', $orderId)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+ 
+        return view('user.ordershow', compact('order'));
+    }
 } 
 // public function orderlist(Request $r)
 //     {
