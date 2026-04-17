@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -14,9 +14,11 @@ class OrderController extends Controller
 {
     public function orderlist(Request $r)
     {
-        $data = Order::with('user')->orderBy('created_at', 'desc');
-    $date=Order::select('order_date')->distinct()->groupBy('order_date')->orderBy('order_date','desc')->get();
-
+    $data = Order::with('user')->orderBy('created_at', 'desc');
+    $date = Order::select(DB::raw('DATE(order_date) as order_date'))
+    ->groupBy(DB::raw('DATE(order_date)'))
+    ->orderBy('order_date','desc')
+    ->get();
         if ($r->status) {
             $data->where('status', $r->status);
         }
