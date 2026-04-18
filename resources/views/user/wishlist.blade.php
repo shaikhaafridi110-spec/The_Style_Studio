@@ -264,13 +264,13 @@
                             <td class="product-col">
                                 <div class="product" style="display:flex;align-items:center;gap:14px;">
                                     <figure class="product-media">
-                                        <a href="{{ url('user/single-shop/' . $pro->id) }}">
+                                        <a href="{{ url('user/single-shop/' . $pro->proid) }}">
                                             <img src="{{ asset('admin/assets/images/' . $pro->proimage) }}"
                                                  alt="{{ $pro->proname }}">
                                         </a>
                                     </figure>
                                     <h3 class="product-title" style="margin:0;">
-                                        <a href="{{ url('user/single-shop/' . $pro->id) }}">{{ $pro->proname }}</a>
+                                        <a href="{{ url('user/single-shop/' . $pro->proid) }}">{{ $pro->proname }}</a>
                                         @if($pro->category)
                                             <span style="display:block;font-size:12px;color:#999;font-weight:400;margin-top:3px;">
                                                 {{ $pro->category->name }}

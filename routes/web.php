@@ -16,18 +16,19 @@ use App\Http\Controllers\UsershopController;
 use App\Http\Controllers\AdminCouponController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Checkoutcontroller;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersingleController;
 use App\Http\Controllers\WishlistController;
 
 
 // google authentication
 
-Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle']);
+Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
 
 // Forgot Password
-Route::get('forgot-password', [Forgetpassword::class, 'forgotPassword']);
+Route::get('forgot-password', [Forgetpassword::class, 'forgotPassword'])->name('forgot.password');
 Route::post('send-otp', [Forgetpassword::class, 'sendOtp']);
 
 // Verify OTP
@@ -113,7 +114,7 @@ Route::get('admin/delete_order/{id}', [OrderController::class, 'order_del']);
 
 Route::get('admin/order-edit/{id}', [OrderController::class, 'order_edit']);
 Route::post('admin/order-update/{id}', [OrderController::class, 'order_update']);
-
+Route::patch('admin/order-status/{id}', [OrderController::class, 'order_status_update']);
 Route::get('admin/Order-items', [OrderController::class, 'orderitems']);
 Route::get('admin/delete_order-item/{id}', [OrderController::class, 'orderitem_del']);
 
@@ -238,6 +239,25 @@ Route::middleware('isUser')->group(function () {
 });
 
 
+//profile
+Route::middleware('isUser')->group(function () {
+ 
+    // Show profile page
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+ 
+    // Update personal info + address
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+ 
+    // Update password
+    Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+ 
+});
+
 Route::get('user/about', [UserController::class, 'about']);
-Route::get('user/contact', [UserController::class, 'contact']);
+
+
+//contact
+
+Route::post('/user/contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
+Route::get('user/contact', [ContactController::class, 'contact'])->name('contact');;
 

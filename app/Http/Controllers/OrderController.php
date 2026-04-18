@@ -12,6 +12,30 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
+    public function order_status_update(Request $r, $id)
+{
+    $r->validate([
+        'status' => 'required|in:confirmed,shipped,delivered',
+    ]);
+
+    $order = Order::findOrFail($id);
+
+    $flow = ['pending'=>1, 'confirmed'=>2, 'shipped'=>3, 'delivered'=>4];
+    if (($flow[$r->status] ?? 0) <= ($flow[$order->status] ?? 0)) {
+        return redirect('admin/Order')->with('error', 'Invalid status change.');
+    }
+
+    $order->status = $r->status;
+
+    // ===== Save delivered_at timestamp when marked delivered =====
+    if ($r->status === 'delivered') {
+        $order->delivered_at = now();
+    }
+
+    $order->save();
+
+    return redirect('admin/Order')->with('success', 'Order marked as ' . ucfirst($r->status));
+}
     public function orderlist(Request $r)
     {
     $data = Order::with('user')->orderBy('created_at', 'desc');

@@ -159,7 +159,7 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="#">My Profile</a>
+                                <a class="dropdown-item" href="{{url('profile')}}">My Profile</a>
                                 <a class="dropdown-item" href="{{url('orders')}}">My Orders</a>
                                 <a class="dropdown-item" href="{{url('logout')}}">Logout</a>
                             </div>
