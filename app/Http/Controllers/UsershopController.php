@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UsershopController extends Controller
 {
+    
     public function shop(Request $r, $name = null)
     {
         // ── Base query ────────────────────────────────────────────
@@ -66,16 +67,17 @@ class UsershopController extends Controller
             if (!empty($topIds)) {
                 $ids = implode(',', $topIds);
                 $query->whereIn('proid', $topIds)
-                      ->orderByRaw("FIELD(proid, $ids)");
+                    ->orderByRaw("FIELD(proid, $ids)");
             }
-
         } elseif ($r->sortby === 'rating') {
-            // withAvg('reviews','rating') creates alias "reviews_avg_rating"
             $query->orderByDesc('reviews_avg_rating');
-
         } elseif ($r->sortby === 'date') {
             $query->orderByDesc('proid');
-
+        } elseif ($r->sortby === 'price_low') {
+            // Final price = price - discount_price (when discount > 0), else price
+            $query->orderByRaw('(price - IF(discount_price > 0, discount_price, 0)) ASC');
+        } elseif ($r->sortby === 'price_high') {
+            $query->orderByRaw('(price - IF(discount_price > 0, discount_price, 0)) DESC');
         } else {
             $query->orderBy('proid', 'asc');
         }

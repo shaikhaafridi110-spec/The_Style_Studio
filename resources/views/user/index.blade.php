@@ -16,6 +16,7 @@ function productCard($product) {
 @endphp
 
 <main class="main">
+    
 
     {{-- ── SLIDER ── --}}
     <div class="intro-slider-container mb-0">
@@ -70,7 +71,7 @@ function productCard($product) {
             </div>
             <div class="col-lg-3 col-sm-6">
                 <div class="icon-box text-center">
-                    <span class="icon-box-icon text-dark"><i class="icon-lock"></i></span>
+                    <span class="icon-box-icon text-dark"><i class="fa-solid fa-lock"></i></span>
                     <div class="icon-box-content">
                         <h3 class="icon-box-title">Secure Payment</h3>
                         <p>100% secure payment</p>
@@ -436,42 +437,74 @@ function productCard($product) {
     <div class="mb-2"></div>
 
     {{-- ── CTA SECTION ── --}}
-    <div class="container">
-        <div class="cta cta-separator mb-5">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="cta-wrapper cta-text text-center">
-                        <h3 class="cta-title">Shop Social</h3>
-                        <p class="cta-desc">Follow us on social media for the latest trends and offers.</p>
-                        <div class="social-icons social-icons-colored justify-content-center">
-                            <a href="#" class="social-icon social-facebook" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
-                            <a href="#" class="social-icon social-twitter" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
-                            <a href="#" class="social-icon social-instagram" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
-                            <a href="#" class="social-icon social-youtube" title="Youtube" target="_blank"><i class="icon-youtube"></i></a>
-                            <a href="#" class="social-icon social-pinterest" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="cta-wrapper text-center">
-                        <h3 class="cta-title">Get the Latest Deals</h3>
-                        <p class="cta-desc">and receive <span class="text-primary">₹200 coupon</span> for first shopping</p>
-                        <form action="#">
-                            <div class="input-group">
-                                <input type="email" class="form-control"
-                                       placeholder="Enter your Email Address" required>
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary btn-rounded" type="submit">
-                                        <i class="icon-long-arrow-right"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+<div class="container">
+    <div class="cta cta-separator mb-5">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="cta-wrapper cta-text text-center">
+                    <h3 class="cta-title">Shop Social</h3>
+                    <p class="cta-desc">Follow us on social media for the latest trends and offers.</p>
+                    <div class="social-icons social-icons-colored justify-content-center">
+                        <a href="#" class="social-icon social-facebook" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
+                        <a href="#" class="social-icon social-twitter" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
+                        <a href="#" class="social-icon social-instagram" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
+                        <a href="#" class="social-icon social-youtube" title="Youtube" target="_blank"><i class="icon-youtube"></i></a>
+                        <a href="#" class="social-icon social-pinterest" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
                     </div>
                 </div>
             </div>
+
+            <div class="col-lg-6">
+                <div class="cta-wrapper text-center">
+                    <h3 class="cta-title">Get the Latest Deals</h3>
+                    <p class="cta-desc">and receive <span class="text-primary">₹200 coupon</span> for your loyalty</p>
+
+                    {{-- ✅ Success Message --}}
+                    @if(session('fcupon_success'))
+                        <div class="alert alert-success mt-2 mb-2" role="alert"
+                             style="border-radius:25px; font-size:14px;">
+                            <i class="fa-solid fa-circle-check me-1"></i>
+                            {{ session('fcupon_success') }}
+                        </div>
+                    @endif
+
+                    {{-- ❌ Error Message --}}
+                    @if(session('fcupon_error'))
+                        <div class="alert alert-danger mt-2 mb-2" role="alert"
+                             style="border-radius:25px; font-size:14px;">
+                            <i class="fa-solid fa-circle-xmark me-1"></i>
+                            {{ session('fcupon_error') }}
+                        </div>
+                    @endif
+
+                    <form action="{{ url('user/fcupon') }}" method="POST">
+                        @csrf
+                        <div class="input-group">
+                            <input
+                                type="email"
+                                class="form-control"
+                                name="email"
+                                placeholder="Enter your Email Address"
+                                value="{{ old('email') }}"
+                                required>
+                            <div class="input-group-append">
+                                <button class="btn btn-primary btn-rounded" type="submit">
+                                    <i class="icon-long-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        {{-- Validation error --}}
+                        @error('email')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
+</div>
 
     {{-- ── INSTAGRAM FEED ── --}}
     <div class="bg-lighter pt-7 pb-4" style="background-color:#fafafa;">

@@ -141,6 +141,15 @@
     </div>
 </div>
 <script>
+    document.getElementById("showPassword").addEventListener("change", function () {
+        let passwordField = document.getElementById("password");
+
+        if (this.checked) {
+            passwordField.type = "text";
+        } else {
+            passwordField.type = "password";
+        }
+    });
     function closeAlert() {
         document.getElementById("errorAlert").style.display = "none";
     }

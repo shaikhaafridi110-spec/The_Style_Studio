@@ -9,6 +9,18 @@ use App\Models\User;
 
 class LoginController extends Controller
 {
+    public function login()
+    {
+        if(Auth::check() && Auth::user()->role==1 ){
+                return redirect('admin/home');
+        }
+        else if(Auth::check() && Auth::user()->role==2){
+            return redirect()->route('home')->with('login', 'Already logged in...');
+        }
+        else{
+        return view('login');
+        }
+    }
     public function loginProcess(Request $req)
     {
 

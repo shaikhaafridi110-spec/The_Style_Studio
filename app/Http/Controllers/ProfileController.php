@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -59,11 +60,11 @@ class ProfileController extends Controller
         ]);
 
         $user = Auth::user();
-
+  
         // ── Plain-text comparison (consistent with rest of this app) ──
-        if ($user->password !== $request->current_password) {
+        if (!Hash::check($request->current_password, $user->password)) {
             return redirect('forgot-password')
-                ->with('info', 'Current password is incorrect. Reset your password below.');
+                ->with('error', 'Current password is incorrect. Reset your password below.');
         }
 
         $user->update(['password' => $request->password]);

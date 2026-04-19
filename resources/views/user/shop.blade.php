@@ -474,11 +474,10 @@
 </div>
 
 <main class="main">
-    <div class="page-header text-center">
-        <div class="container" style="padding-top: 80px;">
-            <h1 class="page-title">Shop Now</h1>
-        </div>
-    </div>
+    <div class="page-header page-header-big text-center" style="background-image: url({{asset('user/assets/images/1.jpg')}}">
+        			<h1 class="page-title text-white">Shop Now</h1>
+	        	</div>
+    
 
     <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
         <div class="container"></div>
@@ -513,11 +512,13 @@
                                     <label for="sortby">Sort by:</label>
                                     <div class="select-custom">
                                         <select name="sortby" id="sortby" class="form-control" onchange="this.form.submit()">
-                                            <option value="">Select Option</option>
-                                            <option value="popularity" {{ request('sortby') == 'popularity' ? 'selected' : '' }}>Most Popular</option>
-                                            <option value="rating"     {{ request('sortby') == 'rating'     ? 'selected' : '' }}>Most Rated</option>
-                                            <option value="date"       {{ request('sortby') == 'date'       ? 'selected' : '' }}>Date</option>
-                                        </select>
+    <option value="">Select Option</option>
+    <option value="popularity" {{ request('sortby') == 'popularity' ? 'selected' : '' }}>Most Popular</option>
+    <option value="rating"     {{ request('sortby') == 'rating'     ? 'selected' : '' }}>Most Rated</option>
+    <option value="date"       {{ request('sortby') == 'date'       ? 'selected' : '' }}>Date</option>
+    <option value="price_low"  {{ request('sortby') == 'price_low'  ? 'selected' : '' }}>Price: Low to High</option>
+    <option value="price_high" {{ request('sortby') == 'price_high' ? 'selected' : '' }}>Price: High to Low</option>
+</select>
                                     </div>
                                 </div>
                             </div>

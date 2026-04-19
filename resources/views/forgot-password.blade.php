@@ -56,8 +56,12 @@
                     <h3 class="text-center mb-4">Forgot Password</h3>
 
                     @if(session('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
-                    @endif
+<div id="errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ session('error') }}
+    
+   
+</div>
+@endif
                     <form method="POST" action="{{ url('send-otp') }}">
                         @csrf
 
@@ -109,6 +113,16 @@
             // document.getElementById("confirm_password").type = type;
         });
     </script>
+    <script>
+setTimeout(function () {
+    let alert = document.getElementById('errorAlert');
+    if (alert) {
+        alert.classList.remove('show');
+        alert.classList.add('fade');
+        setTimeout(() => alert.remove(), 500);
+    }
+}, 5000);
+</script>
 </body>
 
 </html>

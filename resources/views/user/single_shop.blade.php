@@ -141,9 +141,9 @@
 <main class="main">
 
     {{-- PAGE HEADER --}}
-    <div class="page-header text-center">
-        <div class="container" style="padding-top:80px;">
-            <h1 class="page-title">{{ $product->proname }}</h1>
+    <div class="page-header text-center" style="background-image: url({{asset('user/assets/images/1.jpg')}}">
+        <div class="container" style="padding-top:80px;" >
+            <h1 class="page-title text-white">{{ $product->proname }}</h1>
         </div>
     </div>
 

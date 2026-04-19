@@ -18,6 +18,9 @@ class Coupon extends Model
         'used_count',
         'status'
     ];
+    protected $casts = [
+        'expiry_date' => 'date',
+    ];
     public function couponUsages()
     {
         return $this->hasMany(CouponUsage::class, 'coupon_id');

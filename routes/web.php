@@ -39,13 +39,11 @@ Route::post('verify-otp', [Forgetpassword::class, 'verifyOtp']);
 Route::get('reset-password', [Forgetpassword::class, 'resetPasswordPage']);
 Route::post('reset-password', [Forgetpassword::class, 'resetPassword']);
 // login -register
-Route::get('/login', function () {
-    return view('login');
-});
+
 Route::get('cprofile', function () {
     return view('cprofile');
 });
-
+Route::get('login',[LoginController::class,'login']);
 Route::post('login_process',[LoginController::class,'loginProcess']);
 Route::get('logout',[LoginController::class,'logout']);
 
@@ -156,13 +154,15 @@ Route::get('admin/coupon-status/{id}', [AdminCouponController::class, 'status'])
 
 Route::get('/', [UserController::class, 'index'])->name('home');
 Route::get('/home', [UserController::class, 'index']);
+Route::post('user/fcupon',[UserController::class,'fcupon']);
+
 
 
 
 // shop
 
 Route::get('user/shop', [UsershopController::class, 'shop']);
-Route::get('user/shop/{name}', [UsershopController::class, 'shop']);
+Route::get('user/shop/{name}', [UsershopController::class, 'shop'])->name('user.category')->middleware('isUser');
 
 
 
@@ -255,7 +255,12 @@ Route::middleware('isUser')->group(function () {
 
 Route::get('user/about', [UserController::class, 'about']);
 
+// category
 
+Route::get('user/categories', [UserController::class, 'allCategories'])->name('user.categories')->middleware('isUser');
+
+//chat box
+Route::post('user/chatbot', [UserController::class, 'chatbot'])->name('user.chatbot');
 //contact
 
 Route::post('/user/contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
