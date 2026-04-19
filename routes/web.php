@@ -234,8 +234,9 @@ Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wi
 
 //order
 Route::middleware('isUser')->group(function () {
-    Route::get('/orders',      [OrderController::class, 'index'])->name('orders.index');
-    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders',                              [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{id}',                         [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{orderId}/items/{itemId}/cancel', [OrderController::class, 'cancelItem'])->name('orders.cancelItem');
 });
 
 

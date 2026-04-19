@@ -371,23 +371,27 @@
 
                     <!-- ===== ORDER STATUS STEPPER ===== -->
                     @php
-                        $statusFlow  = ['pending' => 'confirmed', 'confirmed' => 'shipped', 'shipped' => 'delivered'];
-                        $stepClasses = [
-                            'pending'   => 'pending-step',
-                            'confirmed' => 'confirmed-step',
-                            'shipped'   => 'shipped-step',
-                            'delivered' => 'delivered-step',
-                        ];
-                        $stepIcons = [
-                            'pending'   => '🕐',
-                            'confirmed' => '✅',
-                            'shipped'   => '🚚',
-                            'delivered' => '📬',
-                        ];
-                        $stepOrder  = ['pending', 'confirmed', 'shipped', 'delivered'];
-                        $currentIdx = array_search($order->status, $stepOrder);
-                        $next       = $statusFlow[$order->status] ?? null;
-                        $btnClass   = $next ? 'to-'.$next : 'is-delivered';
+                        // ✅ Fix
+$statusFlow  = ['pending' => 'confirmed', 'confirmed' => 'shipped', 'shipped' => 'delivered'];
+$stepClasses = [
+    'pending'   => 'pending-step',
+    'confirmed' => 'confirmed-step',
+    'shipped'   => 'shipped-step',
+    'delivered' => 'delivered-step',
+    'cancelled' => 'cancelled-step',
+];
+$stepIcons = [
+    'pending'   => '🕐',
+    'confirmed' => '✅',
+    'shipped'   => '🚚',
+    'delivered' => '📬',
+    'cancelled' => '❌',
+];
+$stepOrder  = ['pending', 'confirmed', 'shipped', 'delivered'];
+$currentIdx = array_search($order->status, $stepOrder);
+$next       = $statusFlow[$order->status] ?? null;
+$btnClass   = $next ? 'to-'.$next : 'is-delivered';
+$isCancelled = $order->status === 'cancelled';
                     @endphp
 
                     <div class="mb-1">
@@ -398,34 +402,46 @@
                     <input type="hidden" name="status" id="statusInput" value="{{ $order->status }}">
 
                     {{-- Progress Stepper --}}
-                    <div class="status-stepper">
-                        @foreach($stepOrder as $i => $step)
-                            <div class="status-step">
-                                <div class="step-pill {{ $stepClasses[$step] }} {{ $i <= $currentIdx ? 'done' : 'inactive' }}">
-                                    {{ $stepIcons[$step] }} {{ ucfirst($step) }}
-                                </div>
-                                @if(!$loop->last)
-                                    <span class="step-arrow">›</span>
-                                @endif
-                            </div>
-                        @endforeach
-                    </div>
+<div class="status-stepper">
+    @if($isCancelled)
+        {{-- Show cancelled pill instead of normal stepper --}}
+        <div class="step-pill done" style="background:#e74a3b;border-color:#e74a3b;color:#fff;">
+            ❌ Cancelled
+        </div>
+    @else
+        @foreach($stepOrder as $i => $step)
+            <div class="status-step">
+                <div class="step-pill {{ $stepClasses[$step] }} {{ $i <= $currentIdx ? 'done' : 'inactive' }}">
+                    {{ $stepIcons[$step] }} {{ ucfirst($step) }}
+                </div>
+                @if(!$loop->last)
+                    <span class="step-arrow">›</span>
+                @endif
+            </div>
+        @endforeach
+    @endif
+</div>
 
-                    {{-- Advance Button --}}
-                    <div class="mb-4">
-                        @if($next)
-                            <button type="button"
-                                    class="btn-advance {{ $btnClass }}"
-                                    onclick="advanceStatus('{{ $next }}')">
-                                {{ $stepIcons[$next] }}
-                                Mark as {{ ucfirst($next) }}
-                            </button>
-                        @else
-                            <button type="button" class="btn-advance is-delivered" disabled>
-                                📬 Order Delivered
-                            </button>
-                        @endif
-                    </div>
+{{-- Advance Button --}}
+<div class="mb-4">
+    @if($isCancelled)
+        <button type="button" class="btn-advance"
+                style="background:#fff0f0;color:#e74a3b;border:2px solid #e74a3b;cursor:not-allowed;box-shadow:none;"
+                disabled>
+            ❌ Order Cancelled
+        </button>
+    @elseif($next)
+        <button type="button"
+                class="btn-advance {{ $btnClass }}"
+                onclick="advanceStatus('{{ $next }}')">
+            {{ $stepIcons[$next] }} Mark as {{ ucfirst($next) }}
+        </button>
+    @else
+        <button type="button" class="btn-advance is-delivered" disabled>
+            📬 Order Delivered
+        </button>
+    @endif
+</div>
 
                     <!-- PAYMENT STATUS -->
                     <div class="mb-3">

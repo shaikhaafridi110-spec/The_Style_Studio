@@ -53,12 +53,12 @@ class CheckoutController extends Controller
     // ─────────────────────────────────────────────────────────
     public function applyCoupon(Request $request)
     {
-        $request->validate(['code' => 'required|string', 'shipping_charge' => 'nullable|numeric']);
+        $request->validate(['code' => 'required|string']);
 
-        $coupon = Coupon::where('code', strtoupper(trim($request->code)))
-            ->where('status', '1')
-            ->first();
-
+        // ← ADD THIS
+        $coupon = Coupon::whereRaw('UPPER(TRIM(code)) = ?', [strtoupper(trim($request->code))])
+      ->whereRaw("status = '1'")
+        ->first();
         if (!$coupon) {
             return response()->json(['status' => 'error', 'message' => 'Invalid or inactive coupon code.']);
         }
@@ -151,8 +151,8 @@ class CheckoutController extends Controller
         $coupon         = null;
 
         if ($request->coupon_code) {
-            $coupon = Coupon::where('code', strtoupper(trim($request->coupon_code)))
-                ->where('status', '1')
+            $coupon = Coupon::whereRaw('UPPER(TRIM(code)) = ?', [strtoupper(trim($request->coupon_code))])
+                ->whereRaw("status = '1'")
                 ->first();
 
             if ($coupon) {
@@ -233,16 +233,18 @@ class CheckoutController extends Controller
             }
 
             DB::commit();
-
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withInput()->with('error', 'Order could not be placed. Please try again.');
         }
 
         switch ($request->payment_method) {
-            case 'card': return $this->razorpayPayment($order);
-            case 'upi':  return $this->upiQR($order);
-            case 'cod':  return $this->sendOtp($order);
+            case 'card':
+                return $this->razorpayPayment($order);
+            case 'upi':
+                return $this->upiQR($order);
+            case 'cod':
+                return $this->sendOtp($order);
         }
     }
 

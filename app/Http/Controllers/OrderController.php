@@ -8,41 +8,41 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
     public function order_status_update(Request $r, $id)
-{
-    $r->validate([
-        'status' => 'required|in:confirmed,shipped,delivered',
-    ]);
+    {
+        $r->validate([
+            'status' => 'required|in:confirmed,shipped,delivered',
+        ]);
 
-    $order = Order::findOrFail($id);
+        $order = Order::findOrFail($id);
 
-    $flow = ['pending'=>1, 'confirmed'=>2, 'shipped'=>3, 'delivered'=>4];
-    if (($flow[$r->status] ?? 0) <= ($flow[$order->status] ?? 0)) {
-        return redirect('admin/Order')->with('error', 'Invalid status change.');
+        $flow = ['pending' => 1, 'confirmed' => 2, 'shipped' => 3, 'delivered' => 4];
+        if (($flow[$r->status] ?? 0) <= ($flow[$order->status] ?? 0)) {
+            return redirect('admin/Order')->with('error', 'Invalid status change.');
+        }
+
+        $order->status = $r->status;
+
+        // ===== Save delivered_at timestamp when marked delivered =====
+        if ($r->status === 'delivered') {
+            $order->delivered_at = now();
+        }
+
+        $order->save();
+
+        return redirect('admin/Order')->with('success', 'Order marked as ' . ucfirst($r->status));
     }
-
-    $order->status = $r->status;
-
-    // ===== Save delivered_at timestamp when marked delivered =====
-    if ($r->status === 'delivered') {
-        $order->delivered_at = now();
-    }
-
-    $order->save();
-
-    return redirect('admin/Order')->with('success', 'Order marked as ' . ucfirst($r->status));
-}
     public function orderlist(Request $r)
     {
-    $data = Order::with('user')->orderBy('created_at', 'desc');
-    $date = Order::select(DB::raw('DATE(order_date) as order_date'))
-    ->groupBy(DB::raw('DATE(order_date)'))
-    ->orderBy('order_date','desc')
-    ->get();
+        $data = Order::with('user')->orderBy('created_at', 'desc');
+        $date = Order::select(DB::raw('DATE(order_date) as order_date'))
+            ->groupBy(DB::raw('DATE(order_date)'))
+            ->orderBy('order_date', 'desc')
+            ->get();
         if ($r->status) {
             $data->where('status', $r->status);
         }
@@ -50,9 +50,9 @@ class OrderController extends Controller
         if ($r->payment_status) {
             $data->where('payment_status', $r->payment_status);
         }
-        if($r->date){
-                 $d = date('Y-m-d', strtotime($r->date));
-                $data->whereDate('order_date', $d );
+        if ($r->date) {
+            $d = date('Y-m-d', strtotime($r->date));
+            $data->whereDate('order_date', $d);
         }
 
         $data = $data->paginate(10);
@@ -70,9 +70,9 @@ class OrderController extends Controller
     // ================= EDIT =================
     public function order_edit($id)
     {
-       $order = Order::with('user', 'items.product')->find($id);
+        $order = Order::with('user', 'items.product')->find($id);
 
-   
+
 
         if (!$order) {
             return redirect()->back()->with('error', 'Order not found');
@@ -82,45 +82,45 @@ class OrderController extends Controller
 
     // ================= UPDATE =================
     public function order_update(Request $r, $id)
-{
+    {
 
-    $r->validate([
-        'name' => 'required',
-        'email' => 'required|email',
-        'phone' => 'required',
-        'status' => 'required',
-        'payment_status' => 'required',
-    ]);
+        $r->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'status' => 'required',
+            'payment_status' => 'required',
+        ]);
 
-    
-    $order = Order::with('user')->find($id);
 
-    if (!$order) {
-        return redirect()->back()->with('error', 'Order not found');
+        $order = Order::with('user')->find($id);
+
+        if (!$order) {
+            return redirect()->back()->with('error', 'Order not found');
+        }
+
+        // ================= ORDER UPDATE =================
+        $order->name = $r->name;
+        $order->phone = $r->phone;
+        $order->status = $r->status;
+        $order->payment_status = $r->payment_status;
+        $order->notes = $r->notes;
+
+
+        $order->address_line1 = $r->address_line1;
+        $order->tracking_number = $r->tracking_number;
+
+        $order->save();
+
+        // ================= USER UPDATE =================
+        if ($order->user) {
+            $order->user->email = $r->email;
+            $order->user->save();
+        }
+
+        // ================= REDIRECT =================
+        return redirect('admin/Order')->with('success', 'Order Updated Successfully!');
     }
-
-    // ================= ORDER UPDATE =================
-    $order->name = $r->name;
-    $order->phone = $r->phone;
-    $order->status = $r->status;
-    $order->payment_status = $r->payment_status;
-    $order->notes = $r->notes;
-
-   
-    $order->address_line1 = $r->address_line1;
-    $order->tracking_number = $r->tracking_number;
-
-    $order->save();
-
-    // ================= USER UPDATE =================
-    if ($order->user) {
-        $order->user->email = $r->email;
-        $order->user->save();
-    }
-
-    // ================= REDIRECT =================
-    return redirect('admin/Order')->with('success', 'Order Updated Successfully!');
-}
 
     // ================= ORDER ITEMS =================
     public function orderitems()
@@ -147,17 +147,17 @@ class OrderController extends Controller
         $query = Order::with('items')
             ->where('user_id', Auth::id())
             ->latest('order_date');
- 
+
         // Filter by status (optional)
         if ($request->filled('status') && $request->status !== 'all') {
             $query->where('status', $request->status);
         }
- 
+
         $orders = $query->paginate(8)->withQueryString();
- 
+
         return view('user.order', compact('orders'));
     }
- 
+
     // ─────────────────────────────────────────────────────────
     // 2. ORDER DETAIL / STATUS
     // ─────────────────────────────────────────────────────────
@@ -167,9 +167,101 @@ class OrderController extends Controller
             ->where('id', $orderId)
             ->where('user_id', Auth::id())
             ->firstOrFail();
- 
+
         return view('user.ordershow', compact('order'));
     }
+    public function cancelItem(Request $request, $orderId, $itemId)
+{
+    $order = Order::with('items')
+        ->where('id', $orderId)
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
+
+    if (in_array($order->status, ['delivered', 'cancelled'])) {
+        return back()->with('error', 'Items cannot be cancelled for this order.');
+    }
+
+    $item = $order->items()->where('order_item_id', $itemId)->firstOrFail();
+
+    if ($item->status === 'cancelled') {
+        return back()->with('error', 'This item is already cancelled.');
+    }
+
+    // ── Capture refund amount BEFORE update ──
+    $refundAmount = $item->subtotal;
+
+    // Cancel the item
+    $item->update([
+        'status'        => 'cancelled',
+        'cancelled_at'  => now(),
+        'cancel_reason' => $request->input('cancel_reason', 'Cancelled by customer'),
+    ]);
+
+    // Recalculate
+    $activeItems = $order->items()->where('status', 'active')->get();
+    $newTotal    = $activeItems->sum('subtotal');
+
+    if ($activeItems->count() === 0) {
+        $order->update([
+            'status'       => 'cancelled',
+            'total_amount' => 0,
+            'final_amount' => 0,
+        ]);
+    } else {
+        $order->update([
+            'total_amount' => $newTotal,
+            'final_amount' => $newTotal + $order->shipping_charge - $order->discount_amount,
+        ]);
+    }
+
+    // ── Refresh to get updated totals ──
+    $order->refresh();
+
+    // ── Send cancellation email ──
+    $userEmail   = $order->user->email;
+    $userName    = $order->name;
+    $itemName    = $item->product_name;
+    $itemQty     = $item->qty;
+    $itemSize    = $item->size ? 'Size: ' . $item->size . ' | ' : '';
+    $cancelReason = $item->cancel_reason;
+    $newFinal    = number_format($order->final_amount, 2);
+    $refundFmt   = number_format($refundAmount, 2);
+    $orderNumber = $order->order_number;
+    $payMethod   = strtoupper($order->payment_method);
+
+    Mail::raw(
+        "Hello {$userName},
+
+Your item has been cancelled from Order #{$orderNumber}.
+
+Cancelled Item:
+- {$itemName}
+- {$itemSize}Qty: {$itemQty}
+- Reason: {$cancelReason}
+
+Price Deducted: ₹{$refundFmt}
+New Order Total: ₹{$newFinal}
+Payment Method: {$payMethod}
+
+" . ($order->payment_method === 'cod'
+    ? "Since this is a COD order, the amount has been adjusted from your order total."
+    : "Refund of ₹{$refundFmt} will be credited to your original payment method within 5-7 business days."
+) . "
+
+--------------------------------------
+If you have any questions, feel free to contact us.
+
+Thank you,
+The Style Studio Team",
+
+        function ($message) use ($userEmail, $orderNumber) {
+            $message->to($userEmail)
+                    ->subject("Item Cancelled – Order #{$orderNumber}");
+        }
+    );
+
+    return back()->with('success', 'Item cancelled successfully.');
+}
 } 
 // public function orderlist(Request $r)
 //     {

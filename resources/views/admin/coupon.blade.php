@@ -2,14 +2,23 @@
 
 @section('user-css')
 <style>
-    .page-title { font-weight: 600; font-size: 26px; }
-    .page-subtitle { font-size: 14px; color: #6c757d; }
+    .page-title {
+        font-weight: 600;
+        font-size: 26px;
+    }
+
+    .page-subtitle {
+        font-size: 14px;
+        color: #6c757d;
+    }
 
     .bg-gradient-primary {
         background: linear-gradient(45deg, #4e73df, #224abe);
     }
 
-    .card { border-radius: 12px; }
+    .card {
+        border-radius: 12px;
+    }
 
     .btn-edit {
         background: linear-gradient(45deg, #36b9cc, #1c7ed6);
@@ -84,10 +93,10 @@
             <form method="GET" class="d-flex gap-2">
 
                 <input type="text"
-                       name="search"
-                       value="{{ request('search') }}"
-                       class="form-control"
-                       placeholder="Search code...">
+                    name="search"
+                    value="{{ request('search') }}"
+                    class="form-control"
+                    placeholder="Search code...">
 
                 <select name="status" class="form-select" onchange="this.form.submit()">
                     <option value="">All</option>
@@ -108,9 +117,10 @@
                         <tr>
                             <th>Code</th>
                             <th>Discount</th>
-                           
+
                             <th>Expiry</th>
-                            <th>Used</th>
+                            <th>Usage</th>
+
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -133,16 +143,23 @@
 
                             <td>{{ $d->type == 'percent' ? $d->discount.'%' : '₹'.$d->discount }}</td>
 
-                            
 
-                            <td>{{ $d->expiry_date ?? '-' }}</td>
 
-                            <td>{{ $d->used_count }}</td>
+                            <td>
+                                {{ $d->expiry_date ? \Carbon\Carbon::parse($d->expiry_date)->format('d M Y') : '-' }}
+                            </td>
+                            <td>
+                                {{ $d->used_count }} / {{ $d->usage_limit ?? '∞' }}
+                                @if(!is_null($d->usage_limit) && $d->used_count >= $d->usage_limit)
+                                <span class="badge bg-danger ms-1" style="font-size:10px;">Limit Reached</span>
+                                @endif
+                            </td>
+
 
                             <!-- STATUS -->
                             <td>
                                 <a href="{{ url('admin/coupon-status/'.$d->coupon_id) }}"
-                                   class="btn btn-sm {{ $d->status=='1' ? 'btn-success' : 'btn-danger' }}">
+                                    class="btn btn-sm {{ $d->status=='1' ? 'btn-success' : 'btn-danger' }}">
                                     {{ $d->status=='1' ? 'Active' : 'Inactive' }}
                                 </a>
                             </td>
@@ -151,14 +168,14 @@
                             <td>
 
                                 <a href="{{ url('admin/edit-coupon/'.$d->coupon_id) }}"
-                                   class="btn btn-sm btn-edit">
+                                    class="btn btn-sm btn-edit">
                                     <i class="mdi mdi-pencil"></i>
                                     Edit
                                 </a>
 
                                 <a href="{{ url('admin/delete-coupon/'.$d->coupon_id) }}"
-                                   class="btn btn-sm btn-delete"
-                                   onclick="return confirm('Delete this coupon?')">
+                                    class="btn btn-sm btn-delete"
+                                    onclick="return confirm('Delete this coupon?')">
                                     <i class="mdi mdi-delete"></i>
                                     Delete
                                 </a>

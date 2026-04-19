@@ -100,15 +100,28 @@
         cursor: pointer;
         width: fit-content;
         transition: all 0.25s ease;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
     }
+
     .btn-status-advance:hover {
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
     }
-    .btn-to-confirmed { background: linear-gradient(135deg,#4e73df,#224abe); color: #fff; }
-    .btn-to-shipped   { background: linear-gradient(135deg,#36b9cc,#1a7a88); color: #fff; }
-    .btn-to-delivered { background: linear-gradient(135deg,#1cc88a,#13855c); color: #fff; }
+
+    .btn-to-confirmed {
+        background: linear-gradient(135deg, #4e73df, #224abe);
+        color: #fff;
+    }
+
+    .btn-to-shipped {
+        background: linear-gradient(135deg, #36b9cc, #1a7a88);
+        color: #fff;
+    }
+
+    .btn-to-delivered {
+        background: linear-gradient(135deg, #1cc88a, #13855c);
+        color: #fff;
+    }
 
     .btn-delivered-done {
         display: inline-flex;
@@ -168,9 +181,9 @@
                         class="form-select filter-select"
                         onchange="this.form.submit()">
                         <option value="">Status</option>
-                        <option value="pending"   {{ request('status') == 'pending'   ? 'selected' : '' }}>Pending</option>
+                        <option value="pending" {{ request('status') == 'pending'   ? 'selected' : '' }}>Pending</option>
                         <option value="confirmed" {{ request('status') == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
-                        <option value="shipped"   {{ request('status') == 'shipped'   ? 'selected' : '' }}>Shipped</option>
+                        <option value="shipped" {{ request('status') == 'shipped'   ? 'selected' : '' }}>Shipped</option>
                         <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>Delivered</option>
                     </select>
 
@@ -179,7 +192,7 @@
                         onchange="this.form.submit()">
                         <option value="">Payment Status</option>
                         <option value="pending" {{ request('payment_status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="paid"    {{ request('payment_status') == 'paid'    ? 'selected' : '' }}>Paid</option>
+                        <option value="paid" {{ request('payment_status') == 'paid'    ? 'selected' : '' }}>Paid</option>
                     </select>
 
                     <select name="date" style="width: fit-content;"
@@ -223,17 +236,17 @@
 
                         @foreach($data as $d)
                         @php
-                            $statusFlow = [
-                                'pending'   => 'confirmed',
-                                'confirmed' => 'shipped',
-                                'shipped'   => 'delivered',
-                            ];
-                            $btnIcons = [
-                                'confirmed' => '✅',
-                                'shipped'   => '🚚',
-                                'delivered' => '📬',
-                            ];
-                            $next = $statusFlow[$d->status] ?? null;
+                        $statusFlow = [
+                        'pending' => 'confirmed',
+                        'confirmed' => 'shipped',
+                        'shipped' => 'delivered',
+                        ];
+                        $btnIcons = [
+                        'confirmed' => '✅',
+                        'shipped' => '🚚',
+                        'delivered' => '📬',
+                        ];
+                        $next = $statusFlow[$d->status] ?? null;
                         @endphp
 
                         <tr>
@@ -249,33 +262,40 @@
                                     <h8 style="text-transform: capitalize;">Order Date: {{ date('d M Y', strtotime($d->order_date)) }}</h8>
                                     <h8 style="text-transform: capitalize;">Delivery Date:
                                         @if($d->delivered_at)
-                                            {{ date('d M Y', strtotime($d->delivered_at)) }}
+                                        {{ date('d M Y', strtotime($d->delivered_at)) }}
                                         @else
-                                            N/A
+                                        N/A
                                         @endif
                                     </h8>
 
                                     {{-- Hidden PATCH form --}}
                                     <form action="{{ url('admin/order-status/'.$d->id) }}"
-                                          method="POST"
-                                          id="statusForm_{{ $d->id }}"
-                                          style="display:none;">
+                                        method="POST"
+                                        id="statusForm_{{ $d->id }}"
+                                        style="display:none;">
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="status" value="{{ $next }}">
                                     </form>
 
                                     {{-- Advance button OR delivered badge --}}
-                                    @if($next)
-                                        <button type="button"
-                                                class="btn-status-advance btn-to-{{ $next }}"
-                                                onclick="confirmAdvance({{ $d->id }}, '{{ ucfirst($d->status) }}', '{{ ucfirst($next) }}')">
-                                            {{ $btnIcons[$next] }} Mark {{ ucfirst($next) }}
-                                        </button>
+                                    @if($d->status === 'cancelled')
+                                    <span style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;
+                 padding:5px 14px;border-radius:50px;font-size:12px;font-weight:700;
+                 width:fit-content;background:#fff0f0;color:#e53e3e;
+                 border:1.5px solid #e53e3e;cursor:not-allowed;">
+                                        ❌ Cancelled
+                                    </span>
+                                    @elseif($next)
+                                    <button type="button"
+                                        class="btn-status-advance btn-to-{{ $next }}"
+                                        onclick="confirmAdvance({{ $d->id }}, '{{ ucfirst($d->status) }}', '{{ ucfirst($next) }}')">
+                                        {{ $btnIcons[$next] }} Mark {{ ucfirst($next) }}
+                                    </button>
                                     @else
-                                        <span class="btn-delivered-done">
-                                            📬 Delivered
-                                        </span>
+                                    <span class="btn-delivered-done">
+                                        📬 Delivered
+                                    </span>
                                     @endif
 
                                 </div>
@@ -303,14 +323,14 @@
                             </td>
 
                             {{-- TRACKING - unchanged --}}
-                            
+
 
                             {{-- NOTES - unchanged --}}
                             <td>
                                 @if($d->notes)
-                                    {{ $d->notes }}
+                                {{ $d->notes }}
                                 @else
-                                    <span class="text-muted">N/A</span>
+                                <span class="text-muted">N/A</span>
                                 @endif
                             </td>
 
@@ -324,8 +344,8 @@
                             {{-- DELETE - unchanged --}}
                             <td>
                                 <a href="{{ url('admin/delete_order/'.$d->id) }}"
-                                   class="btn btn-sm btn-danger"
-                                   onclick="return confirm('Are you sure you want to delete this order?');">
+                                    class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Are you sure you want to delete this order?');">
                                     Delete
                                 </a>
                             </td>
@@ -343,11 +363,11 @@
 </div>
 
 <script>
-function confirmAdvance(orderId, from, to) {
-    if (confirm('Move order from "' + from + '" → "' + to + '"?')) {
-        document.getElementById('statusForm_' + orderId).submit();
+    function confirmAdvance(orderId, from, to) {
+        if (confirm('Move order from "' + from + '" → "' + to + '"?')) {
+            document.getElementById('statusForm_' + orderId).submit();
+        }
     }
-}
 </script>
 
 @endsection
